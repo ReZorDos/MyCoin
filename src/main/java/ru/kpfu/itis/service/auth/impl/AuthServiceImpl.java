@@ -1,4 +1,4 @@
-package ru.kpfu.itis.service.impl;
+package ru.kpfu.itis.service.auth.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
@@ -7,13 +7,14 @@ import ru.kpfu.itis.dto.request.SignUpRequest;
 import ru.kpfu.itis.dto.response.AuthResponse;
 import ru.kpfu.itis.model.UserEntity;
 import ru.kpfu.itis.repository.UserRepository;
-import ru.kpfu.itis.service.AuthDataValidationService;
-import ru.kpfu.itis.service.AuthService;
-import ru.kpfu.itis.service.PasswordEncoder;
+import ru.kpfu.itis.service.auth.AuthDataValidationService;
+import ru.kpfu.itis.service.auth.AuthService;
+import ru.kpfu.itis.service.auth.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -42,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
             return fail(errors);
         }
 
-        return ok();
+        return ok(user.get().getUuid());
     }
 
     @Override
@@ -74,6 +75,13 @@ public class AuthServiceImpl implements AuthService {
         return AuthResponse.builder()
                 .success(false)
                 .errors(errors)
+                .build();
+    }
+
+    private AuthResponse ok(UUID userId) {
+        return AuthResponse.builder()
+                .success(true)
+                .idUser(userId)
                 .build();
     }
 

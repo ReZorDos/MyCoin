@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
+public class ExpenseResponse {
 
     private boolean success;
-    private List<FieldErrorDto> errors;
-    private UUID idUser;
+    List<FieldErrorDto> errors;
 }
