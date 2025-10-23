@@ -6,23 +6,26 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.kpfu.itis.dto.ExpenseDto;
 import ru.kpfu.itis.dto.FieldErrorDto;
-import ru.kpfu.itis.dto.request.SignInRequest;
-import ru.kpfu.itis.dto.response.AuthResponse;
-import ru.kpfu.itis.service.auth.AuthService;
+import ru.kpfu.itis.dto.response.ExpenseResponse;
+import ru.kpfu.itis.service.expense.ExpenseService;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
-@WebServlet("/sign-in")
-public class SignInServlet extends HttpServlet {
 
-    private AuthService authService;
+//TODO: создать jsp старницы
+@WebServlet("/create-expense")
+public class CreateExpenseCategoryServlet extends HttpServlet {
+
+    private ExpenseService expenseService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        authService = (AuthService) config.getServletContext().getAttribute("authService");
+        expenseService = (ExpenseService) config.getServletContext().getAttribute("expenseService");
     }
 
     @Override
@@ -31,23 +34,23 @@ public class SignInServlet extends HttpServlet {
         if (Objects.nonNull(errors)) {
             req.setAttribute("errors", errors);
         }
-        req.getRequestDispatcher("/jsp/sign-in.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/create-expense.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SignInRequest request = SignInRequest.builder()
-                .email(req.getParameter("email"))
-                .password(req.getParameter("password"))
+        ExpenseDto request = ExpenseDto.builder()
+                .name(req.getParameter("name"))
+                .userId((UUID) req.getSession(false).getAttribute("userId"))
+                .icon(req.getParameter("icon"))
                 .build();
-        AuthResponse authResponse = authService.signIn(request);
-        if (!authResponse.isSuccess()) {
-            req.getSession(true).setAttribute("errors", authResponse.getErrors());
-            resp.sendRedirect("/sign-in");
+
+        ExpenseResponse expenseResponse = expenseService.createExpenseCategory(request);
+
+        if (!expenseResponse.isSuccess()) {
+            req.getSession(false).setAttribute("errors", expenseResponse.getErrors());
+            resp.sendRedirect("/create-expense");
         } else {
-            req.getSession(true).setAttribute("userId", authResponse.getIdUser());
-            req.getSession(true).setAttribute("errors", null);
-            req.getSession().setAttribute("email", request.getEmail());
             resp.sendRedirect("/profile");
         }
     }

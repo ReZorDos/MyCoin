@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.request.SignUpRequest;
 import ru.kpfu.itis.dto.response.AuthResponse;
-import ru.kpfu.itis.service.AuthService;
+import ru.kpfu.itis.service.auth.AuthService;
 
 import java.io.IOException;
 import java.util.List;

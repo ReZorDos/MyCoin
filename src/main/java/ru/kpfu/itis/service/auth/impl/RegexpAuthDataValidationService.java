@@ -1,7 +1,7 @@
-package ru.kpfu.itis.service.impl;
+package ru.kpfu.itis.service.auth.impl;
 
 import ru.kpfu.itis.dto.FieldErrorDto;
-import ru.kpfu.itis.service.AuthDataValidationService;
+import ru.kpfu.itis.service.auth.AuthDataValidationService;
 
 import java.util.ArrayList;
 import java.util.List;

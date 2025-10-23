@@ -1,4 +1,4 @@
-package ru.kpfu.itis.service;
+package ru.kpfu.itis.service.auth;
 
 import ru.kpfu.itis.dto.FieldErrorDto;
 

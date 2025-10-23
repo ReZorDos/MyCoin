@@ -1,7 +1,7 @@
-package ru.kpfu.itis.service.impl;
+package ru.kpfu.itis.service.auth.impl;
 
 import org.mindrot.jbcrypt.BCrypt;
-import ru.kpfu.itis.service.PasswordEncoder;
+import ru.kpfu.itis.service.auth.PasswordEncoder;
 
 public class BCryptPasswordEncoder implements PasswordEncoder {
 
