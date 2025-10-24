@@ -17,7 +17,6 @@ public class ExpenseCategoryEntity {
     private String name;
     private double totalAmount;
     private UUID userId;
-    //FIXME: change to normal format photo
     private String icon;
 
 }

@@ -1,30 +1,80 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ru.kpfu.itis.model.ExpenseCategoryEntity" %>
-<%@ page import="ru.kpfu.itis.model.ExpenseCategoryEntity" %>
 <html>
 <head>
     <title>Profile</title>
     <style>
-        .category {
+        .categories-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .category-card {
             border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            width: 140px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .category-icon {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .category-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+            word-wrap: break-word;
+            margin-bottom: 5px;
+        }
+        .category-amount {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+        .amount-value {
+            font-weight: bold;
+            color: #2c3e50;
         }
         .add-btn {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 6px;
             display: inline-block;
             margin: 10px 0;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
-        img {
-            max-width: 100px;
-            max-height: 100px;
-            margin-top: 5px;
+        .add-btn:hover {
+            background-color: #45a049;
+        }
+        .no-icon {
+            width: 64px;
+            height: 64px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: #999;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -41,24 +91,59 @@
     if (categories != null && !categories.isEmpty()) {
 %>
 <h3>Your Expense Categories:</h3>
-<%
-    for (ExpenseCategoryEntity category : categories) {
-%>
-<div class="category">
-    <strong><%= category.getName() %></strong>
-    <% if (category.getIcon() != null && !category.getIcon().isEmpty()) { %>
-    <br>
-    Photo: <%= category.getIcon() %>
-    Name: <%= category.getName() %>
-    <% } %>
+
+<div class="categories-container">
+    <%
+        for (ExpenseCategoryEntity category : categories) {
+            String iconName = category.getIcon();
+            Double totalAmount = category.getTotalAmount();
+    %>
+    <div class="category-card">
+        <% if (iconName != null && !iconName.isEmpty()) { %>
+        <img src="${pageContext.request.contextPath}/static/icons/<%= iconName %>?v=1.0"
+             alt="<%= category.getName() %> icon"
+             class="category-icon"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="no-icon" style="display: none;">No Icon</div>
+        <% } else { %>
+        <div class="no-icon">No Icon</div>
+        <% } %>
+        <div class="category-name"><%= category.getName() %></div>
+        <div class="category-amount">
+            Total: <span class="amount-value"><%= String.format("%.2f", totalAmount) %></span>
+        </div>
+    </div>
+    <%
+        }
+    %>
 </div>
 <%
-        }
+} else {
+%>
+<p style="color: #666; font-style: italic; margin: 20px 0;">
+    No expense categories yet. <a href="<%= request.getContextPath() %>/create-expense">Create your first one!</a>
+</p>
+<%
     }
 %>
 
 <br>
 <a href="<%= request.getContextPath() %>/sign-in">SIGN-IN</a><br>
 <a href="<%= request.getContextPath() %>/logout">LOGOUT</a><br>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.category-icon');
+        images.forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+                const noIcon = this.nextElementSibling;
+                if (noIcon && noIcon.classList.contains('no-icon')) {
+                    noIcon.style.display = 'flex';
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
