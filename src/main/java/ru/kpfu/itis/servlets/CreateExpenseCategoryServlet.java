@@ -12,12 +12,12 @@ import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.service.expense.ExpenseService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 
-//TODO: создать jsp старницы
 @WebServlet("/create-expense")
 public class CreateExpenseCategoryServlet extends HttpServlet {
 
@@ -25,6 +25,7 @@ public class CreateExpenseCategoryServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
+        super.init(config);
         expenseService = (ExpenseService) config.getServletContext().getAttribute("expenseService");
     }
 
@@ -34,6 +35,11 @@ public class CreateExpenseCategoryServlet extends HttpServlet {
         if (Objects.nonNull(errors)) {
             req.setAttribute("errors", errors);
         }
+
+        String iconPath = getServletContext().getRealPath("/static/icons");
+        List<String> icons = expenseService.getAvailableIcons(iconPath);
+        req.setAttribute("availableIcons", icons);
+
         req.getRequestDispatcher("/jsp/create-expense.jsp").forward(req, resp);
     }
 

@@ -1,5 +1,7 @@
 package ru.kpfu.itis.service.expense.impl;
 
+import jakarta.servlet.Filter;
+import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.ExpenseDto;
@@ -9,8 +11,11 @@ import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
@@ -34,6 +39,21 @@ public class ExpenseServiceImpl implements ExpenseService {
                         .build());
 
         return ok();
+    }
+
+    @Override
+    public List<String> getAvailableIcons(String iconPath) {
+        List<String> icons = new ArrayList<>();
+        File iconDir = new File(iconPath);
+        File[] files = iconDir.listFiles((dir, name) ->
+                name.toLowerCase().endsWith(".png") ||
+                name.toLowerCase().endsWith(".jpg") ||
+                name.toLowerCase().endsWith("jpeg")
+        );
+        for (File file : files) {
+            icons.add(file.getName());
+        }
+        return icons;
     }
 
     private ExpenseResponse fail(List<FieldErrorDto> errors) {
