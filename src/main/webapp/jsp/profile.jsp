@@ -21,10 +21,52 @@
             background: white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
         .category-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .category-card.active {
+            border-color: #4CAF50;
+            background-color: #f8fff8;
+        }
+        .actions-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+            margin-top: 5px;
+        }
+        .category-card.active .actions-menu {
+            display: flex;
+        }
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+        .action-btn:hover {
+            background-color: #f5f5f5;
+        }
+        .delete-btn {
+            color: #ff4444;
+            border-bottom: 1px solid #eee;
+        }
+        .edit-btn {
+            color: #2196F3;
         }
         .category-icon {
             width: 64px;
@@ -60,10 +102,6 @@
             display: inline-block;
             margin: 10px 0;
             font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .add-btn:hover {
-            background-color: #45a049;
         }
         .add-income-btn {
             background-color: #2196F3;
@@ -74,10 +112,6 @@
             display: inline-block;
             margin: 10px 10px 10px 0;
             font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .add-income-btn:hover {
-            background-color: #1976D2;
         }
         .no-icon {
             width: 64px;
@@ -125,7 +159,7 @@
                 String iconName = category.getIcon();
                 Double totalAmount = category.getTotalAmount();
         %>
-        <div class="category-card">
+        <div class="category-card" data-uuid="<%= category.getId() %>" data-type="expense">
             <% if (iconName != null && !iconName.isEmpty()) { %>
             <img src="${pageContext.request.contextPath}/static/icons/expense/<%= iconName %>?v=1.0"
                  alt="<%= category.getName() %> icon"
@@ -138,6 +172,15 @@
             <div class="category-name"><%= category.getName() %></div>
             <div class="category-amount">
                 Total: <span class="amount-value"><%= String.format("%.2f", totalAmount) %></span>
+            </div>
+
+            <div class="actions-menu">
+                <button class="action-btn edit-btn" onclick="editCategory('<%= category.getId() %>', 'expense')">
+                    Изменить
+                </button>
+                <button class="action-btn delete-btn" onclick="deleteCategory('<%= category.getId() %>', 'expense')">
+                    Удалить
+                </button>
             </div>
         </div>
         <%
@@ -166,7 +209,7 @@
                 String iconName = category.getIcon();
                 Double totalAmount = category.getTotalAmount();
         %>
-        <div class="category-card">
+        <div class="category-card" data-uuid="<%= category.getId() %>" data-type="income">
             <% if (iconName != null && !iconName.isEmpty()) { %>
             <img src="${pageContext.request.contextPath}/static/icons/income/<%= iconName %>?v=1.0"
                  alt="<%= category.getName() %> icon"
@@ -179,6 +222,15 @@
             <div class="category-name"><%= category.getName() %></div>
             <div class="category-amount">
                 Total: <span class="amount-value"><%= String.format("%.2f", totalAmount) %></span>
+            </div>
+
+            <div class="actions-menu">
+                <button class="action-btn edit-btn" onclick="editCategory('<%= category.getId() %>', 'income')">
+                    Изменить
+                </button>
+                <button class="action-btn delete-btn" onclick="deleteCategory('<%= category.getId() %>', 'income')">
+                    Удалить
+                </button>
             </div>
         </div>
         <%
@@ -200,6 +252,8 @@
     <a href="<%= request.getContextPath() %>/logout">LOGOUT</a><br>
 
     <script>
+        let activeCard = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             const images = document.querySelectorAll('.category-icon');
             images.forEach(img => {
@@ -211,7 +265,59 @@
                     }
                 });
             });
+
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('.actions-menu')) {
+                        return;
+                    }
+
+                    if (activeCard && activeCard !== this) {
+                        activeCard.classList.remove('active');
+                    }
+
+                    this.classList.toggle('active');
+
+                    if (this.classList.contains('active')) {
+                        activeCard = this;
+                    } else {
+                        activeCard = null;
+                    }
+                });
+            });
+
+            document.addEventListener('click', function(e) {
+                if (activeCard && !activeCard.contains(e.target)) {
+                    activeCard.classList.remove('active');
+                    activeCard = null;
+                }
+            });
         });
+
+        function deleteCategory(uuid, type) {
+            if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = type === 'expense'
+                    ? '<%= request.getContextPath() %>/expense-category/delete'
+                    : '<%= request.getContextPath() %>/income-category/delete';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'uuid';
+                input.value = uuid;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        function editCategory(uuid, type) {
+            window.location.href = type === 'expense'
+                ? '<%= request.getContextPath() %>/expense-category/update?uuid=' + uuid
+                : '<%= request.getContextPath() %>/edit-income?uuid=' + uuid;
+        }
     </script>
 </body>
 </html>
