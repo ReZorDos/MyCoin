@@ -1,9 +1,11 @@
 package ru.kpfu.itis.service.expense.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
+import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
@@ -11,6 +13,7 @@ import ru.kpfu.itis.service.expense.ExpenseService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -40,6 +43,16 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public boolean deleteExpenseCategory(UUID uuid) {
         return expenseRepository.deleteById(uuid);
+    }
+
+    @Override
+    public ExpenseCategoryEntity updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request) {
+        return expenseRepository.updateById(uuid, request);
+    }
+
+    @Override
+    public ExpenseCategoryEntity getCategoryById(UUID uuid) {
+        return expenseRepository.findById(uuid).get();
     }
 
     @Override

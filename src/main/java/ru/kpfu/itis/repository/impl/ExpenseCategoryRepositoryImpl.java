@@ -30,7 +30,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
             """;
     private static final String SQL_UPDATE_BY_ID = """
             update expense_category
-            set name = ?, total_amount = ?, user_id = ?, icon = ?
+            set name = ?, icon = ?
             where id = ?
             """;
     private static final String SQL_SAVE_EXPENSE_CATEGORY = """
@@ -67,8 +67,6 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
         if (expense.isPresent()) {
             jdbcTemplate.update(SQL_UPDATE_BY_ID,
                     expenseCategory.getName(),
-                    expenseCategory.getTotalAmount(),
-                    expenseCategory.getUserId(),
                     expenseCategory.getIcon(),
                     uuid);
             return findById(uuid).get();
