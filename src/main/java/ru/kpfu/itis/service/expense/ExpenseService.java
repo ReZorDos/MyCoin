@@ -10,6 +10,8 @@ public interface ExpenseService {
 
     ExpenseResponse createExpenseCategory(ExpenseDto request);
 
+    boolean deleteExpenseCategory(UUID uuid);
+
     List<String> getAvailableIcons(String iconsPath);
 
 }

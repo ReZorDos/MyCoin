@@ -38,6 +38,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    public boolean deleteExpenseCategory(UUID uuid) {
+        return expenseRepository.deleteById(uuid);
+    }
+
+    @Override
     public List<String> getAvailableIcons(String iconPath) {
         List<String> icons = new ArrayList<>();
         File iconDir = new File(iconPath);
