@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 
@@ -76,7 +77,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
     }
 
     @Override
-    public void save(ExpenseCategoryEntity expenseCategory) {
+    public void save(ExpenseDto expenseCategory) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(SQL_SAVE_EXPENSE_CATEGORY, new String[]{"id"});

@@ -6,8 +6,10 @@ import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import ru.kpfu.itis.config.JdbcConfig;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
+import ru.kpfu.itis.repository.IncomeCategoryRepository;
 import ru.kpfu.itis.repository.UserRepository;
 import ru.kpfu.itis.repository.impl.ExpenseCategoryRepositoryImpl;
+import ru.kpfu.itis.repository.impl.IncomeCategoryRepositoryImpl;
 import ru.kpfu.itis.repository.impl.UserRepositoryImpl;
 import ru.kpfu.itis.service.auth.AuthDataValidationService;
 import ru.kpfu.itis.service.auth.AuthService;
@@ -19,6 +21,9 @@ import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.expense.impl.ExpenseServiceImpl;
 import ru.kpfu.itis.service.expense.impl.RegexpExpenseValidationService;
+import ru.kpfu.itis.service.income.IncomeDataValidation;
+import ru.kpfu.itis.service.income.impl.IncomeServiceImpl;
+import ru.kpfu.itis.service.income.impl.RegexpIncomeValidationService;
 
 @WebListener
 public class ProjectStartUpListener implements ServletContextListener {
@@ -36,9 +41,17 @@ public class ProjectStartUpListener implements ServletContextListener {
 
         ExpenseCategoryRepository expenseRepository = new ExpenseCategoryRepositoryImpl(JdbcConfig.getJdbcTemplate());
         context.setAttribute("expenseRepository", expenseRepository);
-        ExpenseDataValidationService validationService = new RegexpExpenseValidationService();
+        ExpenseDataValidationService validationExpenseService = new RegexpExpenseValidationService();
 
-        ExpenseService expenseService = new ExpenseServiceImpl(expenseRepository, validationService);
+        ExpenseService expenseService = new ExpenseServiceImpl(expenseRepository, validationExpenseService);
         context.setAttribute("expenseService", expenseService);
+
+        IncomeCategoryRepository incomeRepository = new IncomeCategoryRepositoryImpl(JdbcConfig.getJdbcTemplate());
+        context.setAttribute("incomeRepository", incomeRepository);
+        IncomeDataValidation validationIncomeService = new RegexpIncomeValidationService();
+
+        IncomeServiceImpl incomeService = new IncomeServiceImpl(incomeRepository, validationIncomeService);
+        context.setAttribute("incomeService", incomeService);
+
     }
 }

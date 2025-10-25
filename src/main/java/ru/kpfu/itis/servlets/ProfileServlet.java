@@ -8,7 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
+import ru.kpfu.itis.model.IncomeCategoryEntity;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
+import ru.kpfu.itis.repository.IncomeCategoryRepository;
 import ru.kpfu.itis.service.expense.ExpenseService;
 
 import java.io.IOException;
@@ -19,19 +21,23 @@ import java.util.UUID;
 public class ProfileServlet extends HttpServlet {
 
     private ExpenseCategoryRepository expenseRepository;
+    private IncomeCategoryRepository incomeRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         expenseRepository = (ExpenseCategoryRepository) config.getServletContext().getAttribute("expenseRepository");
+        incomeRepository = (IncomeCategoryRepository) config.getServletContext().getAttribute("incomeRepository");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         UUID userId = (UUID) req.getSession(false).getAttribute("userId");
-        List<ExpenseCategoryEntity> categories = expenseRepository.findAllCategoriesByIdUser(userId);
+        List<ExpenseCategoryEntity> expenseCategories = expenseRepository.findAllCategoriesByIdUser(userId);
+        List<IncomeCategoryEntity> incomeCategories = incomeRepository.findAllCategoriesByIdUser(userId);
 
-        req.setAttribute("categories", categories);
+        req.setAttribute("expenseCategories", expenseCategories);
+        req.setAttribute("incomeCategories", incomeCategories);
 
         req.getRequestDispatcher("/jsp/profile.jsp").forward(req, resp);
     }

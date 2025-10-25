@@ -10,7 +10,7 @@ import java.util.List;
 @WebFilter("/*")
 public class ErrorsCleanFilter implements Filter {
 
-    private static final List<String> ALLOWED_ERRORS = List.of("/sign-in", "/sign-up", "/create-expense");
+    private static final List<String> ALLOWED_ERRORS = List.of("/sign-in", "/sign-up", "/create-expense", "/create-income");
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

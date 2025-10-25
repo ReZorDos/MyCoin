@@ -1,12 +1,9 @@
 package ru.kpfu.itis.service.expense.impl;
 
-import jakarta.servlet.Filter;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
-import ru.kpfu.itis.dto.ExpenseDto;
+import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
-import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
@@ -14,8 +11,7 @@ import ru.kpfu.itis.service.expense.ExpenseService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ServiceConfigurationError;
-import java.util.ServiceLoader;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
@@ -32,7 +28,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             return fail(errors);
         }
 
-        expenseRepository.save(ExpenseCategoryEntity.builder()
+        expenseRepository.save(ExpenseDto.builder()
                         .name(request.getName())
                         .userId(request.getUserId())
                         .icon(request.getIcon())

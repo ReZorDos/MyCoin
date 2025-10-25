@@ -90,7 +90,7 @@
             <label class="icon-option">
                 <input type="radio" name="icon" value="<%= icon %>"
                        class="icon-radio" required>
-                <img src="${pageContext.request.contextPath}/static/icons/<%= icon %>?v=1.0"
+                <img src="${pageContext.request.contextPath}/static/icons/expense/<%= icon %>?v=1.0"
                      alt="<%= icon %>"
                      onerror="this.style.display='none'">
                 <div class="icon-name"><%= icon %></div>
@@ -98,7 +98,7 @@
             <% } %>
             <% } else { %>
             <div style="color: #666; font-style: italic;">
-                Иконки не найдены. Проверьте папку /static/icons/
+                Иконки не найдены. Проверьте папку /static/icons/expense
             </div>
             <% } %>
         </div>
