@@ -1,5 +1,6 @@
 package ru.kpfu.itis.repository;
 
+import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.model.UserEntity;
 
@@ -13,7 +14,7 @@ public interface ExpenseCategoryRepository {
     List<ExpenseCategoryEntity> findAllCategoriesByIdUser(UUID uuid);
     boolean deleteById(UUID uuid);
     ExpenseCategoryEntity updateById(UUID uuid, ExpenseCategoryEntity expenseCategory);
-    void save(ExpenseCategoryEntity expenseCategory);
+    void save(ExpenseDto expenseCategory);
     Optional<ExpenseCategoryEntity> findById(UUID uuid);
 
 }
