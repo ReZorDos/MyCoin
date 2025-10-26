@@ -132,6 +132,10 @@
             padding-bottom: 5px;
             border-bottom: 2px solid #eee;
         }
+        .transaction-btn {
+            color: #4CAF50;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -177,6 +181,9 @@
             <div class="actions-menu">
                 <button class="action-btn edit-btn" onclick="editCategory('<%= category.getId() %>', 'expense')">
                     Изменить
+                </button>
+                <button class="action-btn transaction-btn" onclick="createTransaction('<%= category.getId() %>', 'expense')">
+                    Создать транзакцию
                 </button>
                 <button class="action-btn delete-btn" onclick="deleteCategory('<%= category.getId() %>', 'expense')">
                     Удалить
@@ -317,6 +324,14 @@
             window.location.href = type === 'expense'
                 ? '<%= request.getContextPath() %>/expense-category/update?uuid=' + uuid
                 : '<%= request.getContextPath() %>/income-category/update?uuid=' + uuid;
+        }
+
+        function createTransaction(categoryId, type) {
+            if (type === 'expense') {
+                window.location.href = '<%= request.getContextPath() %>/create-transaction/expense?categoryId=' + categoryId;
+            } else {
+                window.location.href = '<%= request.getContextPath() %>/create-transaction/income?categoryId=' + categoryId;
+            }
         }
     </script>
 </body>

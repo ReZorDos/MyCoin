@@ -17,4 +17,6 @@ public interface ExpenseCategoryRepository {
     void save(ExpenseDto expenseCategory);
     Optional<ExpenseCategoryEntity> findById(UUID uuid);
 
+    ExpenseCategoryEntity updateTotalSum(UUID expenseId, Double transactionSum);
+
 }
