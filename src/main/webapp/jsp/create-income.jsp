@@ -1,10 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.kpfu.itis.dto.FieldErrorDto" %>
-<%
-    List<String> availableIcons = (List<String>) request.getAttribute("availableIcons");
-    List<FieldErrorDto> errors = (List<FieldErrorDto>) request.getAttribute("errors");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Создать категорию заработка</title>
@@ -61,16 +56,16 @@
         }
     </style>
 </head>
-    <body>
+<body>
     <h2>Создать категорию заработка</h2>
 
-    <% if (errors != null && !errors.isEmpty()) { %>
-    <div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
-        <% for (FieldErrorDto error : errors) { %>
-        <div class="error"><%= error.getMessage() %></div>
-        <% } %>
-    </div>
-    <% } %>
+    <c:if test="${not empty errors}">
+        <div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
+            <c:forEach var="error" items="${errors}">
+                <div class="error">${error.message}</div>
+            </c:forEach>
+        </div>
+    </c:if>
 
     <form action="create-income" method="post">
         <div>
@@ -85,22 +80,25 @@
             <label><strong>Выберите иконку:</strong></label><br>
 
             <div class="icons-container">
-                <% if (availableIcons != null && !availableIcons.isEmpty()) { %>
-                <% for (String icon : availableIcons) { %>
-                <label class="icon-option">
-                    <input type="radio" name="icon" value="<%= icon %>"
-                           class="icon-radio" required>
-                    <img src="${pageContext.request.contextPath}/static/icons/income/<%= icon %>?v=1.0"
-                         alt="<%= icon %>"
-                         onerror="this.style.display='none'">
-                    <div class="icon-name"><%= icon %></div>
-                </label>
-                <% } %>
-                <% } else { %>
-                <div style="color: #666; font-style: italic;">
-                    Иконки не найдены. Проверьте папку /static/icons/
-                </div>
-                <% } %>
+                <c:choose>
+                    <c:when test="${not empty availableIcons}">
+                        <c:forEach var="icon" items="${availableIcons}">
+                            <label class="icon-option">
+                                <input type="radio" name="icon" value="${icon}"
+                                       class="icon-radio" required>
+                                <img src="${pageContext.request.contextPath}/static/icons/income/${icon}?v=1.0"
+                                     alt="${icon}"
+                                     onerror="this.style.display='none'">
+                                <div class="icon-name">${icon}</div>
+                            </label>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="color: #666; font-style: italic;">
+                            Иконки не найдены. Проверьте папку /static/icons/
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <small style="color: #666;">* Выберите одну иконку из списка</small>
@@ -119,32 +117,32 @@
         </div>
     </form>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const radioButtons = document.querySelectorAll('.icon-radio');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioButtons = document.querySelectorAll('.icon-radio');
 
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    document.querySelectorAll('.icon-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-
-                    if (this.checked) {
-                        this.parentElement.classList.add('selected');
-                    }
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.icon-option').forEach(opt => {
+                    opt.classList.remove('selected');
                 });
-            });
 
-            document.querySelectorAll('.icon-option').forEach(option => {
-                option.addEventListener('click', function(e) {
-                    const radio = this.querySelector('.icon-radio');
-                    if (radio) {
-                        radio.checked = true;
-                        radio.dispatchEvent(new Event('change'));
-                    }
-                });
+                if (this.checked) {
+                    this.parentElement.classList.add('selected');
+                }
             });
         });
-    </script>
+
+        document.querySelectorAll('.icon-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                const radio = this.querySelector('.icon-radio');
+                if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

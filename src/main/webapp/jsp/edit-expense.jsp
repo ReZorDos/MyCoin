@@ -1,10 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="ru.kpfu.itis.model.ExpenseCategoryEntity" %>
-<%@ page import="java.util.List" %>
-<%
-    ExpenseCategoryEntity category = (ExpenseCategoryEntity) request.getAttribute("category");
-    List<String> availableIcons = (List<String>) request.getAttribute("availableIcons");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Edit Expense Category</title>
@@ -100,69 +95,71 @@
     <h2>Edit Expense Category</h2>
 
     <div class="form-container">
-        <form method="post" action="<%= request.getContextPath() %>/expense-category/update">
-            <input type="hidden" name="uuid" value="<%= category.getId() %>">
+        <form method="post" action="${pageContext.request.contextPath}/expense-category/update">
+            <input type="hidden" name="uuid" value="${category.id}">
 
             <div class="form-group">
                 <label for="name">Category Name:</label>
-                <input type="text" id="name" name="name" value="<%= category.getName() %>" required>
+                <input type="text" id="name" name="name" value="${category.name}" required>
             </div>
 
             <div class="form-group">
                 <label>Icon:</label>
                 <div class="icons-container">
-                    <% if (availableIcons != null && !availableIcons.isEmpty()) { %>
-                    <% for (String icon : availableIcons) {
-                        boolean isSelected = icon.equals(category.getIcon());
-                    %>
-                    <label class="icon-option <%= isSelected ? "selected" : "" %>">
-                        <input type="radio" name="icon" value="<%= icon %>"
-                               class="icon-radio" <%= isSelected ? "checked" : "" %>>
-                        <img src="${pageContext.request.contextPath}/static/icons/expense/<%= icon %>?v=1.0"
-                             alt="<%= icon %>"
-                             onerror="this.style.display='none'">
-                        <div class="icon-name"><%= icon %></div>
-                    </label>
-                    <% } %>
-                    <% } else { %>
-                    <div style="color: #666; font-style: italic;">
-                        No icons found
-                    </div>
-                    <% } %>
+                    <c:choose>
+                        <c:when test="${not empty availableIcons}">
+                            <c:forEach var="icon" items="${availableIcons}">
+                                <c:set var="isSelected" value="${icon eq category.icon}" />
+                                <label class="icon-option <c:if test='${isSelected}'>selected</c:if>">
+                                    <input type="radio" name="icon" value="${icon}"
+                                           class="icon-radio" <c:if test='${isSelected}'>checked</c:if>>
+                                    <img src="${pageContext.request.contextPath}/static/icons/expense/${icon}?v=1.0"
+                                         alt="${icon}"
+                                         onerror="this.style.display='none'">
+                                    <div class="icon-name">${icon}</div>
+                                </label>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div style="color: #666; font-style: italic;">
+                                No icons found
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
             <button type="submit" class="submit-btn">Update Category</button>
-            <a href="<%= request.getContextPath() %>/profile" class="cancel-btn">Cancel</a>
+            <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
         </form>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const radioButtons = document.querySelectorAll('.icon-radio');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioButtons = document.querySelectorAll('.icon-radio');
 
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    document.querySelectorAll('.icon-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-
-                    if (this.checked) {
-                        this.parentElement.classList.add('selected');
-                    }
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.icon-option').forEach(opt => {
+                    opt.classList.remove('selected');
                 });
-            });
 
-            document.querySelectorAll('.icon-option').forEach(option => {
-                option.addEventListener('click', function(e) {
-                    const radio = this.querySelector('.icon-radio');
-                    if (radio) {
-                        radio.checked = true;
-                        radio.dispatchEvent(new Event('change'));
-                    }
-                });
+                if (this.checked) {
+                    this.parentElement.classList.add('selected');
+                }
             });
         });
-    </script>
+
+        document.querySelectorAll('.icon-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                const radio = this.querySelector('.icon-radio');
+                if (radio) {
+                    radio.checked = true;
+                    radio.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

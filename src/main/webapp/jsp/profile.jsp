@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.kpfu.itis.model.ExpenseCategoryEntity" %>
-<%@ page import="ru.kpfu.itis.model.IncomeCategoryEntity" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>Profile</title>
@@ -140,199 +139,183 @@
 </head>
 <body>
     <h2>Profile</h2>
-    <p>Your email: <%= request.getAttribute("email") %></p>
+    <p>Your email: ${email}</p>
 
     <div>
-        <a href="<%= request.getContextPath() %>/create-expense" class="add-btn">
+        <a href="${pageContext.request.contextPath}/create-expense" class="add-btn">
             + Add New Expense Category
         </a>
-        <a href="<%= request.getContextPath() %>/create-income" class="add-income-btn">
+        <a href="${pageContext.request.contextPath}/create-income" class="add-income-btn">
             + Add New Income Category
         </a>
     </div>
 
-    <%
-        List<ExpenseCategoryEntity> expenseCategories = (List<ExpenseCategoryEntity>) request.getAttribute("expenseCategories");
-        if (expenseCategories != null && !expenseCategories.isEmpty()) {
-    %>
-    <h3 class="section-title">Your Expense Categories:</h3>
+    <c:choose>
+        <c:when test="${not empty expenseCategories}">
+            <h3 class="section-title">Your Expense Categories:</h3>
+            <div class="categories-container">
+                <c:forEach var="category" items="${expenseCategories}">
+                    <div class="category-card" data-uuid="${category.id}" data-type="expense">
+                        <c:choose>
+                            <c:when test="${not empty category.icon}">
+                                <img src="${pageContext.request.contextPath}/static/icons/expense/${category.icon}?v=1.0"
+                                     alt="${category.name} icon"
+                                     class="category-icon"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="no-icon" style="display: none;">No Icon</div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="no-icon">No Icon</div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="category-name">${category.name}</div>
+                        <div class="category-amount">
+                            Total: <span class="amount-value"><fmt:formatNumber value="${category.totalAmount}" pattern="#.##"/></span>
+                        </div>
 
-    <div class="categories-container">
-        <%
-            for (ExpenseCategoryEntity category : expenseCategories) {
-                String iconName = category.getIcon();
-                Double totalAmount = category.getTotalAmount();
-        %>
-        <div class="category-card" data-uuid="<%= category.getId() %>" data-type="expense">
-            <% if (iconName != null && !iconName.isEmpty()) { %>
-            <img src="${pageContext.request.contextPath}/static/icons/expense/<%= iconName %>?v=1.0"
-                 alt="<%= category.getName() %> icon"
-                 class="category-icon"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="no-icon" style="display: none;">No Icon</div>
-            <% } else { %>
-            <div class="no-icon">No Icon</div>
-            <% } %>
-            <div class="category-name"><%= category.getName() %></div>
-            <div class="category-amount">
-                Total: <span class="amount-value"><%= String.format("%.2f", totalAmount) %></span>
+                        <div class="actions-menu">
+                            <button class="action-btn edit-btn" onclick="editCategory('${category.id}', 'expense')">
+                                Изменить
+                            </button>
+                            <button class="action-btn transaction-btn" onclick="createTransaction('${category.id}', 'expense')">
+                                Создать транзакцию
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteCategory('${category.id}', 'expense')">
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                </c:forEach>
             </div>
+        </c:when>
+        <c:otherwise>
+            <p style="color: #666; font-style: italic; margin: 20px 0;">
+                No expense categories yet. <a href="${pageContext.request.contextPath}/create-expense">Create your first one!</a>
+            </p>
+        </c:otherwise>
+    </c:choose>
 
-            <div class="actions-menu">
-                <button class="action-btn edit-btn" onclick="editCategory('<%= category.getId() %>', 'expense')">
-                    Изменить
-                </button>
-                <button class="action-btn transaction-btn" onclick="createTransaction('<%= category.getId() %>', 'expense')">
-                    Создать транзакцию
-                </button>
-                <button class="action-btn delete-btn" onclick="deleteCategory('<%= category.getId() %>', 'expense')">
-                    Удалить
-                </button>
+    <c:choose>
+        <c:when test="${not empty incomeCategories}">
+            <h3 class="section-title">Your Income Categories:</h3>
+            <div class="categories-container">
+                <c:forEach var="category" items="${incomeCategories}">
+                    <div class="category-card" data-uuid="${category.id}" data-type="income">
+                        <c:choose>
+                            <c:when test="${not empty category.icon}">
+                                <img src="${pageContext.request.contextPath}/static/icons/income/${category.icon}?v=1.0"
+                                     alt="${category.name} icon"
+                                     class="category-icon"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="no-icon" style="display: none;">No Icon</div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="no-icon">No Icon</div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="category-name">${category.name}</div>
+                        <div class="category-amount">
+                            Total: <span class="amount-value"><fmt:formatNumber value="${category.totalAmount}" pattern="#.##"/></span>
+                        </div>
+
+                        <div class="actions-menu">
+                            <button class="action-btn edit-btn" onclick="editCategory('${category.id}', 'income')">
+                                Изменить
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteCategory('${category.id}', 'income')">
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                </c:forEach>
             </div>
-        </div>
-        <%
-            }
-        %>
-    </div>
-    <%
-    } else {
-    %>
-    <p style="color: #666; font-style: italic; margin: 20px 0;">
-        No expense categories yet. <a href="<%= request.getContextPath() %>/create-expense">Create your first one!</a>
-    </p>
-    <%
-        }
-    %>
-
-    <%
-        List<IncomeCategoryEntity> incomeCategories = (List<IncomeCategoryEntity>) request.getAttribute("incomeCategories");
-        if (incomeCategories != null && !incomeCategories.isEmpty()) {
-    %>
-    <h3 class="section-title">Your Income Categories:</h3>
-
-    <div class="categories-container">
-        <%
-            for (IncomeCategoryEntity category : incomeCategories) {
-                String iconName = category.getIcon();
-                Double totalAmount = category.getTotalAmount();
-        %>
-        <div class="category-card" data-uuid="<%= category.getId() %>" data-type="income">
-            <% if (iconName != null && !iconName.isEmpty()) { %>
-            <img src="${pageContext.request.contextPath}/static/icons/income/<%= iconName %>?v=1.0"
-                 alt="<%= category.getName() %> icon"
-                 class="category-icon"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="no-icon" style="display: none;">No Icon</div>
-            <% } else { %>
-            <div class="no-icon">No Icon</div>
-            <% } %>
-            <div class="category-name"><%= category.getName() %></div>
-            <div class="category-amount">
-                Total: <span class="amount-value"><%= String.format("%.2f", totalAmount) %></span>
-            </div>
-
-            <div class="actions-menu">
-                <button class="action-btn edit-btn" onclick="editCategory('<%= category.getId() %>', 'income')">
-                    Изменить
-                </button>
-                <button class="action-btn delete-btn" onclick="deleteCategory('<%= category.getId() %>', 'income')">
-                    Удалить
-                </button>
-            </div>
-        </div>
-        <%
-            }
-        %>
-    </div>
-    <%
-    } else {
-    %>
-    <p style="color: #666; font-style: italic; margin: 20px 0;">
-        No income categories yet. <a href="<%= request.getContextPath() %>/create-income">Create your first one!</a>
-    </p>
-    <%
-        }
-    %>
+        </c:when>
+        <c:otherwise>
+            <p style="color: #666; font-style: italic; margin: 20px 0;">
+                No income categories yet. <a href="${pageContext.request.contextPath}/create-income">Create your first one!</a>
+            </p>
+        </c:otherwise>
+    </c:choose>
 
     <br>
-    <a href="<%= request.getContextPath() %>/sign-in">SIGN-IN</a><br>
-    <a href="<%= request.getContextPath() %>/logout">LOGOUT</a><br>
+    <a href="${pageContext.request.contextPath}/sign-in">SIGN-IN</a><br>
+    <a href="${pageContext.request.contextPath}/logout">LOGOUT</a><br>
 
-    <script>
-        let activeCard = null;
+<script>
+    let activeCard = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('.category-icon');
-            images.forEach(img => {
-                img.addEventListener('error', function() {
-                    this.style.display = 'none';
-                    const noIcon = this.nextElementSibling;
-                    if (noIcon && noIcon.classList.contains('no-icon')) {
-                        noIcon.style.display = 'flex';
-                    }
-                });
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.category-icon');
+        images.forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+                const noIcon = this.nextElementSibling;
+                if (noIcon && noIcon.classList.contains('no-icon')) {
+                    noIcon.style.display = 'flex';
+                }
             });
+        });
 
-            document.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (e.target.closest('.actions-menu')) {
-                        return;
-                    }
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('.actions-menu')) {
+                    return;
+                }
 
-                    if (activeCard && activeCard !== this) {
-                        activeCard.classList.remove('active');
-                    }
-
-                    this.classList.toggle('active');
-
-                    if (this.classList.contains('active')) {
-                        activeCard = this;
-                    } else {
-                        activeCard = null;
-                    }
-                });
-            });
-
-            document.addEventListener('click', function(e) {
-                if (activeCard && !activeCard.contains(e.target)) {
+                if (activeCard && activeCard !== this) {
                     activeCard.classList.remove('active');
+                }
+
+                this.classList.toggle('active');
+
+                if (this.classList.contains('active')) {
+                    activeCard = this;
+                } else {
                     activeCard = null;
                 }
             });
         });
 
-        function deleteCategory(uuid, type) {
-            if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = type === 'expense'
-                    ? '<%= request.getContextPath() %>/expense-category/delete'
-                    : '<%= request.getContextPath() %>/income-category/delete';
-
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'uuid';
-                input.value = uuid;
-
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
+        document.addEventListener('click', function(e) {
+            if (activeCard && !activeCard.contains(e.target)) {
+                activeCard.classList.remove('active');
+                activeCard = null;
             }
-        }
+        });
+    });
 
-        function editCategory(uuid, type) {
-            window.location.href = type === 'expense'
-                ? '<%= request.getContextPath() %>/expense-category/update?uuid=' + uuid
-                : '<%= request.getContextPath() %>/income-category/update?uuid=' + uuid;
-        }
+    function deleteCategory(uuid, type) {
+        if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = type === 'expense'
+                ? '${pageContext.request.contextPath}/expense-category/delete'
+                : '${pageContext.request.contextPath}/income-category/delete';
 
-        function createTransaction(categoryId, type) {
-            if (type === 'expense') {
-                window.location.href = '<%= request.getContextPath() %>/create-transaction/expense?categoryId=' + categoryId;
-            } else {
-                window.location.href = '<%= request.getContextPath() %>/create-transaction/income?categoryId=' + categoryId;
-            }
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'uuid';
+            input.value = uuid;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
         }
-    </script>
+    }
+
+    function editCategory(uuid, type) {
+        window.location.href = type === 'expense'
+            ? '${pageContext.request.contextPath}/expense-category/update?uuid=' + uuid
+            : '${pageContext.request.contextPath}/income-category/update?uuid=' + uuid;
+    }
+
+    function createTransaction(categoryId, type) {
+        if (type === 'expense') {
+            window.location.href = '${pageContext.request.contextPath}/create-transaction/expense?categoryId=' + categoryId;
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/create-transaction/income?categoryId=' + categoryId;
+        }
+    }
+</script>
 </body>
 </html>
