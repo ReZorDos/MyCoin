@@ -316,7 +316,7 @@
         function editCategory(uuid, type) {
             window.location.href = type === 'expense'
                 ? '<%= request.getContextPath() %>/expense-category/update?uuid=' + uuid
-                : '<%= request.getContextPath() %>/edit-income?uuid=' + uuid;
+                : '<%= request.getContextPath() %>/income-category/update?uuid=' + uuid;
         }
     </script>
 </body>
