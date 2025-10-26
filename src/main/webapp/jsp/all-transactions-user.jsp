@@ -1,7 +1,5 @@
-<%@ page import="java.util.List" %>
-<%@ page import="ru.kpfu.itis.model.TransactionEntity" %>
-<%@ page import="java.util.UUID" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Мои транзакции</title>
@@ -60,56 +58,99 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Мои транзакции</h1>
+    <div class="container">
+        <h1>Мои транзакции</h1>
 
-    <%
-        List<TransactionEntity> transactionList = (List<TransactionEntity>) request.getAttribute("transactionList");
-        if (transactionList != null && !transactionList.isEmpty()) {
-    %>
-    <table class="transaction-table">
-        <thead>
-        <tr>
-            <th>Название</th>
-            <th>Тип</th>
-            <th>Дата</th>
-            <th>Сумма</th>
-            <th>Категория дохода</th>
-            <th>Категория расхода</th>
-            <th>Цель накопления</th>
-        </tr>
-        </thead>
-        <tbody>
-        <%
-            for (TransactionEntity transaction : transactionList) {
-        %>
-        <tr>
-            <td><%= transaction.getTitle() != null ? transaction.getTitle() : "" %></td>
-            <td>
-                            <span class="<%= "income".equals(transaction.getType()) ? "type-income" : "type-expense" %>">
-                                <%= transaction.getType() != null ? transaction.getType() : "" %>
-                            </span>
-            </td>
-            <td><%= transaction.getDate() != null ? transaction.getDate() : "" %></td>
-            <td><%= transaction.getSum() %></td>
-            <td><%= transaction.getIncomeCategoryId() != null ? transaction.getIncomeCategoryId() : "-" %></td>
-            <td><%= transaction.getExpenseCategoryId() != null ? transaction.getExpenseCategoryId() : "-" %></td>
-            <td><%= transaction.getSavingGoalId() != null ? transaction.getSavingGoalId() : "-" %></td>
-        </tr>
-        <%
-            }
-        %>
-        </tbody>
-    </table>
-    <%
-    } else {
-    %>
-    <div class="empty-message">
-        Транзакции не найдены
+        <c:choose>
+            <c:when test="${not empty transactionList}">
+                <table class="transaction-table">
+                    <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Тип</th>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Категория дохода</th>
+                        <th>Категория расхода</th>
+                        <th>Цель накопления</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="transaction" items="${transactionList}">
+                        <tr>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty transaction.title}">
+                                        ${transaction.title}
+                                    </c:when>
+                                    <c:otherwise>
+                                        &nbsp;
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${transaction.type eq 'income'}">
+                                        <span class="type-income">${transaction.type}</span>
+                                    </c:when>
+                                    <c:when test="${transaction.type eq 'expense'}">
+                                        <span class="type-expense">${transaction.type}</span>
+                                    </c:when>
+                                    <c:when test="${not empty transaction.type}">
+                                        ${transaction.type}
+                                    </c:when>
+                                    <c:otherwise>
+                                        &nbsp;
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:if test="${not empty transaction.date}">
+                                    ${transaction.date}
+                                </c:if>
+                            </td>
+                            <td>${transaction.sum}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty transaction.incomeCategoryId}">
+                                        ${transaction.incomeCategoryId}
+                                    </c:when>
+                                    <c:otherwise>
+                                        -
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty transaction.expenseCategoryId}">
+                                        ${transaction.expenseCategoryId}
+                                    </c:when>
+                                    <c:otherwise>
+                                        -
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty transaction.savingGoalId}">
+                                        ${transaction.savingGoalId}
+                                    </c:when>
+                                    <c:otherwise>
+                                        -
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:when>
+            <c:otherwise>
+                <div class="empty-message">
+                    Транзакции не найдены
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
-    <%
-        }
-    %>
-</div>
 </body>
 </html>

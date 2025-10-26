@@ -1,10 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.kpfu.itis.dto.FieldErrorDto" %>
-<%
-    List<String> availableIcons = (List<String>) request.getAttribute("availableIcons");
-    List<FieldErrorDto> errors = (List<FieldErrorDto>) request.getAttribute("errors");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Создать категорию</title>
@@ -62,62 +57,65 @@
     </style>
 </head>
 <body>
-<h2>Создать категорию расходов</h2>
+    <h2>Создать категорию расходов</h2>
 
-<% if (errors != null && !errors.isEmpty()) { %>
-<div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
-    <% for (FieldErrorDto error : errors) { %>
-    <div class="error"><%= error.getMessage() %></div>
-    <% } %>
-</div>
-<% } %>
-
-<form action="create-expense" method="post">
-    <div>
-        <label><strong>Название категории:</strong></label><br>
-        <input type="text" name="name" required
-               style="width: 300px; padding: 8px; margin: 5px 0;"
-               placeholder="Введите название категории">
-    </div>
-    <br>
-
-    <div>
-        <label><strong>Выберите иконку:</strong></label><br>
-
-        <div class="icons-container">
-            <% if (availableIcons != null && !availableIcons.isEmpty()) { %>
-            <% for (String icon : availableIcons) { %>
-            <label class="icon-option">
-                <input type="radio" name="icon" value="<%= icon %>"
-                       class="icon-radio" required>
-                <img src="${pageContext.request.contextPath}/static/icons/expense/<%= icon %>?v=1.0"
-                     alt="<%= icon %>"
-                     onerror="this.style.display='none'">
-                <div class="icon-name"><%= icon %></div>
-            </label>
-            <% } %>
-            <% } else { %>
-            <div style="color: #666; font-style: italic;">
-                Иконки не найдены. Проверьте папку /static/icons/expense
-            </div>
-            <% } %>
+    <c:if test="${not empty errors}">
+        <div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
+            <c:forEach var="error" items="${errors}">
+                <div class="error">${error.message}</div>
+            </c:forEach>
         </div>
+    </c:if>
 
-        <small style="color: #666;">* Выберите одну иконку из списка</small>
-    </div>
-    <br>
+    <form action="create-expense" method="post">
+        <div>
+            <label><strong>Название категории:</strong></label><br>
+            <input type="text" name="name" required
+                   style="width: 300px; padding: 8px; margin: 5px 0;"
+                   placeholder="Введите название категории">
+        </div>
+        <br>
 
-    <div>
-        <button type="submit"
-                style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
-            Создать категорию
-        </button>
-        <a href="profile"
-           style="padding: 10px 20px; background: #6c757d; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px;">
-            Отмена
-        </a>
-    </div>
-</form>
+        <div>
+            <label><strong>Выберите иконку:</strong></label><br>
+
+            <div class="icons-container">
+                <c:choose>
+                    <c:when test="${not empty availableIcons}">
+                        <c:forEach var="icon" items="${availableIcons}">
+                            <label class="icon-option">
+                                <input type="radio" name="icon" value="${icon}"
+                                       class="icon-radio" required>
+                                <img src="${pageContext.request.contextPath}/static/icons/expense/${icon}?v=1.0"
+                                     alt="${icon}"
+                                     onerror="this.style.display='none'">
+                                <div class="icon-name">${icon}</div>
+                            </label>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="color: #666; font-style: italic;">
+                            Иконки не найдены. Проверьте папку /static/icons/expense
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
+            <small style="color: #666;">* Выберите одну иконку из списка</small>
+        </div>
+        <br>
+
+        <div>
+            <button type="submit"
+                    style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Создать категорию
+            </button>
+            <a href="profile"
+               style="padding: 10px 20px; background: #6c757d; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px;">
+                Отмена
+            </a>
+        </div>
+    </form>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

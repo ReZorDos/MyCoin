@@ -1,14 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="ru.kpfu.itis.model.ExpenseCategoryEntity" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.kpfu.itis.model.IncomeCategoryEntity" %>
-<%
-    IncomeCategoryEntity category = (IncomeCategoryEntity) request.getAttribute("category");
-    List<String> availableIcons = (List<String>) request.getAttribute("availableIcons");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Edit Expense Category</title>
+    <title>Edit Income Category</title>
     <style>
         .form-container {
             max-width: 500px;
@@ -98,45 +92,47 @@
     </style>
 </head>
 <body>
-<h2>Edit Expense Category</h2>
+    <h2>Edit Income Category</h2>
 
-<div class="form-container">
-    <form method="post" action="<%= request.getContextPath() %>/income-category/update">
-        <input type="hidden" name="uuid" value="<%= category.getId() %>">
+    <div class="form-container">
+        <form method="post" action="${pageContext.request.contextPath}/income-category/update">
+            <input type="hidden" name="uuid" value="${category.id}">
 
-        <div class="form-group">
-            <label for="name">Category Name:</label>
-            <input type="text" id="name" name="name" value="<%= category.getName() %>" required>
-        </div>
-
-        <div class="form-group">
-            <label>Icon:</label>
-            <div class="icons-container">
-                <% if (availableIcons != null && !availableIcons.isEmpty()) { %>
-                <% for (String icon : availableIcons) {
-                    boolean isSelected = icon.equals(category.getIcon());
-                %>
-                <label class="icon-option <%= isSelected ? "selected" : "" %>">
-                    <input type="radio" name="icon" value="<%= icon %>"
-                           class="icon-radio" <%= isSelected ? "checked" : "" %>>
-                    <img src="${pageContext.request.contextPath}/static/icons/income/<%= icon %>?v=1.0"
-                         alt="<%= icon %>"
-                         onerror="this.style.display='none'">
-                    <div class="icon-name"><%= icon %></div>
-                </label>
-                <% } %>
-                <% } else { %>
-                <div style="color: #666; font-style: italic;">
-                    No icons found
-                </div>
-                <% } %>
+            <div class="form-group">
+                <label for="name">Category Name:</label>
+                <input type="text" id="name" name="name" value="${category.name}" required>
             </div>
-        </div>
 
-        <button type="submit" class="submit-btn">Update Category</button>
-        <a href="<%= request.getContextPath() %>/profile" class="cancel-btn">Cancel</a>
-    </form>
-</div>
+            <div class="form-group">
+                <label>Icon:</label>
+                <div class="icons-container">
+                    <c:choose>
+                        <c:when test="${not empty availableIcons}">
+                            <c:forEach var="icon" items="${availableIcons}">
+                                <c:set var="isSelected" value="${icon eq category.icon}" />
+                                <label class="icon-option <c:if test='${isSelected}'>selected</c:if>">
+                                    <input type="radio" name="icon" value="${icon}"
+                                           class="icon-radio" <c:if test='${isSelected}'>checked</c:if>>
+                                    <img src="${pageContext.request.contextPath}/static/icons/income/${icon}?v=1.0"
+                                         alt="${icon}"
+                                         onerror="this.style.display='none'">
+                                    <div class="icon-name">${icon}</div>
+                                </label>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div style="color: #666; font-style: italic;">
+                                No icons found
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Update Category</button>
+            <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
