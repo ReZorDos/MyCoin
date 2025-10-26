@@ -27,7 +27,7 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
     private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from income_category where user_id = ?";
     private static final String SQL_UPDATE_BY_ID = """
             update income_category
-            set name = ?, total_amount = ?, user_id = ?, icon = ?
+            set name = ?, icon = ?
             where id = ?
             """;
     private static final String SQL_FIND_BY_USER_AND_INCOME_ID = """
@@ -64,8 +64,6 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
         if (income.isPresent()) {
             jdbcTemplate.update(SQL_UPDATE_BY_ID,
                     incomeCategory.getName(),
-                    incomeCategory.getTotalAmount(),
-                    incomeCategory.getUserId(),
                     incomeCategory.getIcon(),
                     uuid);
             return findById(uuid).get();
