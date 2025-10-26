@@ -70,6 +70,11 @@ public class ExpenseServiceImpl implements ExpenseService {
         return icons;
     }
 
+    @Override
+    public void updateExpenseCategoryTotal(UUID expenseId, Double transactionSum) {
+        expenseRepository.updateTotalSum(expenseId, transactionSum);
+    }
+
     private ExpenseResponse fail(List<FieldErrorDto> errors) {
         return ExpenseResponse.builder()
                 .success(false)

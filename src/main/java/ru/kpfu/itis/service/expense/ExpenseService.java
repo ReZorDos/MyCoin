@@ -20,4 +20,6 @@ public interface ExpenseService {
 
     List<String> getAvailableIcons(String iconsPath);
 
+    void updateExpenseCategoryTotal(UUID expenseId, Double transactionSum);
+
 }

@@ -4,12 +4,15 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.kpfu.itis.config.JdbcConfig;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 import ru.kpfu.itis.repository.IncomeCategoryRepository;
+import ru.kpfu.itis.repository.TransactionRepository;
 import ru.kpfu.itis.repository.UserRepository;
 import ru.kpfu.itis.repository.impl.ExpenseCategoryRepositoryImpl;
 import ru.kpfu.itis.repository.impl.IncomeCategoryRepositoryImpl;
+import ru.kpfu.itis.repository.impl.TransactionRepositoryImpl;
 import ru.kpfu.itis.repository.impl.UserRepositoryImpl;
 import ru.kpfu.itis.service.auth.AuthDataValidationService;
 import ru.kpfu.itis.service.auth.AuthService;
@@ -24,6 +27,10 @@ import ru.kpfu.itis.service.expense.impl.RegexpExpenseValidationService;
 import ru.kpfu.itis.service.income.IncomeDataValidation;
 import ru.kpfu.itis.service.income.impl.IncomeServiceImpl;
 import ru.kpfu.itis.service.income.impl.RegexpIncomeValidationService;
+import ru.kpfu.itis.service.transaction.TransactionDataValidation;
+import ru.kpfu.itis.service.transaction.TransactionService;
+import ru.kpfu.itis.service.transaction.impl.RegexpTransactionValidationService;
+import ru.kpfu.itis.service.transaction.impl.TransactionServiceImpl;
 
 @WebListener
 public class ProjectStartUpListener implements ServletContextListener {
@@ -52,6 +59,12 @@ public class ProjectStartUpListener implements ServletContextListener {
 
         IncomeServiceImpl incomeService = new IncomeServiceImpl(incomeRepository, validationIncomeService);
         context.setAttribute("incomeService", incomeService);
+
+        TransactionRepository transactionRepository = new TransactionRepositoryImpl(JdbcConfig.getJdbcTemplate());
+        TransactionDataValidation validationTransactionService = new RegexpTransactionValidationService();
+
+        TransactionService transactionService = new TransactionServiceImpl(transactionRepository, validationTransactionService);
+        context.setAttribute("transactionService", transactionService);
 
     }
 }

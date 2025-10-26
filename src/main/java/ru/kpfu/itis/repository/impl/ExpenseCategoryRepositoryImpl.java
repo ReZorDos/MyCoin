@@ -23,6 +23,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
     private static final String SQL_FIND_BY_ID = "select * from expense_category where id = ?";
     private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from expense_category where user_id = ?";
     private static final String SQL_DELETE_BY_ID = "delete from expense_category where id = ?";
+    private static final String SQL_UPDATE_TOTAL_AMOUNT = "update expense_category set total_amount = ? where id = ?";
     private static final String SQL_FIND_BY_USER_ID_AND_EXPENSE_ID = """
             select *
             from expense_category
@@ -93,6 +94,18 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public ExpenseCategoryEntity updateTotalSum(UUID expenseId, Double transactionSum) {
+        Optional<ExpenseCategoryEntity> expense = findById(expenseId);
+        if (expense.isPresent()) {
+            jdbcTemplate.update(SQL_UPDATE_TOTAL_AMOUNT,
+                    transactionSum,
+                    expenseId);
+            return findById(expenseId).get();
+        }
+        throw new IllegalArgumentException();
     }
 
     private static final class ExpenseCategoryRowMapper implements RowMapper<ExpenseCategoryEntity> {
