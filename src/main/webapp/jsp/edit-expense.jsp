@@ -89,11 +89,27 @@
             max-width: 80px;
             word-break: break-all;
         }
+        .error-container {
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 15px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+        }
     </style>
 </head>
 <body>
     <h2>Edit Expense Category</h2>
 
+    <c:if test="${not empty errors}">
+        <div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
+            <c:forEach var="error" items="${errors}">
+                <div class="error">${error.message}</div>
+            </c:forEach>
+        </div>
+    </c:if>
     <div class="form-container">
         <form method="post" action="${pageContext.request.contextPath}/expense-category/update">
             <input type="hidden" name="uuid" value="${category.id}">

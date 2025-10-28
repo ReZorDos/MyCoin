@@ -46,8 +46,16 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseCategoryEntity updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request) {
-        return expenseRepository.updateById(uuid, request);
+    public ExpenseResponse updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        errors.addAll(validationService.validateName(request.getName()));
+
+        if (!errors.isEmpty()) {
+            return fail(errors);
+        }
+
+        expenseRepository.updateById(uuid, request);
+        return ok();
     }
 
     @Override
