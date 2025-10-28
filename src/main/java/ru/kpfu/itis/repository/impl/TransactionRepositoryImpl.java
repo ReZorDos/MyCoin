@@ -22,7 +22,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final TransactionRowMapper rowMapper = new TransactionRowMapper();
-    private final String SQL_GET_ALL_TRANSACTIONS_OF_USER = "select * from transaction where user_id = ?";
+    private static final String SQL_GET_ALL_TRANSACTIONS_OF_USER = "select * from transaction where user_id = ?";
     private static final String SQL_SAVE_EXPENSE_TRANSACTION = """
             insert  into transaction (title, expense_category_id, saving_goal_id, user_id, sum, type)
             values (?, ?, ?, ?, ?, ?)
@@ -76,7 +76,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         @Override
         public TransactionEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
             return TransactionEntity.builder()
-                    .title(rs.getString("id"))
+                    .id(UUID.fromString(rs.getString("id")))
+                    .title(rs.getString("title"))
                     .userId(UUID.fromString(rs.getString("user_id")))
                     .savingGoalId(getUUIDOrNull(rs, "saving_goal_id"))
                     .expenseCategoryId(getUUIDOrNull(rs, "expense_category_id"))
