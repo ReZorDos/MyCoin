@@ -7,12 +7,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import ru.kpfu.itis.dto.categories.IncomeDto;
+import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
 import ru.kpfu.itis.repository.IncomeCategoryRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +27,7 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
     private static final String SQL_DELETE_BY_ID = "delete from income_category where id = ?";
     private static final String SQL_FIND_BY_ID = "select * from income_category where id = ?";
     private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from income_category where user_id = ?";
+    private static final String SQL_UPDATE_TOTAL_AMOUNT = "update income_category set total_amount = ? where id = ?";
     private static final String SQL_UPDATE_BY_ID = """
             update income_category
             set name = ?, icon = ?
@@ -50,7 +53,11 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
 
     @Override
     public List<IncomeCategoryEntity> findAllCategoriesByIdUser(UUID uuid) {
-        return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
+        try {
+            return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 
     @Override
@@ -91,6 +98,18 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
             Optional.empty();
         }
         return Optional.empty();
+    }
+
+    @Override
+    public IncomeCategoryEntity updateTotalSum(UUID incomeId, Double transactionSum) {
+        Optional<IncomeCategoryEntity> income = findById(incomeId);
+        if (income.isPresent()) {
+            jdbcTemplate.update(SQL_UPDATE_TOTAL_AMOUNT,
+                    transactionSum,
+                    incomeId);
+            return findById(incomeId).get();
+        }
+        throw new IllegalArgumentException();
     }
 
     private static final class IncomeRowMapper implements RowMapper<IncomeCategoryEntity> {

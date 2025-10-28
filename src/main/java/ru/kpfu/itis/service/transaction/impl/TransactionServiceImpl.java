@@ -44,6 +44,28 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public TransactionResponse createIncomeTransaction(TransactionDto transaction) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        errors.addAll(validationService.validateTitle(transaction.getTitle()));
+        errors.addAll(validationService.validateSum(transaction.getSum()));
+
+        if (!errors.isEmpty()) {
+            return fail(errors);
+        }
+
+        transactionRepository.saveIncomeTransaction(TransactionDto.builder()
+                .title(transaction.getTitle())
+                .incomeId(transaction.getIncomeId())
+                .saveGoalId(transaction.getSaveGoalId())
+                .userId(transaction.getUserId())
+                .sum(transaction.getSum())
+                .type("INCOME")
+                .build());
+
+        return ok();
+    }
+
+    @Override
     public List<TransactionEntity> getAllTransactionsOfUser(UUID userId) {
         return transactionRepository.getAllTransactionsOfUser(userId);
     }

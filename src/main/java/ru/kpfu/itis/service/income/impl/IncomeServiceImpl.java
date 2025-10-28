@@ -70,6 +70,11 @@ public class IncomeServiceImpl implements IncomeService {
         return icons;
     }
 
+    @Override
+    public void updateIncomeCategoryTotal(UUID incomeId, Double transactionSum) {
+        incomeRepository.updateTotalSum(incomeId, transactionSum);
+    }
+
     private IncomeResponse fail(List<FieldErrorDto> errors) {
         return IncomeResponse.builder()
                 .success(false)

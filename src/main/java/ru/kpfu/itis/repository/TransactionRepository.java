@@ -10,6 +10,8 @@ public interface TransactionRepository {
 
     void saveExpenseTransaction(TransactionDto expenseTransaction);
 
+    void saveIncomeTransaction(TransactionDto incomeTransaction);
+
     List<TransactionEntity> getAllTransactionsOfUser(UUID userId);
 
 

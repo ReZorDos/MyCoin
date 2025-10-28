@@ -11,6 +11,8 @@ public interface TransactionService {
 
     TransactionResponse createExpenseTransaction(TransactionDto transaction);
 
+    TransactionResponse createIncomeTransaction(TransactionDto transaction);
+
     List<TransactionEntity> getAllTransactionsOfUser(UUID userId);
 
 }
