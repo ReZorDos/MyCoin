@@ -17,4 +17,6 @@ public interface IncomeCategoryRepository {
     void save(IncomeDto incomeCategory);
     Optional<IncomeCategoryEntity> findById(UUID uuid);
 
+    IncomeCategoryEntity updateTotalSum(UUID incomeId, Double transactionSum);
+
 }

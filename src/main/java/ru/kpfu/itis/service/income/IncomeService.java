@@ -19,4 +19,6 @@ public interface IncomeService {
     IncomeCategoryEntity updateIncomeCategory(UUID uuid, IncomeCategoryEntity request);
 
     List<String> getAvailableIcons(String iconsPath);
+
+    void updateIncomeCategoryTotal(UUID incomeId, Double transactionSum);
 }

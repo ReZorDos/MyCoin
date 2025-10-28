@@ -222,6 +222,9 @@
                             <button class="action-btn edit-btn" onclick="editCategory('${category.id}', 'income')">
                                 Изменить
                             </button>
+                            <button class="action-btn transaction-btn" onclick="createTransaction('${category.id}', 'income')">
+                                Создать транзакцию
+                            </button>
                             <button class="action-btn delete-btn" onclick="deleteCategory('${category.id}', 'income')">
                                 Удалить
                             </button>

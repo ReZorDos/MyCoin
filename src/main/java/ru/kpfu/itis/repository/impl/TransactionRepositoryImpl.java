@@ -1,6 +1,7 @@
 package ru.kpfu.itis.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,6 +13,7 @@ import ru.kpfu.itis.repository.TransactionRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +25,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     private final String SQL_GET_ALL_TRANSACTIONS_OF_USER = "select * from transaction where user_id = ?";
     private static final String SQL_SAVE_EXPENSE_TRANSACTION = """
             insert  into transaction (title, expense_category_id, saving_goal_id, user_id, sum, type)
+            values (?, ?, ?, ?, ?, ?)
+            """;
+    private static final String SQL_SAVE_INCOME_TRANSACTION = """
+            insert  into transaction (title, income_category_id, saving_goal_id, user_id, sum, type)
             values (?, ?, ?, ?, ?, ?)
             """;
 
@@ -39,12 +45,30 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             ps.setString(6, expenseTransaction.getType());
             return ps;
         }, keyHolder);
+    }
 
+    @Override
+    public void saveIncomeTransaction(TransactionDto incomeTransaction) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(SQL_SAVE_INCOME_TRANSACTION, new String[]{"id"});
+            ps.setString(1, incomeTransaction.getTitle());
+            ps.setObject(2, incomeTransaction.getIncomeId());
+            ps.setObject(3, incomeTransaction.getSaveGoalId());
+            ps.setObject(4, incomeTransaction.getUserId());
+            ps.setDouble(5, incomeTransaction.getSum());
+            ps.setString(6, incomeTransaction.getType());
+            return ps;
+        }, keyHolder);
     }
 
     @Override
     public List<TransactionEntity> getAllTransactionsOfUser(UUID userId) {
-        return jdbcTemplate.query(SQL_GET_ALL_TRANSACTIONS_OF_USER, rowMapper, userId);
+        try {
+            return jdbcTemplate.query(SQL_GET_ALL_TRANSACTIONS_OF_USER, rowMapper, userId);
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 
     private static final class TransactionRowMapper implements RowMapper<TransactionEntity> {
