@@ -6,11 +6,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.kpfu.itis.dto.FieldErrorDto;
+import ru.kpfu.itis.dto.response.IncomeResponse;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
 import ru.kpfu.itis.service.income.IncomeService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @WebServlet("/income-category/update")
@@ -26,6 +29,11 @@ public class UpdateIncomeCategoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<FieldErrorDto> errors = (List<FieldErrorDto>) req.getSession().getAttribute("errors");
+        if (Objects.nonNull(errors)) {
+            req.setAttribute("errors", errors);
+        }
+
         String uuid = req.getParameter("uuid");
 
         IncomeCategoryEntity category = incomeService.getCategoryById(UUID.fromString(uuid));
@@ -46,8 +54,13 @@ public class UpdateIncomeCategoryServlet extends HttpServlet {
                 .icon(req.getParameter("icon"))
                 .build();
 
-        incomeService.updateIncomeCategory(uuid, income);
+        IncomeResponse incomeResponse =  incomeService.updateIncomeCategory(uuid, income);
 
-        resp.sendRedirect("/profile");
+        if (!incomeResponse.isSuccess()) {
+            req.getSession().setAttribute("errors", incomeResponse.getErrors());
+            resp.sendRedirect("/income-category/update?uuid=" + uuid);
+        } else {
+            resp.sendRedirect("/profile");
+        }
     }
 }

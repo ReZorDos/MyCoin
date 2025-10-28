@@ -94,6 +94,13 @@
 <body>
     <h2>Edit Income Category</h2>
 
+    <c:if test="${not empty errors}">
+        <div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
+            <c:forEach var="error" items="${errors}">
+                <div class="error">${error.message}</div>
+            </c:forEach>
+        </div>
+    </c:if>
     <div class="form-container">
         <form method="post" action="${pageContext.request.contextPath}/income-category/update">
             <input type="hidden" name="uuid" value="${category.id}">

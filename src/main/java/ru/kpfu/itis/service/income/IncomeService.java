@@ -16,7 +16,7 @@ public interface IncomeService {
 
     IncomeCategoryEntity getCategoryById(UUID uuid);
 
-    IncomeCategoryEntity updateIncomeCategory(UUID uuid, IncomeCategoryEntity request);
+    IncomeResponse updateIncomeCategory(UUID uuid, IncomeCategoryEntity request);
 
     List<String> getAvailableIcons(String iconsPath);
 
