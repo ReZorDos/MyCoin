@@ -11,6 +11,7 @@ import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
 import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.transaction.impl.TransactionServiceImpl;
+import ru.kpfu.itis.service.user.UserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,11 +23,13 @@ public class CreateExpenseTransactionServlet extends HttpServlet {
 
     private TransactionServiceImpl transactionService;
     private ExpenseService expenseService;
+    private UserService userService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         transactionService = (TransactionServiceImpl) config.getServletContext().getAttribute("transactionService");
         expenseService = (ExpenseService) config.getServletContext().getAttribute("expenseService");
+        userService = (UserService) config.getServletContext().getAttribute("userService");
     }
 
     @Override
@@ -62,6 +65,10 @@ public class CreateExpenseTransactionServlet extends HttpServlet {
             req.getSession(false).setAttribute("errors", transactionResponse.getErrors());
             resp.sendRedirect("/create-transaction/expense");
         } else {
+            userService.changeUserBalance((UUID) req.getSession(false).getAttribute("userId"),
+                    "EXPENSE",
+                    req.getParameter("sum")
+            );
             expenseService.updateExpenseCategoryTotal(request.getExpenseId(), request.getSum());
             resp.sendRedirect("/profile");
         }

@@ -11,6 +11,7 @@ import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
 import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.transaction.TransactionService;
+import ru.kpfu.itis.service.user.UserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,11 +23,13 @@ public class CreateIncomeTransactionServlet extends HttpServlet {
 
     private TransactionService transactionService;
     private IncomeService incomeService;
+    private UserService userService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         incomeService = (IncomeService) config.getServletContext().getAttribute("incomeService");
         transactionService = (TransactionService) config.getServletContext().getAttribute("transactionService");
+        userService = (UserService) config.getServletContext().getAttribute("userService");
     }
 
     @Override
@@ -62,6 +65,11 @@ public class CreateIncomeTransactionServlet extends HttpServlet {
             req.getSession(false).setAttribute("errors", transactionResponse.getErrors());
             resp.sendRedirect("/create-transaction/income");
         } else {
+            userService.changeUserBalance(
+                    (UUID) req.getSession(false).getAttribute("userId"),
+                    "INCOME",
+                    req.getParameter("sum")
+            );
             incomeService.updateIncomeCategoryTotal(request.getIncomeId(), request.getSum());
             resp.sendRedirect("/profile");
         }

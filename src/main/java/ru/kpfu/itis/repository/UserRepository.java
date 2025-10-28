@@ -14,5 +14,7 @@ public interface UserRepository {
     UserEntity updateById(UUID uuid, UserEntity userEntity);
     UserEntity save(UserEntity userEntity);
     Optional<UserEntity> findByEmail(String email);
+    void updateUserBalance(UUID userId, String type, double sum);
+    double getUserBalance(UUID userId);
 
 }

@@ -26,6 +26,8 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String SQL_FIND_ALL_USERS = "select * from user_entity";
     private static final String SQL_DELETE_BY_ID = "delete from user_entity where id = ?";
     private static final String SQL_FIND_BY_EMAIL = "select * from user_entity where email = ?";
+    private static final String SQL_UPDATE_USER_BALANCE = "update user_entity set balance = balance + ? where id = ?";
+    private static final String SQL_GET_USER_BALANCE = "select balance from user_entity where id = ?";
     private static final String SQL_UPDATE_BY_ID = """
             update user_entity 
             set nickname = ?, password = ?, email = ? 
@@ -89,6 +91,21 @@ public class UserRepositoryImpl implements UserRepository {
             return Optional.of(jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, rowMapper, email));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public void updateUserBalance(UUID userId, String type, double sum) {
+        double amount = type.equals("EXPENSE") ? -Math.abs(sum) : Math.abs(sum);
+        jdbcTemplate.update(SQL_UPDATE_USER_BALANCE, amount, userId);
+    }
+
+    @Override
+    public double getUserBalance(UUID userId) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_USER_BALANCE, Double.class, userId)).orElse(0.0);
+        } catch (EmptyResultDataAccessException e) {
+            return 0.0;
         }
     }
 

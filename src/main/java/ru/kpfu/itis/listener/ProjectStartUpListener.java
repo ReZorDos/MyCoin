@@ -25,12 +25,15 @@ import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.expense.impl.ExpenseServiceImpl;
 import ru.kpfu.itis.service.expense.impl.RegexpExpenseValidationService;
 import ru.kpfu.itis.service.income.IncomeDataValidation;
+import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.income.impl.IncomeServiceImpl;
 import ru.kpfu.itis.service.income.impl.RegexpIncomeValidationService;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
 import ru.kpfu.itis.service.transaction.TransactionService;
 import ru.kpfu.itis.service.transaction.impl.RegexpTransactionValidationService;
 import ru.kpfu.itis.service.transaction.impl.TransactionServiceImpl;
+import ru.kpfu.itis.service.user.UserService;
+import ru.kpfu.itis.service.user.impl.UserServiceImpl;
 
 @WebListener
 public class ProjectStartUpListener implements ServletContextListener {
@@ -57,7 +60,7 @@ public class ProjectStartUpListener implements ServletContextListener {
         context.setAttribute("incomeRepository", incomeRepository);
         IncomeDataValidation validationIncomeService = new RegexpIncomeValidationService();
 
-        IncomeServiceImpl incomeService = new IncomeServiceImpl(incomeRepository, validationIncomeService);
+        IncomeService incomeService = new IncomeServiceImpl(incomeRepository, validationIncomeService);
         context.setAttribute("incomeService", incomeService);
 
         TransactionRepository transactionRepository = new TransactionRepositoryImpl(JdbcConfig.getJdbcTemplate());
@@ -65,6 +68,9 @@ public class ProjectStartUpListener implements ServletContextListener {
 
         TransactionService transactionService = new TransactionServiceImpl(transactionRepository, validationTransactionService);
         context.setAttribute("transactionService", transactionService);
+
+        UserService userService = new UserServiceImpl(userRepository);
+        context.setAttribute("userService", userService);
 
     }
 }

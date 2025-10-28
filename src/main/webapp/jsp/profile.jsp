@@ -135,11 +135,44 @@
             color: #4CAF50;
             border-bottom: 1px solid #eee;
         }
+
+        .balance-container {
+            margin: 20px 0;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 300px;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h2>Profile</h2>
     <p>Your email: ${email}</p>
+
+    <div class="balance-container">
+        <div class="balance-card">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-amount">
+                <fmt:formatNumber value="${userBalance}" pattern="#,##0.00"/> ₽
+            </div>
+        </div>
+    </div>
 
     <div>
         <a href="${pageContext.request.contextPath}/create-expense" class="add-btn">
