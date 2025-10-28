@@ -50,8 +50,16 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
-    public IncomeCategoryEntity updateIncomeCategory(UUID uuid, IncomeCategoryEntity request) {
-        return incomeRepository.updateById(uuid, request);
+    public IncomeResponse updateIncomeCategory(UUID uuid, IncomeCategoryEntity request) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        errors.addAll(validationService.validateName(request.getName()));
+
+        if (!errors.isEmpty()) {
+            return fail(errors);
+        }
+
+        incomeRepository.updateById(uuid, request);
+        return ok();
     }
 
     @Override
