@@ -6,11 +6,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.kpfu.itis.dto.FieldErrorDto;
+import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.service.expense.ExpenseService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @WebServlet("/expense-category/update")
@@ -26,6 +29,11 @@ public class UpdateExpenseCategoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<FieldErrorDto> errors = (List<FieldErrorDto>) req.getSession().getAttribute("errors");
+        if (Objects.nonNull(errors)) {
+            req.setAttribute("errors", errors);
+        }
+
         String uuid = req.getParameter("uuid");
 
         ExpenseCategoryEntity category = expenseService.getCategoryById(UUID.fromString(uuid));
@@ -46,8 +54,13 @@ public class UpdateExpenseCategoryServlet extends HttpServlet {
                 .icon(req.getParameter("icon"))
                 .build();
 
-        expenseService.updateExpenseCategory(uuid, expense);
+        ExpenseResponse expenseResponse = expenseService.updateExpenseCategory(uuid, expense);
 
-        resp.sendRedirect("/profile");
+        if (!expenseResponse.isSuccess()) {
+            req.getSession().setAttribute("errors", expenseResponse.getErrors());
+            resp.sendRedirect("/expense-category/update?uuid=" + uuid);
+        } else {
+            resp.sendRedirect("/profile");
+        }
     }
 }
