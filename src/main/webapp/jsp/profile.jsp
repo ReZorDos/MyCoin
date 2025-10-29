@@ -4,164 +4,13 @@
 <html>
 <head>
     <title>Profile</title>
-    <style>
-        .categories-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        .category-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            width: 140px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-        .category-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .category-card.active {
-            border-color: #4CAF50;
-            background-color: #f8fff8;
-        }
-        .actions-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none;
-            flex-direction: column;
-            z-index: 10;
-            margin-top: 5px;
-        }
-        .category-card.active .actions-menu {
-            display: flex;
-        }
-        .action-btn {
-            background: none;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 13px;
-            transition: background-color 0.2s;
-        }
-        .action-btn:hover {
-            background-color: #f5f5f5;
-        }
-        .delete-btn {
-            color: #ff4444;
-            border-bottom: 1px solid #eee;
-        }
-        .edit-btn {
-            color: #2196F3;
-        }
-        .category-icon {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-            margin-bottom: 10px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .category-name {
-            font-weight: bold;
-            color: #333;
-            font-size: 14px;
-            word-wrap: break-word;
-            margin-bottom: 5px;
-        }
-        .category-amount {
-            font-size: 12px;
-            color: #666;
-            font-weight: normal;
-        }
-        .amount-value {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .add-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            text-decoration: none;
-            border-radius: 6px;
-            display: inline-block;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        .add-income-btn {
-            background-color: #2196F3;
-            color: white;
-            padding: 12px 20px;
-            text-decoration: none;
-            border-radius: 6px;
-            display: inline-block;
-            margin: 10px 10px 10px 0;
-            font-weight: bold;
-        }
-        .no-icon {
-            width: 64px;
-            height: 64px;
-            background-color: #f5f5f5;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: #999;
-            font-size: 12px;
-        }
-        .section-title {
-            color: #333;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #eee;
-        }
-        .transaction-btn {
-            color: #4CAF50;
-            border-bottom: 1px solid #eee;
-        }
-
-        .balance-container {
-            margin: 20px 0;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            max-width: 300px;
-        }
-
-        .balance-label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-
-        .balance-amount {
-            font-size: 24px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/proflie.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/categories.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/action.css">
 </head>
 <body>
+<div class="profile-container">
     <h2>Profile</h2>
     <p>Your email: ${email}</p>
 
@@ -222,7 +71,7 @@
             </div>
         </c:when>
         <c:otherwise>
-            <p style="color: #666; font-style: italic; margin: 20px 0;">
+            <p class="empty-message">
                 No expense categories yet. <a href="${pageContext.request.contextPath}/create-expense">Create your first one!</a>
             </p>
         </c:otherwise>
@@ -267,7 +116,7 @@
             </div>
         </c:when>
         <c:otherwise>
-            <p style="color: #666; font-style: italic; margin: 20px 0;">
+            <p class="empty-message">
                 No income categories yet. <a href="${pageContext.request.contextPath}/create-income">Create your first one!</a>
             </p>
         </c:otherwise>
@@ -276,6 +125,7 @@
     <br>
     <a href="${pageContext.request.contextPath}/sign-in">SIGN-IN</a><br>
     <a href="${pageContext.request.contextPath}/logout">LOGOUT</a><br>
+</div>
 
 <script>
     let activeCard = null;

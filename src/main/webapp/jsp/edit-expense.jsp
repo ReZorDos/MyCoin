@@ -3,120 +3,30 @@
 <html>
 <head>
     <title>Edit Expense Category</title>
-    <style>
-        .form-container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .submit-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .cancel-btn {
-            background-color: #6c757d;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-left: 10px;
-        }
-        .icons-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .icon-option {
-            text-align: center;
-            cursor: pointer;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-        .icon-option:hover {
-            border-color: #007bff;
-            background-color: #f8f9fa;
-        }
-        .icon-option.selected {
-            border-color: #007bff;
-            background-color: #e3f2fd;
-            box-shadow: 0 0 5px rgba(0,123,255,0.5);
-        }
-        .icon-option img {
-            width: 32px;
-            height: 32px;
-            display: block;
-            margin: 0 auto 5px;
-            object-fit: contain;
-        }
-        .icon-radio {
-            display: none;
-        }
-        .icon-name {
-            font-size: 11px;
-            color: #666;
-            max-width: 80px;
-            word-break: break-all;
-        }
-        .error-container {
-            max-width: 500px;
-            margin: 10px auto;
-            padding: 15px;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 5px;
-            color: #721c24;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/forms.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/icons.css">
 </head>
 <body>
+<div class="container">
     <h2>Edit Expense Category</h2>
 
     <c:if test="${not empty errors}">
-        <div style="color: red; margin: 10px 0; padding: 10px; border: 1px solid red;">
+        <div class="error-container">
             <c:forEach var="error" items="${errors}">
-                <div class="error">${error.message}</div>
+                <div class="error-item">${error.message}</div>
             </c:forEach>
         </div>
     </c:if>
+
     <div class="form-container">
         <form method="post" action="${pageContext.request.contextPath}/expense-category/update">
             <input type="hidden" name="uuid" value="${category.id}">
 
             <div class="form-group">
                 <label for="name">Category Name:</label>
-                <input type="text" id="name" name="name" value="${category.name}" required>
+                <input class="form-input" type="text" id="name" name="name" value="${category.name}" required
+                       placeholder="Enter category name">
             </div>
 
             <div class="form-group">
@@ -128,7 +38,7 @@
                                 <c:set var="isSelected" value="${icon eq category.icon}" />
                                 <label class="icon-option <c:if test='${isSelected}'>selected</c:if>">
                                     <input type="radio" name="icon" value="${icon}"
-                                           class="icon-radio" <c:if test='${isSelected}'>checked</c:if>>
+                                           class="icon-radio" <c:if test='${isSelected}'>checked</c:if> required>
                                     <img src="${pageContext.request.contextPath}/static/icons/expense/${icon}?v=1.0"
                                          alt="${icon}"
                                          onerror="this.style.display='none'">
@@ -137,18 +47,21 @@
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <div style="color: #666; font-style: italic;">
-                                No icons found
+                            <div class="no-icons-message">
+                                No icons found. Please check the /static/icons/expense folder.
                             </div>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">Update Category</button>
-            <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
+            <div>
+                <button type="submit" class="submit-btn">Update Category</button>
+                <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
+            </div>
         </form>
     </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

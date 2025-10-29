@@ -54,7 +54,7 @@ public class IncomeServiceImpl implements IncomeService {
     public IncomeResponse updateIncomeCategory(UUID uuid, IncomeCategoryEntity request, UUID userId) {
         List<FieldErrorDto> errors = new ArrayList<>();
         errors.addAll(validationService.validateName(request.getName()));
-        Optional<IncomeCategoryEntity> existingCategory = incomeRepository.findByUserIdAndIncomeId(userId, uuid);
+        Optional<IncomeCategoryEntity> existingCategory = incomeRepository.findByUserIdAndIncomeId(uuid, userId);
         if (existingCategory.isEmpty()) {
             errors.add(new FieldErrorDto("category", "Category not found or access denied"));
         }
