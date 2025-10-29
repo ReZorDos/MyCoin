@@ -46,9 +46,13 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseResponse updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request) {
+    public ExpenseResponse updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request, UUID userId) {
         List<FieldErrorDto> errors = new ArrayList<>();
         errors.addAll(validationService.validateName(request.getName()));
+        Optional<ExpenseCategoryEntity> existingCategory = expenseRepository.findByUserIdAndExpenseId(userId, uuid);
+        if (existingCategory.isEmpty()) {
+            errors.add(new FieldErrorDto("category", "Category not found or access denied"));
+        }
 
         if (!errors.isEmpty()) {
             return fail(errors);

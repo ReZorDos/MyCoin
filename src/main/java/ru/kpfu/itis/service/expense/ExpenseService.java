@@ -14,7 +14,7 @@ public interface ExpenseService {
 
     boolean deleteExpenseCategory(UUID uuid);
 
-    ExpenseResponse updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request);
+    ExpenseResponse updateExpenseCategory(UUID uuid, ExpenseCategoryEntity request, UUID userId);
 
     ExpenseCategoryEntity getCategoryById(UUID uuid);
 

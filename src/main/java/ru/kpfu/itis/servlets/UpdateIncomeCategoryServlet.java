@@ -54,7 +54,7 @@ public class UpdateIncomeCategoryServlet extends HttpServlet {
                 .icon(req.getParameter("icon"))
                 .build();
 
-        IncomeResponse incomeResponse =  incomeService.updateIncomeCategory(uuid, income);
+        IncomeResponse incomeResponse =  incomeService.updateIncomeCategory(uuid, income, (UUID) req.getSession(false).getAttribute("userId"));
 
         if (!incomeResponse.isSuccess()) {
             req.getSession().setAttribute("errors", incomeResponse.getErrors());
