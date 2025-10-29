@@ -16,7 +16,10 @@ public class ErrorsCleanFilter implements Filter {
             "/create-expense",
             "/create-income",
             "/expense-category/update",
-            "/income-category/update");
+            "/income-category/update",
+            "/create-transaction/expense",
+            "/create-transaction/income"
+    );
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

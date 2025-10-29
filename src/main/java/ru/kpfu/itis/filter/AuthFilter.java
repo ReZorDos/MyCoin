@@ -12,7 +12,19 @@ import java.util.Objects;
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
-    private static final List<String> PRIVATE_MAPPING = List.of("/profile", "/logout", "/create-expense", "/create-income");
+    private static final List<String> PRIVATE_MAPPING = List.of(
+            "/profile",
+            "/logout",
+            "/create-expense",
+            "/create-income",
+            "/all-transactions",
+            "/create-transaction/expense",
+            "/create-transaction/income",
+            "/expense-category/delete",
+            "/income-category/delete",
+            "/expense-category/update",
+            "/income-category/update"
+    );
     private static final List<String> NOT_ALLOWED_FOR_AUTHENTICATED_MAPPINGS = List.of("/sign-in", "/sign-up");
     private static final String DEFAULT_AUTH_REDIRECT = "/profile";
     private static final String DEFAULT_NO_AUTH_REDIRECT = "/sign-in";
