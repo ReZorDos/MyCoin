@@ -3,44 +3,8 @@
 <html>
 <head>
     <title>Welcome Page</title>
-    <style>
-        .button-container {
-            margin: 20px 0;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        .sign-in {
-            background-color: #008CBA;
-        }
-        .sign-in:hover {
-            background-color: #007B9A;
-        }
-        .profile {
-            background-color: #f44336;
-        }
-        .profile:hover {
-            background-color: #da190b;
-        }
-        .logout {
-            background-color: #ff9800;
-        }
-        .logout:hover {
-            background-color: #e68900;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/welcome.css">
 </head>
 <body>
     <h2>Добро пожаловать в систему управления финансами!</h2>
@@ -65,12 +29,5 @@
             </c:otherwise>
         </c:choose>
     </div>
-
-    <c:if test="${not empty sessionScope.user}">
-        <div style="margin: 20px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-            <p>Добро пожаловать, <strong>${sessionScope.user.name}</strong>!</p>
-        </div>
-    </c:if>
-
 </body>
 </html>

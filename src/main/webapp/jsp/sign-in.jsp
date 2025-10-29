@@ -3,57 +3,34 @@
 <html>
 <head>
     <title>Sign In</title>
-    <style>
-        .error {
-            color: red;
-            margin: 5px 0;
-        }
-        form {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            max-width: 300px;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 15px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/auth.css">
 </head>
 <body>
-
+<div class="auth-page">
     <h1>Sign in Page</h1>
 
-    <form action="${pageContext.request.contextPath}/sign-in" method="post">
-        <label>Email: <input type="text" name="email" value="${param.email}"></label><br>
-        <label>Password: <input type="password" name="password"></label><br>
-        <input type="submit" value="Sign in">
+    <form class="auth-form" action="${pageContext.request.contextPath}/sign-in" method="post">
+        <label>Email:
+            <input class="auth-input" type="text" name="email" value="${param.email}"
+                   placeholder="Enter your email">
+        </label>
+        <label>Password:
+            <input class="auth-input" type="password" name="password"
+                   placeholder="Enter your password">
+        </label>
+        <input class="auth-submit" type="submit" value="Sign in">
     </form>
 
     <c:if test="${not empty errors}">
-        <div style="color: red; margin: 10px 0;">
+        <div class="error-container">
             <c:forEach var="error" items="${errors}">
-                <div class="error">
-                    Field: ${error.field}, Error: ${error.message}
+                <div class="error-item">
+                    <strong>Field: ${error.field}</strong> - ${error.message}
                 </div>
             </c:forEach>
         </div>
     </c:if>
-
+</div>
 </body>
 </html>
