@@ -13,6 +13,7 @@ import ru.kpfu.itis.service.income.IncomeService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -50,9 +51,13 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
-    public IncomeResponse updateIncomeCategory(UUID uuid, IncomeCategoryEntity request) {
+    public IncomeResponse updateIncomeCategory(UUID uuid, IncomeCategoryEntity request, UUID userId) {
         List<FieldErrorDto> errors = new ArrayList<>();
         errors.addAll(validationService.validateName(request.getName()));
+        Optional<IncomeCategoryEntity> existingCategory = incomeRepository.findByUserIdAndIncomeId(userId, uuid);
+        if (existingCategory.isEmpty()) {
+            errors.add(new FieldErrorDto("category", "Category not found or access denied"));
+        }
 
         if (!errors.isEmpty()) {
             return fail(errors);

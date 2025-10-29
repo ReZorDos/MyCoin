@@ -54,7 +54,7 @@ public class UpdateExpenseCategoryServlet extends HttpServlet {
                 .icon(req.getParameter("icon"))
                 .build();
 
-        ExpenseResponse expenseResponse = expenseService.updateExpenseCategory(uuid, expense);
+        ExpenseResponse expenseResponse = expenseService.updateExpenseCategory(uuid, expense, (UUID) req.getSession(false).getAttribute("userId"));
 
         if (!expenseResponse.isSuccess()) {
             req.getSession().setAttribute("errors", expenseResponse.getErrors());
