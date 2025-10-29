@@ -58,14 +58,6 @@
         <a href="${pageContext.request.contextPath}/profile" class="back-link">← Вернуться в профиль</a>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const preselectedCategoryId = '${preselectedCategoryId != null ? preselectedCategoryId : ""}';
-
-        if (!preselectedCategoryId) {
-            console.warn('No category selected for transaction');
-        }
-    });
-</script>
+<script src="${pageContext.request.contextPath}/static/js/transaction-common.js"></script>
 </body>
 </html>
