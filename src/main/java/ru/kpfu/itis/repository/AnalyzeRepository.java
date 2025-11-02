@@ -18,4 +18,6 @@ public interface AnalyzeRepository {
     List<TransactionEntity> findLastExpenseTransactions(UUID userId);
     List<TransactionEntity> findLastIncomeTransactions(UUID userId);
 
+    Double findTotalExpensesByPeriod(UUID userId, LocalDate start, LocalDate end);
+
 }

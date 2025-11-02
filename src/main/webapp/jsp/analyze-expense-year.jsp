@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Анализ расходов за месяц</title>
+    <title>Анализ расходов за год</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -146,35 +146,112 @@
         .summary-value {
             font-weight: bold;
         }
+
+        .yearly-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
         <h1>Анализ расходов за год</h1>
-        <p>Период: с <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/> по <fmt:formatDate value="${endDate}" pattern="dd.MM.yyyy"/></p>
+        <p>Период: <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/> - <fmt:formatDate value="${endDate}" pattern="dd.MM.yyyy"/></p>
+    </div>
+
+    <div class="yearly-stats">
+        <div class="stat-card">
+            <div class="stat-label">Расходы за год</div>
+            <div class="stat-value">
+                <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Изменение за прошлый год</div>
+            <div class="stat-value" style="color:
+            <c:choose>
+            <c:when test="${percentageChange <= 0}">#27ae60</c:when>
+            <c:when test="${percentageChange > 0}">#e74c3c</c:when>
+            <c:otherwise>#ffffff</c:otherwise>
+            </c:choose>;">
+                <c:choose>
+                    <c:when test="${percentageChange > 0}">
+                        +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
+                    </c:when>
+                    <c:when test="${percentageChange < 0}">
+                        <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
+                    </c:when>
+                    <c:otherwise>
+                        0.0% →
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="stat-label" style="font-size: 12px; margin-top: 5px;">
+                Прошлый год: <fmt:formatNumber value="${previousTotal}" type="currency" currencyCode="RUB"/>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Категорий расходов</div>
+            <div class="stat-value">${empty expenseCategories ? 0 : expenseCategories.size()}</div>
+        </div>
     </div>
 
     <div class="chart-section">
-        <div class="chart-title">Распределение расходов по категориям</div>
+        <div class="chart-title">Распределение расходов по категориям за год</div>
         <div class="chart-container">
             <img src="${pageContext.request.contextPath}/chart/expense?period=year"
-                 alt="График расходов по категориям"
+                 alt="График расходов по категориям за год"
                  style="max-width: 600px; height: auto;" />
         </div>
     </div>
 
     <div class="summary">
-        <div class="summary-title">Сводная информация</div>
-        <c:set var="totalExpenses" value="0" />
-        <c:forEach var="category" items="${expenseCategories}">
-            <c:set var="totalExpenses" value="${totalExpenses + category.sum}" />
-        </c:forEach>
-
+        <div class="summary-title">Сводная информация за год</div>
         <div class="summary-item">
             <span class="summary-label">Общая сумма расходов:</span>
             <span class="summary-value" style="color: #e74c3c;">
-                <fmt:formatNumber value="${totalExpenses}" type="currency" currencyCode="RUB"/>
+                <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
+            </span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Изменение к прошлому году:</span>
+            <span class="summary-value"
+                  style="color: ${percentageChange <= 0 ? '#27ae60' : '#e74c3c'};">
+                <c:choose>
+                    <c:when test="${percentageChange > 0}">
+                        +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
+                    </c:when>
+                    <c:when test="${percentageChange < 0}">
+                        <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
+                    </c:when>
+                    <c:otherwise>
+                        <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% →
+                    </c:otherwise>
+                </c:choose>
             </span>
         </div>
         <div class="summary-item">
@@ -189,7 +266,7 @@
 
     <div class="data-section">
         <div class="expense-categories">
-            <div class="section-title">Самые затратные категории</div>
+            <div class="section-title">Самые затратные категории за год</div>
             <c:choose>
                 <c:when test="${not empty expenseCategories}">
                     <c:forEach var="category" items="${expenseCategories}">
@@ -202,7 +279,7 @@
                     </c:forEach>
                 </c:when>
                 <c:otherwise>
-                    <div class="no-data">Нет данных о расходах за текущий месяц</div>
+                    <div class="no-data">Нет данных о расходах за текущий год</div>
                 </c:otherwise>
             </c:choose>
         </div>

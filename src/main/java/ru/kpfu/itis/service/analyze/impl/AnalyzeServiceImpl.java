@@ -104,4 +104,17 @@ public class AnalyzeServiceImpl implements AnalyzeService {
         }
         return result;
     }
+
+    @Override
+    public Double getTotalExpensesByPeriod(UUID userId, LocalDate start, LocalDate end) {
+        return analyzeRepository.findTotalExpensesByPeriod(userId, start, end);
+    }
+
+    @Override
+    public Double getPercentageChange(double currentTotal, double previousTotal) {
+        if (previousTotal != 0) {
+            return ((currentTotal - previousTotal) / previousTotal) * 100;
+        }
+        return 0.0;
+    }
 }

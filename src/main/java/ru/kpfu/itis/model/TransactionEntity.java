@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,7 +23,7 @@ public class TransactionEntity {
     private UUID incomeCategoryId;
     private String title;
     private String type;
-    private Date date;
+    private Timestamp date;
     private double sum;
 
 }

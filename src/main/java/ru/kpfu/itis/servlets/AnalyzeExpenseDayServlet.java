@@ -29,16 +29,24 @@ public class AnalyzeExpenseDayServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID userId = (UUID) req.getSession(false).getAttribute("userId");
 
-        LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(1);
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
 
-        List<ExpenseDto> expenseCategories = analyzeService.getMostExpenseCategoryByPeriod(userId, start, end);
+        LocalDate yesterday = today.minusDays(1);
+
+        List<ExpenseDto> expenseCategories = analyzeService.getMostExpenseCategoryByPeriod(userId, today, tomorrow);
         List<TransactionDto> lastTransactions = analyzeService.getLastFiveExpenseTransactions(userId);
+        Double currentTotal = analyzeService.getTotalExpensesByPeriod(userId, today, tomorrow);
+        Double previousTotal = analyzeService.getTotalExpensesByPeriod(userId, yesterday, today);
+        Double percentageChange = analyzeService.getPercentageChange(currentTotal, previousTotal);
 
         req.setAttribute("expenseCategories", expenseCategories);
         req.setAttribute("lastTransactions", lastTransactions);
-        req.setAttribute("startDate", java.sql.Date.valueOf(start));
-        req.setAttribute("endDate", java.sql.Date.valueOf(start));
+        req.setAttribute("startDate", java.sql.Date.valueOf(today));
+        req.setAttribute("endDate", java.sql.Date.valueOf(today));
+        req.setAttribute("currentTotal", currentTotal);
+        req.setAttribute("previousTotal", previousTotal);
+        req.setAttribute("percentageChange", percentageChange);
 
         req.getRequestDispatcher("/jsp/analyze-expense-day.jsp").forward(req, resp);
     }
