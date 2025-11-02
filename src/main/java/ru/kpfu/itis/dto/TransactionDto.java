@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,6 +23,6 @@ public class TransactionDto {
     private UUID incomeId;
     private UUID saveGoalId;
     private String type;
-    private Date date;
+    private Timestamp date;
 
 }

@@ -83,7 +83,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                     .expenseCategoryId(getUUIDOrNull(rs, "expense_category_id"))
                     .incomeCategoryId(getUUIDOrNull(rs, "income_category_id"))
                     .type(rs.getString("type"))
-                    .date(rs.getDate("date"))
+                    .date(rs.getTimestamp("date"))
                     .sum(rs.getDouble("sum"))
                     .build();
         }

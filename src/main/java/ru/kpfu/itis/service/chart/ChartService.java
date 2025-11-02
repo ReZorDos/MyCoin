@@ -11,4 +11,5 @@ public interface ChartService {
 
     ChartData createIncomePieChart(ChartDto request);
 
+    ChartData createIncomeExpenseLineChart(ChartDto request);
 }

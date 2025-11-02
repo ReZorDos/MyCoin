@@ -174,9 +174,28 @@
         <div class="summary-item">
             <span class="summary-label">Общая сумма расходов:</span>
             <span class="summary-value" style="color: #e74c3c;">
-                <fmt:formatNumber value="${totalExpenses}" type="currency" currencyCode="RUB"/>
-            </span>
+            <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
+        </span>
         </div>
+
+        <div class="summary-item">
+            <span class="summary-label">Изменение к прошлому месяцу:</span>
+            <span class="summary-value"
+                  style="color: ${percentageChange <= 0 ? '#27ae60' : '#e74c3c'};">
+            <c:choose>
+                <c:when test="${percentageChange > 0}">
+                    +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
+                </c:when>
+                <c:when test="${percentageChange < 0}">
+                    <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
+                </c:when>
+                <c:otherwise>
+                    <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% →
+                </c:otherwise>
+            </c:choose>
+        </span>
+        </div>
+
         <div class="summary-item">
             <span class="summary-label">Количество категорий расходов:</span>
             <span class="summary-value">${empty expenseCategories ? 0 : expenseCategories.size()}</span>

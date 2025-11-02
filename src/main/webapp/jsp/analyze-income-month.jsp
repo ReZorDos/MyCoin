@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Анализ расходов за месяц</title>
+    <title>Анализ доходов за день</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,7 +55,7 @@
             margin-bottom: 30px;
         }
 
-        .expense-categories, .last-transactions {
+        .income-categories, .last-transactions {
             flex: 1;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -77,7 +77,7 @@
             margin-bottom: 8px;
             background-color: white;
             border-radius: 4px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #27ae60;
         }
 
         .category-name {
@@ -86,7 +86,7 @@
         }
 
         .category-amount {
-            color: #e74c3c;
+            color: #27ae60;
             font-weight: bold;
         }
 
@@ -146,72 +146,99 @@
         .summary-value {
             font-weight: bold;
         }
+
+        .daily-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>Анализ расходов за неделю</h1>
-        <p>Период: с <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/> по <fmt:formatDate value="${endDate}" pattern="dd.MM.yyyy"/></p>
+        <h1>Анализ доходов за месяц</h1>
+        <p>Дата: <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/></p>
+    </div>
+
+    <div class="daily-stats">
+        <div class="stat-card">
+            <div class="stat-label">Доходы за месяц</div>
+            <div class="stat-value">
+                <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Изменение за прошлый месяц</div>
+            <div class="stat-value" style="color:
+            <c:choose>
+            <c:when test="${percentageChange >= 0}">#2c3e50</c:when>
+            <c:when test="${percentageChange < 0}">#e74c3c</c:when>
+            <c:otherwise>#ffffff</c:otherwise>
+            </c:choose>;">
+                <c:choose>
+                    <c:when test="${percentageChange > 0}">
+                        +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
+                    </c:when>
+                    <c:when test="${percentageChange < 0}">
+                        <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
+                    </c:when>
+                    <c:otherwise>
+                        0.0% →
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="stat-label" style="font-size: 12px; margin-top: 5px;">
+                Прошлый месяц: <fmt:formatNumber value="${previousTotal}" type="currency" currencyCode="RUB"/>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Категорий доходов</div>
+            <div class="stat-value">${empty incomeCategories ? 0 : incomeCategories.size()}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Транзакций</div>
+            <div class="stat-value">${empty lastTransactions ? 0 : lastTransactions.size()}</div>
+        </div>
     </div>
 
     <div class="chart-section">
-        <div class="chart-title">Распределение расходов по категориям</div>
+        <div class="chart-title">Распределение доходов за месяц</div>
         <div class="chart-container">
-            <img src="${pageContext.request.contextPath}/chart/expense?period=week"
-                 alt="График расходов по категориям"
+            <img src="${pageContext.request.contextPath}/chart/income?period=month"
+                 alt="График доходов по категориям за день"
                  style="max-width: 600px; height: auto;" />
         </div>
     </div>
 
-    <div class="summary">
-        <div class="summary-title">Сводная информация</div>
-        <c:set var="totalExpenses" value="0" />
-        <c:forEach var="category" items="${expenseCategories}">
-            <c:set var="totalExpenses" value="${totalExpenses + category.sum}" />
-        </c:forEach>
-
-        <div class="summary-item">
-            <span class="summary-label">Общая сумма расходов:</span>
-            <span class="summary-value" style="color: #e74c3c;">
-            <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
-        </span>
-        </div>
-
-        <div class="summary-item">
-            <span class="summary-label">Изменение к прошлому месяцу:</span>
-            <span class="summary-value"
-                  style="color: ${percentageChange <= 0 ? '#27ae60' : '#e74c3c'};">
-            <c:choose>
-                <c:when test="${percentageChange > 0}">
-                    +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
-                </c:when>
-                <c:when test="${percentageChange < 0}">
-                    <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
-                </c:when>
-                <c:otherwise>
-                    <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% →
-                </c:otherwise>
-            </c:choose>
-        </span>
-        </div>
-
-        <div class="summary-item">
-            <span class="summary-label">Количество категорий расходов:</span>
-            <span class="summary-value">${empty expenseCategories ? 0 : expenseCategories.size()}</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">Последние транзакции:</span>
-            <span class="summary-value">${empty lastTransactions ? 0 : lastTransactions.size()}</span>
-        </div>
-    </div>
-
     <div class="data-section">
-        <div class="expense-categories">
-            <div class="section-title">Самые затратные категории</div>
+        <div class="income-categories">
+            <div class="section-title">Категории доходов за месяц</div>
             <c:choose>
-                <c:when test="${not empty expenseCategories}">
-                    <c:forEach var="category" items="${expenseCategories}">
+                <c:when test="${not empty incomeCategories}">
+                    <c:forEach var="category" items="${incomeCategories}">
                         <div class="category-item">
                             <div class="category-name">${category.name}</div>
                             <div class="category-amount">
@@ -221,13 +248,13 @@
                     </c:forEach>
                 </c:when>
                 <c:otherwise>
-                    <div class="no-data">Нет данных о расходах за текущий месяц</div>
+                    <div class="no-data">Нет доходов за месяц</div>
                 </c:otherwise>
             </c:choose>
         </div>
 
         <div class="last-transactions">
-            <div class="section-title">Последние транзакции</div>
+            <div class="section-title">Транзакции за день</div>
             <c:choose>
                 <c:when test="${not empty lastTransactions}">
                     <c:forEach var="transaction" items="${lastTransactions}">
@@ -243,7 +270,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
-                                <span class="transaction-amount ${transaction.sum > 0 ? 'income' : 'expense'}">
+                                <span class="transaction-amount ${transaction.type == 'INCOME' ? 'income' : 'expense'}">
                                     <fmt:formatNumber value="${transaction.sum}" type="currency" currencyCode="RUB"/>
                                 </span>
                             </div>
@@ -254,7 +281,7 @@
                     </c:forEach>
                 </c:when>
                 <c:otherwise>
-                    <div class="no-data">Нет данных о транзакциях</div>
+                    <div class="no-data">Нет транзакций за сегодня</div>
                 </c:otherwise>
             </c:choose>
         </div>

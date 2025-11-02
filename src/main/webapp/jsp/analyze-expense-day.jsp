@@ -189,9 +189,35 @@
                 <c:set var="dailyTotal" value="${dailyTotal + category.sum}" />
             </c:forEach>
             <div class="stat-value">
-                <fmt:formatNumber value="${dailyTotal}" type="currency" currencyCode="RUB"/>
+                <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
             </div>
         </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Изменение за вчера</div>
+            <div class="stat-value" style="color:
+            <c:choose>
+            <c:when test="${percentageChange <= 0}">#27ae60</c:when>
+            <c:when test="${percentageChange > 0}">#e74c3c</c:when>
+            <c:otherwise>#ffffff</c:otherwise>
+            </c:choose>;">
+                <c:choose>
+                    <c:when test="${percentageChange > 0}">
+                        +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
+                    </c:when>
+                    <c:when test="${percentageChange < 0}">
+                        <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
+                    </c:when>
+                    <c:otherwise>
+                        0.0% →
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="stat-label" style="font-size: 12px; margin-top: 5px;">
+                Вчера: <fmt:formatNumber value="${previousTotal}" type="currency" currencyCode="RUB"/>
+            </div>
+        </div>
+
         <div class="stat-card">
             <div class="stat-label">Категорий расходов</div>
             <div class="stat-value">${empty expenseCategories ? 0 : expenseCategories.size()}</div>
