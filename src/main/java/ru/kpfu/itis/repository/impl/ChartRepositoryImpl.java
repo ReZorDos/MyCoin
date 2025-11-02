@@ -7,6 +7,7 @@ import ru.kpfu.itis.repository.ChartRepository;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,31 +27,30 @@ public class ChartRepositoryImpl implements ChartRepository {
             order by total desc
             """;
 
-    private final String SQL_GET_EXPENSE_BY_MONTH = """
-            select 
-                TO_CHAR(t.date, 'YYYY-MM') as month,
-                coalesce(SUM(t.sum), 0) as monthly_total
-            from transaction t
-            where t.user_id = ?
-                and t.type = 'EXPENSE'
-                and t.date is not null
+    private final String SQL_GET_INCOME_BY_CATEGORY = """
+            select ic.name, coalesce(sum(t.sum), 0) as total
+            from income_category ic
+            left join transaction t on ic.id = t.income_category_id
+            where ic.user_id = ?
                 and t.date >= ?
                 and t.date < ?
-            group by TO_CHAR(t.date, 'YYYY-MM')
-            having coalesce(SUM(t.sum), 0) > 0
-            order by month asc
+                and t.type = 'INCOME'
+            group by ic.id, ic.name
+            order by total desc
             """;
-    private final String SQL_GET_INCOME_BY_CATEGORY = """
-        select ic.name, coalesce(sum(t.sum), 0) as total
-        from income_category ic
-        left join transaction t on ic.id = t.income_category_id
-        where ic.user_id = ?
-            and t.date >= ?
-            and t.date < ?
-            and t.type = 'INCOME'
-        group by ic.id, ic.name
-        order by total desc
-        """;
+    private final String SQL_GET_INCOME_EXPENSE_BY_MONTH = """
+            select 
+                to_char(t.date, 'YYYY-MM') as month,
+                coalesce(sum(case when t.type = 'INCOME' then t.sum else 0 end), 0) as income_total,
+                coalesce(sum(case when t.type = 'EXPENSE' then t.sum else 0 end), 0) as expense_total
+            from transaction t
+            where t.user_id = ?
+                and t.date is not null
+                and (t.date >= ? or ? is null)
+                and (t.date < ? or ? is null)
+            group by to_char(t.date, 'YYYY-MM')
+            order by to_char(t.date, 'YYYY-MM') asc
+            """;
 
     @Override
     public Map<String, Number> getExpensesByCategory(UUID userId, LocalDate start, LocalDate end) {
@@ -81,26 +81,24 @@ public class ChartRepositoryImpl implements ChartRepository {
     }
 
     @Override
-    public Map<String, Map<String, Number>> getExpenseByMonth(UUID userId, LocalDate start, LocalDate end) {
-        Map<String, Number> monthlyData = jdbcTemplate.query(SQL_GET_EXPENSE_BY_MONTH,
+    public Map<String, Map<String, Number>> getIncomeExpenseByMonth(UUID userId, LocalDate start, LocalDate end) {
+        return jdbcTemplate.query(SQL_GET_INCOME_EXPENSE_BY_MONTH,
                 (ResultSet rs) -> {
-                    Map<String, Number> result = new HashMap<>();
+                    Map<String, Map<String, Number>> result = new HashMap<>();
+                    Map<String, Number> incomeData = new LinkedHashMap<>();
+                    Map<String, Number> expenseData = new LinkedHashMap<>();
+
                     while (rs.next()) {
                         String month = rs.getString("month");
-                        double total = rs.getDouble("monthly_total");
-                        result.put(month, total);
+                        double income = rs.getDouble("income_total");
+                        double expense = rs.getDouble("expense_total");
+
+                        incomeData.put(month, income);
+                        expenseData.put(month, expense);
                     }
+                    result.put("Income", incomeData);
+                    result.put("Expense", expenseData);
                     return result;
-                }, userId, start, end);
-
-        Map<String, Map<String, Number>> result = new HashMap<>();
-        Map<String, Number> totalExpenses = new HashMap<>();
-
-        for (Map.Entry<String, Number> entry : monthlyData.entrySet()) {
-            totalExpenses.put(entry.getKey(), entry.getValue());
-        }
-
-        result.put("Total Expenses", totalExpenses);
-        return result;
+                }, userId, start, start, end, end);
     }
 }

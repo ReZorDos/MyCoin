@@ -15,5 +15,4 @@ public class ChartData {
     private UUID userId;
     private String imageBase64;
     private String type;
-    private String period;
 }
