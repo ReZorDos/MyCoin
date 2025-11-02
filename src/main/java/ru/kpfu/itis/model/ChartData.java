@@ -1,4 +1,4 @@
-package ru.kpfu.itis.dto.categories;
+package ru.kpfu.itis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,14 +8,12 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class IncomeDto {
-
-    private String name;
+@AllArgsConstructor
+@Builder
+public class ChartData {
     private UUID userId;
-    private String icon;
-    private double sum;
-
+    private String imageBase64;
+    private String type;
+    private String period;
 }

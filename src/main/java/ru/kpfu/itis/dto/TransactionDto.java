@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -20,5 +21,6 @@ public class TransactionDto {
     private UUID incomeId;
     private UUID saveGoalId;
     private String type;
+    private Date date;
 
 }

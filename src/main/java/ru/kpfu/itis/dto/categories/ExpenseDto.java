@@ -16,5 +16,6 @@ public class ExpenseDto {
     private String name;
     private UUID userId;
     private String icon;
+    private double sum;
 
 }

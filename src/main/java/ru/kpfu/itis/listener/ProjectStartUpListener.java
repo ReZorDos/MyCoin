@@ -1,25 +1,23 @@
 package ru.kpfu.itis.listener;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import org.springframework.jdbc.core.JdbcTemplate;
 import ru.kpfu.itis.config.JdbcConfig;
-import ru.kpfu.itis.repository.ExpenseCategoryRepository;
-import ru.kpfu.itis.repository.IncomeCategoryRepository;
-import ru.kpfu.itis.repository.TransactionRepository;
-import ru.kpfu.itis.repository.UserRepository;
-import ru.kpfu.itis.repository.impl.ExpenseCategoryRepositoryImpl;
-import ru.kpfu.itis.repository.impl.IncomeCategoryRepositoryImpl;
-import ru.kpfu.itis.repository.impl.TransactionRepositoryImpl;
-import ru.kpfu.itis.repository.impl.UserRepositoryImpl;
+import ru.kpfu.itis.repository.*;
+import ru.kpfu.itis.repository.impl.*;
+import ru.kpfu.itis.service.analyze.AnalyzeService;
+import ru.kpfu.itis.service.analyze.impl.AnalyzeServiceImpl;
 import ru.kpfu.itis.service.auth.AuthDataValidationService;
 import ru.kpfu.itis.service.auth.AuthService;
 import ru.kpfu.itis.service.auth.PasswordEncoder;
 import ru.kpfu.itis.service.auth.impl.AuthServiceImpl;
 import ru.kpfu.itis.service.auth.impl.BCryptPasswordEncoder;
 import ru.kpfu.itis.service.auth.impl.RegexpAuthDataValidationService;
+import ru.kpfu.itis.service.chart.ChartService;
+import ru.kpfu.itis.service.chart.impl.ChartServiceImpl;
 import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.expense.impl.ExpenseServiceImpl;
@@ -72,5 +70,15 @@ public class ProjectStartUpListener implements ServletContextListener {
         UserService userService = new UserServiceImpl(userRepository);
         context.setAttribute("userService", userService);
 
+        ChartRepository chartRepository = new ChartRepositoryImpl(JdbcConfig.getJdbcTemplate());
+        ChartService chartService = new ChartServiceImpl(chartRepository);
+        context.setAttribute("chartService", chartService);
+
+        Gson gson = new Gson();
+        context.setAttribute("gson", gson);
+
+        AnalyzeRepository analyzeRepository = new AnalyzeRepositoryImpl(JdbcConfig.getJdbcTemplate(), userRepository);
+        AnalyzeService analyzeService = new AnalyzeServiceImpl(analyzeRepository);
+        context.setAttribute("analyzeService", analyzeService);
     }
 }
