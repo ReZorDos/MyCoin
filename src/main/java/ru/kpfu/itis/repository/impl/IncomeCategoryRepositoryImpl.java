@@ -26,7 +26,7 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
     private final IncomeRowMapper rowMapper = new IncomeRowMapper();
     private static final String SQL_DELETE_BY_ID = "delete from income_category where id = ?";
     private static final String SQL_FIND_BY_ID = "select * from income_category where id = ?";
-    private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from income_category where user_id = ?";
+    private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from income_category where user_id = ? order by created_at asc";
     private static final String SQL_UPDATE_TOTAL_AMOUNT = "update income_category set total_amount = ? where id = ?";
     private static final String SQL_UPDATE_BY_ID = """
             update income_category
@@ -121,6 +121,7 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
                     .name(rs.getString("name"))
                     .totalAmount(rs.getDouble("total_amount"))
                     .icon(rs.getString("icon"))
+                    .createdAt(rs.getTimestamp("created_at"))
                     .build();
         }
     }

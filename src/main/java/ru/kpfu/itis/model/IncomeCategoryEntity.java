@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
@@ -18,5 +19,6 @@ public class IncomeCategoryEntity {
     private double totalAmount;
     private UUID userId;
     private String icon;
+    private Timestamp createdAt;
 
 }

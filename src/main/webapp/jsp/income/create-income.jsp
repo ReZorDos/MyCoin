@@ -40,7 +40,6 @@
                                 <img src="${pageContext.request.contextPath}/static/icons/income/${icon}?v=1.0"
                                      alt="${icon}"
                                      onerror="this.style.display='none'">
-                                <div class="icon-name">${icon}</div>
                             </label>
                         </c:forEach>
                     </c:when>
