@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class ChartServiceImpl implements ChartService {
@@ -51,17 +52,6 @@ public class ChartServiceImpl implements ChartService {
     private static final Font LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     private static final Font LEGEND_FONT = new Font("Segoe UI", Font.PLAIN, 13);
 
-    @Override
-    public ChartData getChartData(ChartDto request) {
-        switch (request.getChartType()) {
-            case "expense":
-                return createExpensePieChart(request);
-            case "income":
-                return createIncomePieChart(request);
-            default:
-                return createEmptyChart("");
-        }
-    }
 
     @Override
     public ChartData createExpensePieChart(ChartDto request) {
@@ -90,7 +80,6 @@ public class ChartServiceImpl implements ChartService {
         return ChartData.builder()
                 .userId(request.getUserId())
                 .imageBase64(chartImage)
-                .type("pie")
                 .build();
     }
 
@@ -121,7 +110,6 @@ public class ChartServiceImpl implements ChartService {
         return ChartData.builder()
                 .userId(request.getUserId())
                 .imageBase64(chartImage)
-                .type("expense")
                 .build();
     }
 
@@ -138,8 +126,10 @@ public class ChartServiceImpl implements ChartService {
         Map<String, Number> incomeData = data.get("Income");
         Map<String, Number> expenseData = data.get("Expense");
 
-        List<String> sortedMonths = new ArrayList<>(incomeData.keySet());
-        Collections.sort(sortedMonths);
+        List<String> sortedMonths = Stream.concat(incomeData.keySet().stream(), expenseData.keySet().stream())
+                .distinct()
+                .sorted()
+                .toList();
 
         if (!sortedMonths.isEmpty()) {
             List<Double> incomeHistory = sortedMonths.stream()
@@ -209,7 +199,7 @@ public class ChartServiceImpl implements ChartService {
         }
 
         JFreeChart chart = ChartFactory.createLineChart(
-                "Динамика доходов и расходов по месяцам с прогнозом",
+                "Динамика доходов и расходов по месяцам",
                 "Месяц",
                 "Сумма (руб)",
                 dataset,
@@ -225,7 +215,6 @@ public class ChartServiceImpl implements ChartService {
         return ChartData.builder()
                 .userId(request.getUserId())
                 .imageBase64(chartImage)
-                .type("line")
                 .build();
     }
 
@@ -242,21 +231,6 @@ public class ChartServiceImpl implements ChartService {
         } catch (Exception e) {
             return month;
         }
-    }
-
-    private ChartData createEmptyChart(String message) {
-        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
-        dataset.setValue(message, 1);
-
-        JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);
-        stylePieChart(chart);
-
-        String chartImage = convertChartToBase64(chart, 800, 500);
-        return ChartData.builder()
-                .userId(null)
-                .imageBase64(chartImage)
-                .type("pie")
-                .build();
     }
 
     private void stylePieChart(JFreeChart chart) {

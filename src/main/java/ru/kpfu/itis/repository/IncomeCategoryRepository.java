@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface IncomeCategoryRepository {
 
     Optional<IncomeCategoryEntity> findByUserIdAndIncomeId(UUID userUUID, UUID incomeUUID);
-    List<IncomeCategoryEntity> findAllCategoriesByIdUser(UUID uuid);
+    List<IncomeCategoryEntity> findAllIncomeCategoriesByIdUser(UUID uuid);
     boolean deleteById(UUID uuid);
     IncomeCategoryEntity updateById(UUID uuid, IncomeCategoryEntity incomeCategory);
     void save(IncomeDto incomeCategory);

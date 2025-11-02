@@ -22,4 +22,6 @@ public interface ExpenseService {
 
     void updateExpenseCategoryTotal(UUID expenseId, Double transactionSum);
 
+    List<ExpenseCategoryEntity> getAllExpenseCategoriesByIdUser(UUID uuid);
+
 }

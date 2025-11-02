@@ -49,7 +49,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
     }
 
     @Override
-    public List<ExpenseCategoryEntity> findAllCategoriesByIdUser(UUID uuid) {
+    public List<ExpenseCategoryEntity> findAllExpenseCategoriesByIdUser(UUID uuid) {
         try {
             return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
         } catch (EmptyResultDataAccessException e) {

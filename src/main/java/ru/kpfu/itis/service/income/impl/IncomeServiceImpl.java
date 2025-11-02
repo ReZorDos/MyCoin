@@ -88,6 +88,11 @@ public class IncomeServiceImpl implements IncomeService {
         incomeRepository.updateTotalSum(incomeId, transactionSum);
     }
 
+    @Override
+    public List<IncomeCategoryEntity> getAllIncomeCategoriesByIdUser(UUID uuid) {
+        return incomeRepository.findAllIncomeCategoriesByIdUser(uuid);
+    }
+
     private IncomeResponse fail(List<FieldErrorDto> errors) {
         return IncomeResponse.builder()
                 .success(false)

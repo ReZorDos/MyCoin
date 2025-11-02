@@ -23,7 +23,16 @@ public class AuthFilter implements Filter {
             "/expense-category/delete",
             "/income-category/delete",
             "/expense-category/update",
-            "/income-category/update"
+            "/income-category/update",
+            "/analyze-expense/day",
+            "/analyze-expense/month",
+            "/analyze-expense/week",
+            "/analyze-expense/year",
+            "/analyze-income/day",
+            "/analyze-income/month",
+            "/analyze-income/week",
+            "/analyze-income/year",
+            "/analyze/overview"
     );
     private static final List<String> NOT_ALLOWED_FOR_AUTHENTICATED_MAPPINGS = List.of("/sign-in", "/sign-up");
     private static final String DEFAULT_AUTH_REDIRECT = "/profile";
