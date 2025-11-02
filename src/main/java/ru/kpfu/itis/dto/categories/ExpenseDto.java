@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Getter
@@ -17,5 +18,6 @@ public class ExpenseDto {
     private UUID userId;
     private String icon;
     private double sum;
+    private Timestamp createdAt;
 
 }
