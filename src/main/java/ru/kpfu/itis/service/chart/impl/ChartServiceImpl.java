@@ -48,9 +48,9 @@ public class ChartServiceImpl implements ChartService {
     @Override
     public ChartData getChartData(ChartDto request) {
         switch (request.getChartType()) {
-            case "exepnse":
+            case "expense":
                 return createExpensePieChart(request);
-            case "":
+            case "income":
                 return createIncomePieChart(request);
             default:
                 return createEmptyChart("no chart");
@@ -90,8 +90,33 @@ public class ChartServiceImpl implements ChartService {
 
     @Override
     public ChartData createIncomePieChart(ChartDto request) {
+        Map<String, Number> map = chartRepository.getIncomesByCategory(
+                request.getUserId(),
+                request.getStartDate(),
+                request.getEndDate()
+        );
 
-        return new ChartData();
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+        for (Map.Entry<String, Number> entry : map.entrySet()) {
+            dataset.setValue(entry.getKey(), entry.getValue().doubleValue());
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                null,
+                dataset,
+                true,
+                true,
+                false
+        );
+
+        stylePieChart(chart);
+
+        String chartImage = convertChartToBase64(chart, 800, 500);
+        return ChartData.builder()
+                .userId(request.getUserId())
+                .imageBase64(chartImage)
+                .type("pie")
+                .build();
     }
 
     private ChartData createEmptyChart(String message) {

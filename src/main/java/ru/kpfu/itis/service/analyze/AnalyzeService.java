@@ -18,6 +18,7 @@ public interface AnalyzeService {
     List<TransactionDto> getLastFiveIncomeTransactions(UUID userId);
 
     Double getTotalExpensesByPeriod(UUID userId, LocalDate start, LocalDate end);
+    Double getTotalIncomesByPeriod(UUID userId, LocalDate start, LocalDate end);
 
     Double getPercentageChange(double currentTotal, double previousTotal);
 

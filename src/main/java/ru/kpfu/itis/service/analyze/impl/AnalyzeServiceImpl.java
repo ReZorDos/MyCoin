@@ -111,6 +111,11 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     }
 
     @Override
+    public Double getTotalIncomesByPeriod(UUID userId, LocalDate start, LocalDate end) {
+        return analyzeRepository.findTotalIncomesByPeriod(userId, start, end);
+    }
+
+    @Override
     public Double getPercentageChange(double currentTotal, double previousTotal) {
         if (previousTotal != 0) {
             return ((currentTotal - previousTotal) / previousTotal) * 100;

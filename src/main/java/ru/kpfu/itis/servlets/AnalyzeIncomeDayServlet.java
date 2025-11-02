@@ -16,8 +16,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@WebServlet("/analyze-expense/day")
-public class AnalyzeExpenseDayServlet extends HttpServlet {
+@WebServlet("/analyze-income/day")
+public class AnalyzeIncomeDayServlet extends HttpServlet {
 
     private AnalyzeService analyzeService;
 
@@ -35,13 +35,13 @@ public class AnalyzeExpenseDayServlet extends HttpServlet {
 
         LocalDate yesterday = today.minusDays(1);
 
-        List<ExpenseDto> expenseCategories = analyzeService.getMostExpenseCategoryByPeriod(userId, today, tomorrow);
-        List<TransactionDto> lastTransactions = analyzeService.getLastFiveExpenseTransactions(userId);
-        Double currentTotal = analyzeService.getTotalExpensesByPeriod(userId, today, tomorrow);
-        Double previousTotal = analyzeService.getTotalExpensesByPeriod(userId, yesterday, today);
+        List<IncomeDto> incomeCategories = analyzeService.getMostIncomeCategoryByPeriod(userId, today, tomorrow);
+        List<TransactionDto> lastTransactions = analyzeService.getLastFiveIncomeTransactions(userId);
+        Double currentTotal = analyzeService.getTotalIncomesByPeriod(userId, today, tomorrow);
+        Double previousTotal = analyzeService.getTotalIncomesByPeriod(userId, yesterday, today);
         Double percentageChange = analyzeService.getPercentageChange(currentTotal, previousTotal);
 
-        req.setAttribute("expenseCategories", expenseCategories);
+        req.setAttribute("incomeCategories", incomeCategories);
         req.setAttribute("lastTransactions", lastTransactions);
         req.setAttribute("startDate", java.sql.Date.valueOf(today));
         req.setAttribute("endDate", java.sql.Date.valueOf(today));
@@ -49,6 +49,7 @@ public class AnalyzeExpenseDayServlet extends HttpServlet {
         req.setAttribute("previousTotal", previousTotal);
         req.setAttribute("percentageChange", percentageChange);
 
-        req.getRequestDispatcher("/jsp/analyze-expense-day.jsp").forward(req, resp);
+
+        req.getRequestDispatcher("/jsp/analyze-income-day.jsp").forward(req, resp);
     }
 }

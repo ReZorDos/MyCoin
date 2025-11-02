@@ -12,12 +12,14 @@ import ru.kpfu.itis.dto.categories.IncomeDto;
 import ru.kpfu.itis.service.analyze.AnalyzeService;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.UUID;
 
-@WebServlet("/analyze-expense/day")
-public class AnalyzeExpenseDayServlet extends HttpServlet {
+@WebServlet("/analyze-income/week")
+public class AnalyzeIncomeWeekServlet extends HttpServlet {
 
     private AnalyzeService analyzeService;
 
@@ -30,25 +32,26 @@ public class AnalyzeExpenseDayServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID userId = (UUID) req.getSession(false).getAttribute("userId");
 
-        LocalDate today = LocalDate.now();
-        LocalDate tomorrow = today.plusDays(1);
+        LocalDate start = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate end = start.plusWeeks(1);
 
-        LocalDate yesterday = today.minusDays(1);
+        LocalDate previousStart = start.minusWeeks(1);
+        LocalDate previousEnd = previousStart.plusWeeks(1);
 
-        List<ExpenseDto> expenseCategories = analyzeService.getMostExpenseCategoryByPeriod(userId, today, tomorrow);
-        List<TransactionDto> lastTransactions = analyzeService.getLastFiveExpenseTransactions(userId);
-        Double currentTotal = analyzeService.getTotalExpensesByPeriod(userId, today, tomorrow);
-        Double previousTotal = analyzeService.getTotalExpensesByPeriod(userId, yesterday, today);
+        List<IncomeDto> incomeCategories = analyzeService.getMostIncomeCategoryByPeriod(userId, start, end);
+        List<TransactionDto> lastTransactions = analyzeService.getLastFiveIncomeTransactions(userId);
+        Double currentTotal = analyzeService.getTotalIncomesByPeriod(userId, start, end);
+        Double previousTotal = analyzeService.getTotalIncomesByPeriod(userId, previousStart, previousEnd);
         Double percentageChange = analyzeService.getPercentageChange(currentTotal, previousTotal);
 
-        req.setAttribute("expenseCategories", expenseCategories);
+        req.setAttribute("incomeCategories", incomeCategories);
         req.setAttribute("lastTransactions", lastTransactions);
-        req.setAttribute("startDate", java.sql.Date.valueOf(today));
-        req.setAttribute("endDate", java.sql.Date.valueOf(today));
+        req.setAttribute("startDate", java.sql.Date.valueOf(start));
+        req.setAttribute("endDate", java.sql.Date.valueOf(end.minusDays(1)));
         req.setAttribute("currentTotal", currentTotal);
         req.setAttribute("previousTotal", previousTotal);
         req.setAttribute("percentageChange", percentageChange);
 
-        req.getRequestDispatcher("/jsp/analyze-expense-day.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/analyze-income-week.jsp").forward(req, resp);
     }
 }

@@ -40,10 +40,35 @@ public class ChartRepositoryImpl implements ChartRepository {
             having coalesce(SUM(t.sum), 0) > 0
             order by month asc
             """;
+    private final String SQL_GET_INCOME_BY_CATEGORY = """
+        select ic.name, coalesce(sum(t.sum), 0) as total
+        from income_category ic
+        left join transaction t on ic.id = t.income_category_id
+        where ic.user_id = ?
+            and t.date >= ?
+            and t.date < ?
+            and t.type = 'INCOME'
+        group by ic.id, ic.name
+        order by total desc
+        """;
 
     @Override
     public Map<String, Number> getExpensesByCategory(UUID userId, LocalDate start, LocalDate end) {
         return jdbcTemplate.query(SQL_GET_EXPENSE_BY_CATEGORY,
+                (ResultSet rs) -> {
+                    Map<String, Number> result = new HashMap<>();
+                    while (rs.next()) {
+                        String name = rs.getString("name");
+                        double total = rs.getDouble("total");
+                        result.put(name, total);
+                    }
+                    return result;
+                }, userId, start, end);
+    }
+
+    @Override
+    public Map<String, Number> getIncomesByCategory(UUID userId, LocalDate start, LocalDate end) {
+        return jdbcTemplate.query(SQL_GET_INCOME_BY_CATEGORY,
                 (ResultSet rs) -> {
                     Map<String, Number> result = new HashMap<>();
                     while (rs.next()) {
