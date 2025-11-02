@@ -52,7 +52,7 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
     }
 
     @Override
-    public List<IncomeCategoryEntity> findAllCategoriesByIdUser(UUID uuid) {
+    public List<IncomeCategoryEntity> findAllIncomeCategoriesByIdUser(UUID uuid) {
         try {
             return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
         } catch (EmptyResultDataAccessException e) {

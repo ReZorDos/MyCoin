@@ -87,6 +87,11 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseRepository.updateTotalSum(expenseId, transactionSum);
     }
 
+    @Override
+    public List<ExpenseCategoryEntity> getAllExpenseCategoriesByIdUser(UUID uuid) {
+        return expenseRepository.findAllExpenseCategoriesByIdUser(uuid);
+    }
+
     private ExpenseResponse fail(List<FieldErrorDto> errors) {
         return ExpenseResponse.builder()
                 .success(false)

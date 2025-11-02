@@ -1,4 +1,4 @@
-package ru.kpfu.itis.servlets;
+package ru.kpfu.itis.servlets.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,10 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/")
-public class WelcomePageServlet extends HttpServlet {
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/jsp/auth/welcome.jsp").forward(req, resp);
+        req.getSession(false).invalidate();
+        resp.sendRedirect("/");
     }
 }

@@ -21,4 +21,6 @@ public interface IncomeService {
     List<String> getAvailableIcons(String iconsPath);
 
     void updateIncomeCategoryTotal(UUID incomeId, Double transactionSum);
+
+    List<IncomeCategoryEntity> getAllIncomeCategoriesByIdUser(UUID uuid);
 }

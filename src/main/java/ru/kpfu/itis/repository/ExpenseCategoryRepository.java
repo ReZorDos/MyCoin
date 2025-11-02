@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface ExpenseCategoryRepository {
 
     Optional<ExpenseCategoryEntity> findByUserIdAndExpenseId(UUID userUUID, UUID expenseUUID);
-    List<ExpenseCategoryEntity> findAllCategoriesByIdUser(UUID uuid);
+    List<ExpenseCategoryEntity> findAllExpenseCategoriesByIdUser(UUID uuid);
     boolean deleteById(UUID uuid);
     ExpenseCategoryEntity updateById(UUID uuid, ExpenseCategoryEntity expenseCategory);
     void save(ExpenseDto expenseCategory);

@@ -48,14 +48,12 @@ public class ProjectStartUpListener implements ServletContextListener {
         context.setAttribute("authService", authService);
 
         ExpenseCategoryRepository expenseRepository = new ExpenseCategoryRepositoryImpl(JdbcConfig.getJdbcTemplate());
-        context.setAttribute("expenseRepository", expenseRepository);
         ExpenseDataValidationService validationExpenseService = new RegexpExpenseValidationService();
 
         ExpenseService expenseService = new ExpenseServiceImpl(expenseRepository, validationExpenseService);
         context.setAttribute("expenseService", expenseService);
 
         IncomeCategoryRepository incomeRepository = new IncomeCategoryRepositoryImpl(JdbcConfig.getJdbcTemplate());
-        context.setAttribute("incomeRepository", incomeRepository);
         IncomeDataValidation validationIncomeService = new RegexpIncomeValidationService();
 
         IncomeService incomeService = new IncomeServiceImpl(incomeRepository, validationIncomeService);
