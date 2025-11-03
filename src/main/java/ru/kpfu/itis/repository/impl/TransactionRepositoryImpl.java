@@ -22,7 +22,16 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final TransactionRowMapper rowMapper = new TransactionRowMapper();
-    private static final String SQL_GET_ALL_TRANSACTIONS_OF_USER = "select * from transaction where user_id = ?";
+    private static final String SQL_GET_ALL_TRANSACTIONS_OF_USER = """
+            select t.*,
+                    ec.name as expense_category_name,
+                    ic.name as income_category_name
+            from transaction t
+            left join expense_category ec ON t.expense_category_id = ec.id
+            left join income_category ic ON t.income_category_id = ic.id
+            where t.user_id = ?
+            order by t.date desc
+            """;
     private static final String SQL_SAVE_EXPENSE_TRANSACTION = """
             insert  into transaction (title, expense_category_id, saving_goal_id, user_id, sum, type)
             values (?, ?, ?, ?, ?, ?)
@@ -85,6 +94,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                     .type(rs.getString("type"))
                     .date(rs.getTimestamp("date"))
                     .sum(rs.getDouble("sum"))
+                    .expenseCategoryName(rs.getString("expense_category_name"))
+                    .incomeCategoryName(rs.getString("income_category_name"))
                     .build();
         }
 

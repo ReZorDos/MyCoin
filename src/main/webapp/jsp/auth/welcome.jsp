@@ -4,30 +4,26 @@
 <head>
     <title>Welcome Page</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/welcome.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/footer.css">
 </head>
 <body>
-    <h2>Добро пожаловать в систему управления финансами!</h2>
+<div class="page-wrapper">
+    <div></div>
 
-    <div class="button-container">
-        <c:choose>
-            <c:when test="${not empty sessionScope.user}">
-                <button class="button profile" onclick="location.href='${pageContext.request.contextPath}/profile'">
-                    Мой профиль
-                </button>
-                <button class="button logout" onclick="location.href='${pageContext.request.contextPath}/logout'">
-                    Выйти
-                </button>
-            </c:when>
-            <c:otherwise>
-                <button class="button" onclick="location.href='${pageContext.request.contextPath}/sign-up'">
-                    Регистрация
-                </button>
-                <button class="button sign-in" onclick="location.href='${pageContext.request.contextPath}/sign-in'">
-                    Войти
-                </button>
-            </c:otherwise>
-        </c:choose>
+    <div class="container">
+        <h1 class="logo">MyCoin</h1>
+        <p class="tagline">Умное управление финансами для вашего спокойствия</p>
+
+        <div class="btn-group">
+            <a href="${pageContext.request.contextPath}/sign-in" class="btn btn-primary">Войти</a>
+            <a href="${pageContext.request.contextPath}/sign-up" class="btn btn-secondary">Зарегистрироваться</a>
+        </div>
     </div>
+
+    <div class="footer">
+        Сайт разработан в рамках учебного проекта. GitHub
+        <a href="https://github.com/ReZorDos" target="_blank">тык</a>
+    </div>
+</div>
 </body>
 </html>

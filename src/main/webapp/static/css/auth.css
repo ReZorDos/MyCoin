@@ -1,78 +1,114 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0fdf4;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
 .auth-page {
+    background: white;
+    padding: 3rem 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    text-align: center;
     max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
+    width: 100%;
+    border: 1px solid #dcfce7;
+}
+
+.auth-page h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #166534;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
 }
 
 .auth-form {
-    margin: 20px 0;
-    padding: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+    text-align: left;
 }
 
 .auth-form label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: #166534;
 }
 
 .auth-input {
     width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
+    padding: 1rem;
+    margin: 0.5rem 0 1rem 0;
+    border: 2px solid #dcfce7;
+    border-radius: 10px;
+    font-size: 1rem;
     box-sizing: border-box;
+    transition: all 0.2s ease;
+    background: white;
 }
 
 .auth-input:focus {
     outline: none;
-    border-color: #008CBA;
-    box-shadow: 0 0 5px rgba(0,140,186,0.3);
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 .auth-submit {
+    background: #16a34a;
     color: white;
-    padding: 12px 24px;
+    padding: 1rem 2rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
     cursor: pointer;
-    font-size: 16px;
+    transition: all 0.2s ease;
     width: 100%;
-    transition: background-color 0.3s;
+    margin-top: 0.5rem;
+}
+
+.auth-submit:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+
+.auth-submit[value="Sign up"]:hover {
+    background: #007B9A;
+    transform: translateY(-1px);
 }
 
 .auth-submit[value="Sign in"] {
-    background-color: #4CAF50;
+    background: #16a34a;
 }
 
 .auth-submit[value="Sign in"]:hover {
-    background-color: #45a049;
-}
-
-.auth-submit[value="Sign up"] {
-    background-color: #008CBA;
-}
-
-.auth-submit[value="Sign up"]:hover {
-    background-color: #007B9A;
+    background: #15803d;
+    transform: translateY(-1px);
 }
 
 .error-container {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 4px;
-    padding: 15px;
-    margin: 15px 0;
-    color: #721c24;
+    background-color: #fef2f2;
+    border: 2px solid #fecaca;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    color: #dc2626;
+    text-align: left;
 }
 
 .error-item {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
 }

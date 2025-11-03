@@ -8,7 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
+import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
+import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.transaction.impl.TransactionServiceImpl;
 import ru.kpfu.itis.service.user.UserService;
@@ -16,6 +18,7 @@ import ru.kpfu.itis.service.user.UserService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @WebServlet("/create-transaction/expense")
@@ -37,6 +40,9 @@ public class CreateExpenseTransactionServlet extends HttpServlet {
 
         String categoryIdParam = req.getParameter("categoryId");
         req.setAttribute("preselectedCategoryId", UUID.fromString(categoryIdParam));
+        ExpenseCategoryEntity expense = expenseService.getCategoryById(UUID.fromString(categoryIdParam));
+        req.setAttribute("iconExpense", expense.getIcon());
+        req.setAttribute("nameExpense", expense.getName());
 
         List<FieldErrorDto>  errors = (List<FieldErrorDto>) req.getSession().getAttribute("errors");
         if (Objects.nonNull(errors)) {

@@ -3,12 +3,12 @@
 <html>
 <head>
     <title>Sign Up</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/auth.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/footer.css">
 </head>
 <body>
 <div class="auth-page">
-    <h1>Sign Up Page</h1>
+    <h1>Sign up</h1>
 
     <form class="auth-form" action="${pageContext.request.contextPath}/sign-up" method="post">
         <label>Nickname:
@@ -38,6 +38,11 @@
             </c:forEach>
         </div>
     </c:if>
+
+    <div class="footer">
+        Сайт разработан в рамках учебного проекта. GitHub
+        <a href="https://github.com/ReZorDos" target="_blank">тык</a>
+    </div>
 </div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <html>
 <head>
     <title>Sign In</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/auth.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/footer.css">
 </head>
 <body>
 <div class="auth-page">
-    <h1>Sign in Page</h1>
+    <h1>Sign in</h1>
 
     <form class="auth-form" action="${pageContext.request.contextPath}/sign-in" method="post">
         <label>Email:
@@ -31,6 +31,10 @@
             </c:forEach>
         </div>
     </c:if>
+    <div class="footer">
+        Сайт разработан в рамках учебного проекта. GitHub
+        <a href="https://github.com/ReZorDos" target="_blank">тык</a>
+    </div>
 </div>
 </body>
 </html>

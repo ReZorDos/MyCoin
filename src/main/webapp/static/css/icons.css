@@ -1,44 +1,55 @@
 .icons-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
     margin: 10px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    padding: 1.5rem;
+    border: 2px solid #dcfce7;
+    border-radius: 10px;
     max-height: 300px;
     overflow-y: auto;
-    background: #fafafa;
+    background: white;
+    justify-content: center;
 }
 
 .icon-option {
     text-align: center;
     cursor: pointer;
-    padding: 10px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    padding: 15px 10px;
+    border: 2px solid #dcfce7;
+    border-radius: 10px;
+    transition: all 0.2s ease;
     background: white;
-    width: 80px;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 0 0 calc(33.333% - 10px);
+    max-width: 100px;
+    min-height: 100px;
 }
 
 .icon-option:hover {
-    border-color: #007bff;
-    background-color: #f8f9fa;
+    border-color: #22c55e;
+    background-color: #f0fdf4;
+    transform: translateY(-2px);
 }
 
 .icon-option.selected {
-    border-color: #007bff;
-    background-color: #e3f2fd;
-    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+    border-color: #16a34a;
+    background-color: #dcfce7;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    transform: translateY(-2px);
 }
 
 .icon-option img {
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     display: block;
-    margin: 0 auto 5px;
     object-fit: contain;
+    margin: 0 auto;
 }
 
 .icon-radio {
@@ -47,15 +58,39 @@
 
 .icon-name {
     font-size: 11px;
-    color: #666;
+    color: #166534;
     max-width: 80px;
     word-break: break-all;
+    font-weight: 500;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .no-icons-message {
-    color: #666;
+    color: #65a30d;
     font-style: italic;
     text-align: center;
     padding: 20px;
     width: 100%;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #dcfce7;
+}
+
+.icons-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.icons-container::-webkit-scrollbar-track {
+    background: #f0fdf4;
+    border-radius: 3px;
+}
+
+.icons-container::-webkit-scrollbar-thumb {
+    background: #bbf7d0;
+    border-radius: 3px;
+}
+
+.icons-container::-webkit-scrollbar-thumb:hover {
+    background: #86efac;
 }

@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -24,5 +22,7 @@ public class TransactionDto {
     private UUID saveGoalId;
     private String type;
     private Timestamp date;
+    private String expenseCategoryName;
+    private String incomeCategoryName;
 
 }

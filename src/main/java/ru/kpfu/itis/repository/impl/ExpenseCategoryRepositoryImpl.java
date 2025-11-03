@@ -23,7 +23,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
     private static final String SQL_FIND_BY_ID = "select * from expense_category where id = ?";
     private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from expense_category where user_id = ? order by created_at asc";
     private static final String SQL_DELETE_BY_ID = "delete from expense_category where id = ?";
-    private static final String SQL_UPDATE_TOTAL_AMOUNT = "update expense_category set total_amount = ? where id = ?";
+    private static final String SQL_UPDATE_TOTAL_AMOUNT = "update expense_category set total_amount = total_amount + ? where id = ?";
     private static final String SQL_FIND_BY_USER_ID_AND_EXPENSE_ID = """
             select *
             from expense_category

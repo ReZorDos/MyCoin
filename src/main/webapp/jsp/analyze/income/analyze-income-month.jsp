@@ -3,287 +3,153 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Анализ доходов за день</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .chart-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .chart-container {
-            display: inline-block;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: white;
-        }
-
-        .chart-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .data-section {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .income-categories, .last-transactions {
-            flex: 1;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #fafafa;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 8px;
-        }
-
-        .category-item, .transaction-item {
-            padding: 10px;
-            margin-bottom: 8px;
-            background-color: white;
-            border-radius: 4px;
-            border-left: 4px solid #27ae60;
-        }
-
-        .category-name {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .category-amount {
-            color: #27ae60;
-            font-weight: bold;
-        }
-
-        .transaction-amount {
-            font-weight: bold;
-        }
-
-        .transaction-amount.income {
-            color: #27ae60;
-        }
-
-        .transaction-amount.expense {
-            color: #e74c3c;
-        }
-
-        .transaction-date {
-            color: #7f8c8d;
-            font-size: 12px;
-        }
-
-        .transaction-description {
-            margin-top: 5px;
-            color: #34495e;
-        }
-
-        .no-data {
-            text-align: center;
-            color: #7f8c8d;
-            font-style: italic;
-            padding: 20px;
-        }
-
-        .summary {
-            background-color: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .summary-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-
-        .summary-label {
-            font-weight: bold;
-        }
-
-        .summary-value {
-            font-weight: bold;
-        }
-
-        .daily-stats {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            flex: 1;
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-    </style>
+    <title>Анализ доходов за месяц</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/head.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/analyze-income.css">
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>Анализ доходов за месяц</h1>
-        <p>Дата: <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/></p>
+<header class="top-header">
+    <div class="app-container">
+        <div class="header-content">
+            <a href="${pageContext.request.contextPath}/profile" class="site-title">
+                MyCoin
+            </a>
+            <nav class="header-nav">
+                <a href="${pageContext.request.contextPath}/all-transactions" class="nav-link">
+                    Все транзакции
+                </a>
+                <a href="${pageContext.request.contextPath}/analyze/overview" class="nav-link">
+                    Общий анализ
+                </a>
+                <a href="${pageContext.request.contextPath}/analyze-expense/day" class="nav-link">
+                    Анализ расходов
+                </a>
+                <a href="${pageContext.request.contextPath}/analyze-income/day" class="nav-link">
+                    Анализ доходов
+                </a>
+                <a href="${pageContext.request.contextPath}/logout" class="nav-link logout">
+                    Выход
+                </a>
+            </nav>
+        </div>
     </div>
+</header>
 
-    <div class="daily-stats">
-        <div class="stat-card">
-            <div class="stat-label">Доходы за месяц</div>
-            <div class="stat-value">
-                <fmt:formatNumber value="${currentTotal}" type="currency" currencyCode="RUB"/>
+<div class="app-container">
+    <div class="main-content">
+        <div class="page-header">
+            <a href="${pageContext.request.contextPath}/profile" class="back-link">
+                ← Вернуться в профиль
+            </a>
+
+            <h1>Анализ доходов</h1>
+
+            <div class="period-navigation">
+                <a href="${pageContext.request.contextPath}/analyze-income/day" class="period-btn">За день</a>
+                <a href="${pageContext.request.contextPath}/analyze-income/week" class="period-btn">За неделю</a>
+                <a href="${pageContext.request.contextPath}/analyze-income/month" class="period-btn active">За месяц</a>
+                <a href="${pageContext.request.contextPath}/analyze-income/year" class="period-btn">За год</a>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Изменение за прошлый месяц</div>
-            <div class="stat-value" style="color:
-            <c:choose>
-            <c:when test="${percentageChange >= 0}">#2c3e50</c:when>
-            <c:when test="${percentageChange < 0}">#e74c3c</c:when>
-            <c:otherwise>#ffffff</c:otherwise>
-            </c:choose>;">
+        <div class="period-info">
+            Период: <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/> - <fmt:formatDate value="${endDate}" pattern="dd.MM.yyyy"/>
+        </div>
+
+        <div class="chart-stats-container">
+            <div class="chart-section">
+                <div class="chart-title">Распределение доходов за месяц</div>
+                <div class="chart-container">
+                    <img src="${pageContext.request.contextPath}/chart/income?period=month"
+                         alt="График доходов по категориям за месяц"
+                         style="max-width: 100%; height: auto;" />
+                </div>
+            </div>
+
+            <div class="stats-cards-vertical">
+                <div class="stat-card income">
+                    <div class="stat-label">Доходы за месяц</div>
+                    <div class="stat-value">
+                        <fmt:formatNumber value="${currentTotal}" pattern="#,##0.00"/> ₽
+                    </div>
+                </div>
+
+                <div class="stat-card change">
+                    <div class="stat-label">Изменение за прошлый месяц</div>
+                    <div class="stat-value ${percentageChange >= 0 ? 'positive' : 'negative'}">
+                        <c:choose>
+                            <c:when test="${percentageChange > 0}">
+                                +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>%
+                            </c:when>
+                            <c:when test="${percentageChange < 0}">
+                                <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>%
+                            </c:when>
+                            <c:otherwise>
+                                0.0%
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                    <div class="stat-label yesterday">
+                        Прошлый месяц: <fmt:formatNumber value="${previousTotal}" pattern="#,##0.00"/> ₽
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <div class="section-card">
+                <div class="section-title">Топ категорий доходов за месяц</div>
                 <c:choose>
-                    <c:when test="${percentageChange > 0}">
-                        +<fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↗
-                    </c:when>
-                    <c:when test="${percentageChange < 0}">
-                        <fmt:formatNumber value="${percentageChange}" pattern="0.0"/>% ↘
+                    <c:when test="${not empty incomeCategories}">
+                        <c:forEach var="category" items="${incomeCategories}">
+                            <div class="category-item">
+                                <div class="category-name">${category.name}</div>
+                                <div class="category-amount">
+                                    <fmt:formatNumber value="${category.sum}" pattern="#,##0.00"/> ₽
+                                </div>
+                            </div>
+                        </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        0.0% →
+                        <div class="no-data">Нет доходов за месяц</div>
                     </c:otherwise>
                 </c:choose>
             </div>
-            <div class="stat-label" style="font-size: 12px; margin-top: 5px;">
-                Прошлый месяц: <fmt:formatNumber value="${previousTotal}" type="currency" currencyCode="RUB"/>
+
+            <div class="section-card">
+                <div class="section-title">Топ транзакций за месяц</div>
+                <c:choose>
+                    <c:when test="${not empty lastTransactions}">
+                        <c:forEach var="transaction" items="${lastTransactions}">
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span class="transaction-title">
+                                        <c:choose>
+                                            <c:when test="${not empty transaction.title}">
+                                                ${transaction.title}
+                                            </c:when>
+                                            <c:otherwise>
+                                                Без описания
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                    <span class="transaction-amount income-amount">
+                                        <fmt:formatNumber value="${transaction.sum}" pattern="#,##0.00"/> ₽
+                                    </span>
+                                </div>
+                                <div class="transaction-footer">
+                                    <span class="transaction-date">
+                                        <fmt:formatDate value="${transaction.date}" pattern="dd.MM.yyyy HH:mm"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="no-data">Нет транзакций за месяц</div>
+                    </c:otherwise>
+                </c:choose>
             </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-label">Категорий доходов</div>
-            <div class="stat-value">${empty incomeCategories ? 0 : incomeCategories.size()}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Транзакций</div>
-            <div class="stat-value">${empty lastTransactions ? 0 : lastTransactions.size()}</div>
-        </div>
-    </div>
-
-    <div class="chart-section">
-        <div class="chart-title">Распределение доходов за месяц</div>
-        <div class="chart-container">
-            <img src="${pageContext.request.contextPath}/chart/income?period=month"
-                 alt="График доходов по категориям за день"
-                 style="max-width: 600px; height: auto;" />
-        </div>
-    </div>
-
-    <div class="data-section">
-        <div class="income-categories">
-            <div class="section-title">Категории доходов за месяц</div>
-            <c:choose>
-                <c:when test="${not empty incomeCategories}">
-                    <c:forEach var="category" items="${incomeCategories}">
-                        <div class="category-item">
-                            <div class="category-name">${category.name}</div>
-                            <div class="category-amount">
-                                <fmt:formatNumber value="${category.sum}" type="currency" currencyCode="RUB"/>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <div class="no-data">Нет доходов за месяц</div>
-                </c:otherwise>
-            </c:choose>
-        </div>
-
-        <div class="last-transactions">
-            <div class="section-title">Транзакции за день</div>
-            <c:choose>
-                <c:when test="${not empty lastTransactions}">
-                    <c:forEach var="transaction" items="${lastTransactions}">
-                        <div class="transaction-item">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="transaction-description">
-                                    <c:choose>
-                                        <c:when test="${not empty transaction.title}">
-                                            ${transaction.title}
-                                        </c:when>
-                                        <c:otherwise>
-                                            Без описания
-                                        </c:otherwise>
-                                    </c:choose>
-                                </span>
-                                <span class="transaction-amount ${transaction.type == 'INCOME' ? 'income' : 'expense'}">
-                                    <fmt:formatNumber value="${transaction.sum}" type="currency" currencyCode="RUB"/>
-                                </span>
-                            </div>
-                            <div class="transaction-date">
-                                <fmt:formatDate value="${transaction.date}" pattern="dd.MM.yyyy HH:mm"/>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <div class="no-data">Нет транзакций за сегодня</div>
-                </c:otherwise>
-            </c:choose>
         </div>
     </div>
 </div>

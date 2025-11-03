@@ -1,43 +1,22 @@
-let activeCard = null;
-
 document.addEventListener('DOMContentLoaded', function() {
     const images = document.querySelectorAll('.category-icon');
     images.forEach(img => {
         img.addEventListener('error', function() {
             this.style.display = 'none';
-            const noIcon = this.nextElementSibling;
-            if (noIcon && noIcon.classList.contains('no-icon')) {
-                noIcon.style.display = 'flex';
+            const fallback = this.nextElementSibling;
+            if (fallback && fallback.classList.contains('icon-fallback')) {
+                fallback.style.display = 'flex';
+            }
+        });
+
+        img.addEventListener('load', function() {
+            const fallback = this.nextElementSibling;
+            if (fallback && fallback.classList.contains('icon-fallback')) {
+                fallback.style.display = 'none';
             }
         });
     });
 
-    document.querySelectorAll('.category-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            if (e.target.closest('.actions-menu')) {
-                return;
-            }
-
-            if (activeCard && activeCard !== this) {
-                activeCard.classList.remove('active');
-            }
-
-            this.classList.toggle('active');
-
-            if (this.classList.contains('active')) {
-                activeCard = this;
-            } else {
-                activeCard = null;
-            }
-        });
-    });
-
-    document.addEventListener('click', function(e) {
-        if (activeCard && !activeCard.contains(e.target)) {
-            activeCard.classList.remove('active');
-            activeCard = null;
-        }
-    });
 });
 
 function deleteCategory(uuid, type) {

@@ -3,7 +3,6 @@
 <html>
 <head>
     <title>Создать категорию расходов</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/forms.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/icons.css">
 </head>
@@ -30,26 +29,26 @@
             <div class="form-group">
                 <label><strong>Выберите иконку:</strong></label>
 
-            <div class="icons-container">
-                <c:choose>
-                    <c:when test="${not empty availableIcons}">
-                        <c:forEach var="icon" items="${availableIcons}">
-                            <label class="icon-option">
-                                <input type="radio" name="icon" value="${icon}"
-                                       class="icon-radio" required>
-                                <img src="${pageContext.request.contextPath}/static/icons/expense/${icon}?v=1.0"
-                                     alt="${icon}"
-                                     onerror="this.style.display='none'">
-                            </label>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-icons-message">
-                            Иконки не найдены. Проверьте папку /static/icons/expense
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                <div class="icons-container">
+                    <c:choose>
+                        <c:when test="${not empty availableIcons}">
+                            <c:forEach var="icon" items="${availableIcons}">
+                                <label class="icon-option">
+                                    <input type="radio" name="icon" value="${icon}"
+                                           class="icon-radio" required>
+                                    <img src="${pageContext.request.contextPath}/static/icons/expense/${icon}?v=1.0"
+                                         alt="${icon}"
+                                         onerror="this.style.display='none'">
+                                </label>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-icons-message">
+                                Иконки не найдены. Проверьте папку /static/icons/expense
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
 
                 <small style="color: #666; display: block; margin-top: 8px;">* Выберите одну иконку из списка</small>
             </div>
