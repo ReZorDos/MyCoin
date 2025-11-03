@@ -3,60 +3,62 @@
 <html>
 <head>
     <title>Создать расходную транзакцию</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/forms.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/transactions.css">
 </head>
 <body>
-    <div class="transaction-container">
-        <h1 class="transaction-title">Создать расходную транзакцию</h1>
+<div class="container">
+    <h2>Создать расходную транзакцию</h2>
 
+    <c:if test="${not empty errors}">
+        <div class="error-container">
+            <c:forEach var="error" items="${errors}">
+                <div class="error-item">${error.message}</div>
+            </c:forEach>
+        </div>
+    </c:if>
+
+    <div class="form-container">
         <c:if test="${not empty preselectedCategoryId}">
-            <div class="category-info">
-                <strong>💡 Транзакция будет создана для выбранной категории</strong>
-                <input type="hidden" id="expenseId" name="expenseId" value="${preselectedCategoryId}">
+            <div class="category-preview">
+                <div class="category-preview-header">
+                    <c:if test="${not empty iconExpense}">
+                        <img src="${pageContext.request.contextPath}/static/icons/expense/${iconExpense}?v=1.0"
+                             alt="${nameExpense}" class="category-preview-icon"
+                             onerror="this.style.display='none'">
+                    </c:if>
+                    <span class="category-preview-name">${nameExpense}</span>
+                </div>
+                <div class="category-preview-label">Категория расхода</div>
             </div>
         </c:if>
 
-        <c:if test="${not empty errors}">
-            <div class="error-messages">
-                <c:forEach var="error" items="${errors}">
-                    <div class="error-message">
-                        <strong>Ошибка:</strong>
-                        <c:choose>
-                            <c:when test="${not empty error.message}">
-                                ${error.message}
-                            </c:when>
-                            <c:otherwise>
-                                Неизвестная ошибка
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </c:forEach>
-            </div>
-        </c:if>
-
-        <form class="transaction-form" action="${pageContext.request.contextPath}/create-transaction/expense" method="post">
-            <div class="transaction-form-group">
-                <label class="transaction-label" for="title">Название транзакции:</label>
-                <input class="transaction-input" type="text" id="title" name="title" required
-                       placeholder="Введите название транзакции (например: Покупка продуктов, Оплата коммунальных услуг)">
+        <form action="${pageContext.request.contextPath}/create-transaction/expense" method="post">
+            <div class="form-group">
+                <label><strong>Название транзакции:</strong></label>
+                <input class="form-input" type="text" name="title" required
+                       placeholder="Введите название транзакции">
             </div>
 
-            <div class="transaction-form-group">
-                <label class="transaction-label" for="sum">Сумма:</label>
-                <input class="transaction-input" type="number" id="sum" name="sum" required
+            <div class="form-group">
+                <label><strong>Сумма:</strong></label>
+                <input class="form-input" type="number" name="sum" required
                        min="0.01" step="0.01"
                        placeholder="Введите сумму в рублях">
             </div>
 
             <input type="hidden" name="expenseId" value="${preselectedCategoryId != null ? preselectedCategoryId : ''}">
 
-            <button type="submit" class="transaction-btn">Создать транзакцию</button>
+            <div>
+                <button type="submit" class="create-btn">
+                    Создать транзакцию
+                </button>
+                <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">
+                    Отмена
+                </a>
+            </div>
         </form>
-
-        <a href="${pageContext.request.contextPath}/profile" class="back-link">← Вернуться в профиль</a>
     </div>
+</div>
 
 <script src="${pageContext.request.contextPath}/static/js/transaction-common.js"></script>
 </body>

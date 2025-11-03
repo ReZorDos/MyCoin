@@ -1,82 +1,170 @@
-.transaction-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+:root {
+    --primary: #16a34a;
+    --primary-dark: #15803d;
+    --primary-light: #22c55e;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --background: #f0fdf4;
+    --surface: white;
+    --border: #dcfce7;
+    --text-primary: #166534;
+    --text-secondary: #65a30d;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    --radius: 16px;
 }
 
-.transaction-form {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.transaction-title {
-    color: #333;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.transaction-form-group {
-    margin-bottom: 20px;
-}
-
-.transaction-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-}
-
-.transaction-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-.transaction-input:focus {
-    outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--background);
+    min-height: 100vh;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
 }
 
-.transaction-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 30px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+.top-header {
+    margin-top: 0;
+}
+
+.main-content {
+    padding: 1.5rem 0;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin: 2rem 0;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: white;
+}
+
+.transaction-table {
     width: 100%;
-    margin-top: 10px;
-    transition: background-color 0.3s;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: white;
 }
 
-.transaction-btn:hover {
-    background-color: #45a049;
+.transaction-table th,
+.transaction-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
 }
 
-.category-info {
-    background-color: #e8f5e8;
-    padding: 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    border-left: 4px solid #4CAF50;
+.transaction-table th {
+    background-color: var(--background);
+    font-weight: 600;
+    color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    border-bottom: 2px solid var(--border);
+}
+
+.transaction-table tr:last-child td {
+    border-bottom: none;
+}
+
+.type-income {
+    color: #16a34a;
+    font-weight: 600;
+    background: #f0fdf4;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #dcfce7;
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
+.type-expense {
+    color: #dc2626;
+    font-weight: 600;
+    background: #fef2f2;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #fecaca;
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 4rem 2rem;
+    font-size: 1.1rem;
+    background: #f8fdf9;
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+    margin: 2rem 0;
+}
+
+.empty-value {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.amount {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.expense-amount {
+    color: #dc2626;
+}
+
+.category-name {
+    background: #f8fdf9;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    border: 1px solid #dcfce7;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .back-link {
-    display: inline-block;
-    margin-top: 15px;
-    color: #666;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    margin: 0;
+    z-index: 1;
 }
 
-.back-link:hover {
-    color: #333;
-    text-decoration: underline;
+.page-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.page-header h1 {
+    margin: 0 auto;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }

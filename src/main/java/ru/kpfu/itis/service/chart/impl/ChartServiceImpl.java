@@ -247,7 +247,9 @@ public class ChartServiceImpl implements ChartService {
         plot.setLabelOutlinePaint(null);
         plot.setLabelShadowPaint(null);
         plot.setLabelPaint(TEXT_COLOR);
-        plot.setLabelFont(LABEL_FONT);
+
+        Font labelFont = new Font("Segoe UI", Font.PLAIN, 18);
+        plot.setLabelFont(labelFont);
 
         for (int i = 0; i < PIE_COLORS.length; i++) {
             plot.setSectionPaint(i, PIE_COLORS[i]);
@@ -255,7 +257,10 @@ public class ChartServiceImpl implements ChartService {
 
         chart.getLegend().setBackgroundPaint(BACKGROUND_COLOR);
         chart.getLegend().setItemPaint(TEXT_COLOR);
-        chart.getLegend().setItemFont(LEGEND_FONT);
+
+        Font legendFont = new Font("Segoe UI", Font.PLAIN, 17);
+        chart.getLegend().setItemFont(legendFont);
+
         chart.getLegend().setBorder(0, 0, 0, 0);
         chart.getLegend().setPadding(10, 10, 10, 10);
     }

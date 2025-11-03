@@ -1,6 +1,5 @@
 package ru.kpfu.itis.listener;
 
-import com.google.gson.Gson;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -71,9 +70,6 @@ public class ProjectStartUpListener implements ServletContextListener {
         ChartRepository chartRepository = new ChartRepositoryImpl(JdbcConfig.getJdbcTemplate());
         ChartService chartService = new ChartServiceImpl(chartRepository);
         context.setAttribute("chartService", chartService);
-
-        Gson gson = new Gson();
-        context.setAttribute("gson", gson);
 
         AnalyzeRepository analyzeRepository = new AnalyzeRepositoryImpl(JdbcConfig.getJdbcTemplate(), userRepository);
         AnalyzeService analyzeService = new AnalyzeServiceImpl(analyzeRepository);

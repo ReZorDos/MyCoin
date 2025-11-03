@@ -8,6 +8,7 @@ import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.dto.response.TransactionResponse;
 import ru.kpfu.itis.model.TransactionEntity;
 import ru.kpfu.itis.repository.TransactionRepository;
+import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
 import ru.kpfu.itis.service.transaction.TransactionService;
 

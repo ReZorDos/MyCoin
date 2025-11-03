@@ -3,7 +3,6 @@
 <html>
 <head>
     <title>Edit Expense Category</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/forms.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/icons.css">
 </head>
@@ -55,7 +54,7 @@
             </div>
 
             <div>
-                <button type="submit" class="submit-btn">Update Category</button>
+                <button type="submit" class="create-btn">Update Category</button>
                 <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
             </div>
         </form>

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
+import ru.kpfu.itis.model.IncomeCategoryEntity;
 import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.transaction.TransactionService;
 import ru.kpfu.itis.service.user.UserService;
@@ -37,6 +38,9 @@ public class CreateIncomeTransactionServlet extends HttpServlet {
 
         String categoryIdParam = req.getParameter("categoryId");
         req.setAttribute("preselectedCategoryId", UUID.fromString(categoryIdParam));
+        IncomeCategoryEntity income = incomeService.getCategoryById(UUID.fromString(categoryIdParam));
+        req.setAttribute("iconIncome", income.getIcon());
+        req.setAttribute("nameIncome", income.getName());
 
         List<FieldErrorDto> errors = (List<FieldErrorDto>) req.getSession().getAttribute("errors");
         if (Objects.nonNull(errors)) {
