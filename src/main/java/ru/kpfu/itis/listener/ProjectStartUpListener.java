@@ -21,6 +21,10 @@ import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.expense.impl.ExpenseServiceImpl;
 import ru.kpfu.itis.service.expense.impl.RegexpExpenseValidationService;
+import ru.kpfu.itis.service.goals.SavingGoalDataValidation;
+import ru.kpfu.itis.service.goals.SavingGoalService;
+import ru.kpfu.itis.service.goals.impl.RegexpSavingGoalValidationService;
+import ru.kpfu.itis.service.goals.impl.SavingGoalServiceImpl;
 import ru.kpfu.itis.service.income.IncomeDataValidation;
 import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.income.impl.IncomeServiceImpl;
@@ -58,12 +62,6 @@ public class ProjectStartUpListener implements ServletContextListener {
         IncomeService incomeService = new IncomeServiceImpl(incomeRepository, validationIncomeService);
         context.setAttribute("incomeService", incomeService);
 
-        TransactionRepository transactionRepository = new TransactionRepositoryImpl(JdbcConfig.getJdbcTemplate());
-        TransactionDataValidation validationTransactionService = new RegexpTransactionValidationService();
-
-        TransactionService transactionService = new TransactionServiceImpl(transactionRepository, validationTransactionService);
-        context.setAttribute("transactionService", transactionService);
-
         UserService userService = new UserServiceImpl(userRepository);
         context.setAttribute("userService", userService);
 
@@ -74,5 +72,16 @@ public class ProjectStartUpListener implements ServletContextListener {
         AnalyzeRepository analyzeRepository = new AnalyzeRepositoryImpl(JdbcConfig.getJdbcTemplate(), userRepository);
         AnalyzeService analyzeService = new AnalyzeServiceImpl(analyzeRepository);
         context.setAttribute("analyzeService", analyzeService);
+
+        SavingGoalRepository savingGoalRepository = new SavingGoalRepositoryImpl(JdbcConfig.getJdbcTemplate());
+        SavingGoalDataValidation savingGoalDataValidation = new RegexpSavingGoalValidationService();
+        SavingGoalService savingGoalService = new SavingGoalServiceImpl(savingGoalRepository, savingGoalDataValidation);
+        context.setAttribute("savingGoalService", savingGoalService);
+
+        TransactionRepository transactionRepository = new TransactionRepositoryImpl(JdbcConfig.getJdbcTemplate());
+        TransactionDataValidation validationTransactionService = new RegexpTransactionValidationService();
+
+        TransactionService transactionService = new TransactionServiceImpl(transactionRepository, validationTransactionService, savingGoalRepository);
+        context.setAttribute("transactionService", transactionService);
     }
 }

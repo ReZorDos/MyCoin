@@ -8,9 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
+import ru.kpfu.itis.model.SavingGoalEntity;
 import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 import ru.kpfu.itis.repository.IncomeCategoryRepository;
 import ru.kpfu.itis.service.expense.ExpenseService;
+import ru.kpfu.itis.service.goals.SavingGoalService;
 import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.user.UserService;
 
@@ -24,12 +26,14 @@ public class ProfileServlet extends HttpServlet {
     private ExpenseService expenseService;
     private IncomeService incomeService;
     private UserService userService;
+    private SavingGoalService savingGoalService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         expenseService = (ExpenseService) config.getServletContext().getAttribute("expenseService");
         incomeService = (IncomeService) config.getServletContext().getAttribute("incomeService");
         userService = (UserService) config.getServletContext().getAttribute("userService");
+        savingGoalService = (SavingGoalService) config.getServletContext().getAttribute("savingGoalService");
     }
 
     @Override
@@ -38,10 +42,13 @@ public class ProfileServlet extends HttpServlet {
         UUID userId = (UUID) req.getSession(false).getAttribute("userId");
         List<ExpenseCategoryEntity> expenseCategories = expenseService.getAllExpenseCategoriesByIdUser(userId);
         List<IncomeCategoryEntity> incomeCategories = incomeService.getAllIncomeCategoriesByIdUser(userId);
+        List<SavingGoalEntity> savingGoals = savingGoalService.getAllSavingGoalsByIdUser(userId);
+
         double balance = userService.getUserBalance(userId);
 
         req.setAttribute("expenseCategories", expenseCategories);
         req.setAttribute("incomeCategories", incomeCategories);
+        req.setAttribute("savingGoals", savingGoals);
         req.setAttribute("userBalance", balance);
 
         req.getRequestDispatcher("/jsp/profile/profile.jsp").forward(req, resp);

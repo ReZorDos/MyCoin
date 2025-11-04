@@ -179,7 +179,6 @@ public class AnalyzeRepositoryImpl implements AnalyzeRepository {
                     .id(UUID.fromString(rs.getString("id")))
                     .title(rs.getString("title"))
                     .userId(UUID.fromString(rs.getString("user_id")))
-                    .savingGoalId(getUUIDOrNull(rs, "saving_goal_id"))
                     .expenseCategoryId(getUUIDOrNull(rs, "expense_category_id"))
                     .incomeCategoryId(getUUIDOrNull(rs, "income_category_id"))
                     .type(rs.getString("type"))

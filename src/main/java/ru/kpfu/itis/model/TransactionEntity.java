@@ -16,7 +16,6 @@ public class TransactionEntity {
 
     private UUID id;
     private UUID userId;
-    private UUID savingGoalId;
     private UUID expenseCategoryId;
     private UUID incomeCategoryId;
     private String title;
