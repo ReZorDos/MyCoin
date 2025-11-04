@@ -62,7 +62,6 @@ public class CreateExpenseTransactionServlet extends HttpServlet {
                 .sum(Double.parseDouble(req.getParameter("sum")))
                 .userId((UUID) req.getSession(false).getAttribute("userId"))
                 .expenseId(UUID.fromString(req.getParameter("expenseId")))
-                .saveGoalId(saveGoalId)
                 .build();
 
         TransactionResponse transactionResponse = transactionService.createExpenseTransaction(request);

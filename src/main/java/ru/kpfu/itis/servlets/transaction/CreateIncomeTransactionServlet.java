@@ -10,6 +10,9 @@ import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
+import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.model.SavingGoalEntity;
+import ru.kpfu.itis.service.goals.SavingGoalService;
 import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.transaction.TransactionService;
 import ru.kpfu.itis.service.user.UserService;
@@ -25,16 +28,23 @@ public class CreateIncomeTransactionServlet extends HttpServlet {
     private TransactionService transactionService;
     private IncomeService incomeService;
     private UserService userService;
+    private SavingGoalService savingGoalService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         incomeService = (IncomeService) config.getServletContext().getAttribute("incomeService");
         transactionService = (TransactionService) config.getServletContext().getAttribute("transactionService");
         userService = (UserService) config.getServletContext().getAttribute("userService");
+        savingGoalService = (SavingGoalService) config.getServletContext().getAttribute("savingGoalService");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UUID userId = (UUID) req.getSession(false).getAttribute("userId");
+
+        List<SavingGoalEntity> savingGoals = savingGoalService.getAllSavingGoalsByIdUser(userId);
+
+        req.setAttribute("savingGoals",savingGoals);
 
         String categoryIdParam = req.getParameter("categoryId");
         req.setAttribute("preselectedCategoryId", UUID.fromString(categoryIdParam));
@@ -52,15 +62,17 @@ public class CreateIncomeTransactionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        UUID saveGoalId = (req.getParameter("saveGoalId") != null && !req.getParameter("saveGoalId").trim().isEmpty())
-                ? UUID.fromString(req.getParameter("saveGoalId")) : null;
+        List<SavingGoalDistribution> distributions = savingGoalService.makeDistributionByGoals(
+                req.getParameterValues("saveGoalIds"),
+                req.getParameterValues("amounts")
+        );
 
         TransactionDto request = TransactionDto.builder()
                 .title(req.getParameter("title"))
                 .sum(Double.parseDouble(req.getParameter("sum")))
                 .userId((UUID) req.getSession(false).getAttribute("userId"))
                 .incomeId(UUID.fromString(req.getParameter("incomeId")))
-                .saveGoalId(saveGoalId)
+                .distributions(distributions)
                 .build();
 
         TransactionResponse transactionResponse = transactionService.createIncomeTransaction(request);

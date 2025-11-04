@@ -6,7 +6,9 @@ import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.dto.response.TransactionResponse;
+import ru.kpfu.itis.model.SavingGoalDistribution;
 import ru.kpfu.itis.model.TransactionEntity;
+import ru.kpfu.itis.repository.SavingGoalRepository;
 import ru.kpfu.itis.repository.TransactionRepository;
 import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
@@ -21,6 +23,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final TransactionDataValidation validationService;
+    private final SavingGoalRepository savingGoalRepository;
 
     @Override
     public TransactionResponse createExpenseTransaction(TransactionDto transaction) {
@@ -35,7 +38,6 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.saveExpenseTransaction(TransactionDto.builder()
                 .title(transaction.getTitle())
                 .expenseId(transaction.getExpenseId())
-                .saveGoalId(transaction.getSaveGoalId())
                 .userId(transaction.getUserId())
                 .sum(transaction.getSum())
                 .type("EXPENSE")
@@ -49,19 +51,33 @@ public class TransactionServiceImpl implements TransactionService {
         List<FieldErrorDto> errors = new ArrayList<>();
         errors.addAll(validationService.validateTitle(transaction.getTitle()));
         errors.addAll(validationService.validateSum(transaction.getSum()));
+        errors.addAll(validationService.validateDistributions(transaction));
 
         if (!errors.isEmpty()) {
             return fail(errors);
         }
 
-        transactionRepository.saveIncomeTransaction(TransactionDto.builder()
+        TransactionEntity transactionEntity =  transactionRepository.saveIncomeTransaction(TransactionDto.builder()
                 .title(transaction.getTitle())
                 .incomeId(transaction.getIncomeId())
-                .saveGoalId(transaction.getSaveGoalId())
                 .userId(transaction.getUserId())
                 .sum(transaction.getSum())
                 .type("INCOME")
                 .build());
+
+        if (transaction.getDistributions() != null) {
+            for (SavingGoalDistribution distribution : transaction.getDistributions()) {
+                transactionRepository.saveSavingGoalDistribution(
+                        transactionEntity.getId(),
+                        distribution.getSaveGoalId(),
+                        distribution.getAmount()
+                );
+
+                savingGoalRepository.updateCurrentAmount(
+                        distribution.getSaveGoalId(),
+                        distribution.getAmount());
+            }
+        }
 
         return ok();
     }

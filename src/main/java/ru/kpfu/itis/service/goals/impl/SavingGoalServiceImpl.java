@@ -1,0 +1,143 @@
+package ru.kpfu.itis.service.goals.impl;
+
+import lombok.RequiredArgsConstructor;
+import ru.kpfu.itis.dto.FieldErrorDto;
+import ru.kpfu.itis.dto.categories.SavingGoalDto;
+import ru.kpfu.itis.dto.response.SavingGoalResponse;
+import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.model.SavingGoalEntity;
+import ru.kpfu.itis.repository.SavingGoalRepository;
+import ru.kpfu.itis.service.goals.SavingGoalDataValidation;
+import ru.kpfu.itis.service.goals.SavingGoalService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@RequiredArgsConstructor
+public class SavingGoalServiceImpl implements SavingGoalService {
+
+    private final SavingGoalRepository savingGoalRepository;
+    private final SavingGoalDataValidation validationService;
+
+    @Override
+    public SavingGoalResponse createSavingGoal(SavingGoalDto request) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        errors.addAll(validationService.validateName(request.getName()));
+        errors.addAll(validationService.validateTitle(request.getTitle()));
+        errors.addAll(validationService.validateAmount(request.getTotal_amount()));
+
+        if (!errors.isEmpty()) {
+            return fail(errors);
+        }
+
+        savingGoalRepository.save(SavingGoalDto.builder()
+                .name(request.getName())
+                .title(request.getTitle())
+                .total_amount(request.getTotal_amount())
+                .current_amount(request.getCurrent_amount())
+                .userId(request.getUserId())
+                .build());
+
+        return ok();
+    }
+
+    @Override
+    public boolean deleteSavingGoal(UUID savingGoalId) {
+        return savingGoalRepository.deleteById(savingGoalId);
+    }
+
+    @Override
+    public SavingGoalEntity getSavingGoalById(UUID savingGoalId) {
+        return savingGoalRepository.findById(savingGoalId).get();
+    }
+
+    @Override
+    public SavingGoalResponse updateSavingGoal(UUID saveGoalId, SavingGoalEntity request, UUID userId) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        errors.addAll(validationService.validateName(request.getName()));
+        errors.addAll(validationService.validateTitle(request.getTitle()));
+        errors.addAll(validationService.validateAmount(request.getTotal_amount()));
+
+        Optional<SavingGoalEntity> savingGoal = savingGoalRepository.findByUserIdAndExpenseId(userId, saveGoalId);
+        if (savingGoal.isEmpty()) {
+            errors.add(new FieldErrorDto("goal", "Saving goal not found or access denied"));
+        }
+
+        if (!errors.isEmpty()) {
+            return fail(errors);
+        }
+
+        savingGoalRepository.updateById(saveGoalId, request);
+        return ok();
+    }
+
+    @Override
+    public List<SavingGoalEntity> getAllSavingGoalsByIdUser(UUID userId) {
+        return savingGoalRepository.findAllSavingGoalsByIdUser(userId);
+    }
+
+    public SavingGoalResponse updateCurrentAmount(UUID goalId, Double amount, UUID userId) {
+        savingGoalRepository.updateCurrentAmount(goalId, amount);
+        return ok();
+    }
+
+    public SavingGoalResponse addToCurrentAmount(UUID goalId, Double amountToAdd, UUID userId) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        errors.addAll(validationService.validateAmount(amountToAdd));
+
+        Optional<SavingGoalEntity> existingGoal = savingGoalRepository.findByUserIdAndExpenseId(userId, goalId);
+
+        SavingGoalEntity goal = existingGoal.get();
+        double newAmount = goal.getCurrent_amount() + amountToAdd;
+
+        if (newAmount > goal.getTotal_amount()) {
+            errors.add(new FieldErrorDto("amount", "Amount exceeds goal total amount"));
+            return fail(errors);
+        }
+
+        savingGoalRepository.updateCurrentAmount(goalId, amountToAdd);
+        return ok();
+    }
+
+    @Override
+    public List<SavingGoalEntity> getCompletedGoals(UUID userId) {
+        List<SavingGoalEntity> allGoals = getAllSavingGoalsByIdUser(userId);
+        List<SavingGoalEntity> completedGoals = new ArrayList<>();
+
+        for (SavingGoalEntity goal : allGoals) {
+            if (goal.getCurrent_amount() >= goal.getTotal_amount()) {
+                completedGoals.add(goal);
+            }
+        }
+        return completedGoals;
+    }
+
+    @Override
+    public List<SavingGoalDistribution> makeDistributionByGoals(String[] saveGoalsIds, String[] amounts) {
+        List<SavingGoalDistribution> distributions = new ArrayList<>();
+        if (saveGoalsIds != null && amounts != null) {
+            for (int i = 0; i < saveGoalsIds.length; i++) {
+                distributions.add(SavingGoalDistribution.builder()
+                                .saveGoalId(UUID.fromString(saveGoalsIds[i]))
+                                .amount(Double.parseDouble(amounts[i]))
+                                .build());
+            }
+        }
+        return distributions;
+    }
+
+    private SavingGoalResponse fail(List<FieldErrorDto> errors) {
+        return SavingGoalResponse.builder()
+                .success(false)
+                .errors(errors)
+                .build();
+    }
+
+    private SavingGoalResponse ok() {
+        return SavingGoalResponse.builder()
+                .success(true)
+                .build();
+    }
+}

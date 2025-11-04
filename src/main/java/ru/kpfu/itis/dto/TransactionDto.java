@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.kpfu.itis.model.SavingGoalDistribution;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,10 +21,11 @@ public class TransactionDto {
     private UUID userId;
     private UUID expenseId;
     private UUID incomeId;
-    private UUID saveGoalId;
     private String type;
     private Timestamp date;
     private String expenseCategoryName;
     private String incomeCategoryName;
+    private double distributedAmount;
+    private List<SavingGoalDistribution> distributions;
 
 }

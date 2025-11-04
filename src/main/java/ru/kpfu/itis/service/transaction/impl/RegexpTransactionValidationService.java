@@ -1,6 +1,8 @@
 package ru.kpfu.itis.service.transaction.impl;
 
 import ru.kpfu.itis.dto.FieldErrorDto;
+import ru.kpfu.itis.dto.TransactionDto;
+import ru.kpfu.itis.model.SavingGoalDistribution;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
 
 import java.util.ArrayList;
@@ -30,6 +32,19 @@ public class RegexpTransactionValidationService implements TransactionDataValida
             if (sum < 0) {
                 errors.add(new FieldErrorDto("sum", "sum is less than null"));
             }
+        }
+        return errors;
+    }
+
+    @Override
+    public List<FieldErrorDto> validateDistributions(TransactionDto transaction) {
+        List<FieldErrorDto> errors = new ArrayList<>();
+        double totalDistributed = transaction.getDistributions().stream()
+                .mapToDouble(SavingGoalDistribution::getAmount)
+                .sum();
+
+        if (totalDistributed > transaction.getSum()) {
+            errors.add(new FieldErrorDto("distributions", "Сумма распределения не может превышать сумму транзакции"));
         }
         return errors;
     }
