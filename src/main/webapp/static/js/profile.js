@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
 });
 
 function deleteCategory(uuid, type) {
@@ -49,5 +48,26 @@ function createTransaction(categoryId, type) {
         window.location.href = contextPath + '/create-transaction/expense?categoryId=' + categoryId;
     } else {
         window.location.href = contextPath + '/create-transaction/income?categoryId=' + categoryId;
+    }
+}
+
+function editSavingGoal(goalId) {
+    window.location.href = contextPath + '/saving-goal/update?uuid=' + goalId;
+}
+
+function deleteSavingGoal(goalId) {
+    if (confirm('Are you sure you want to delete this saving goal?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = contextPath + '/saving-goal/delete';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'uuid';
+        input.value = goalId;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
     }
 }

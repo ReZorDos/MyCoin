@@ -69,33 +69,28 @@
         <p class="distribution-info">Укажите суммы для распределения части дохода по целям накопления</p>
 
         <c:if test="${not empty savingGoals}">
-            <c:forEach var="goal" items="${savingGoals}">
-                <div class="saving-goal-item">
-                    <div class="goal-header">
-                        <span class="goal-name">${goal.name}</span>
-                    </div>
-                    <div class="goal-progress">
-                        Накоплено: ${goal.current_amount} / ${goal.total_amount} руб.
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill"
-                             style="width: ${goal.total_amount > 0 ? (goal.current_amount / goal.total_amount * 100) : 0}%">
+            <div class="saving-goals-scrollable">
+                <c:forEach var="goal" items="${savingGoals}">
+                    <div class="saving-goal-item">
+                        <div class="goal-header">
+                            <span class="goal-name">${goal.name}</span>
                         </div>
+                        <div class="goal-progress">
+                            Накоплено: ${goal.current_amount} / ${goal.total_amount} руб.
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"
+                                 style="width: ${goal.total_amount > 0 ? (goal.current_amount / goal.total_amount * 100) : 0}%">
+                            </div>
+                        </div>
+                        <input type="number"
+                               class="distribution-input"
+                               min="0"
+                               step="0.01"
+                               placeholder="0.00"
+                               data-goal-id="${goal.id}">
                     </div>
-                    <input type="number"
-                           class="distribution-input"
-                           min="0"
-                           step="0.01"
-                           placeholder="0.00"
-                           data-goal-id="${goal.id}"
-                           onchange="updateDistribution()">
-                </div>
-            </c:forEach>
-
-            <div class="total-distribution">
-                <strong>Общая сумма распределения: </strong>
-                <span id="totalDistribution">0.00</span> руб.
-                <div id="distributionMessage"></div>
+                </c:forEach>
             </div>
         </c:if>
 
@@ -110,44 +105,7 @@
     </div>
 </div>
 
-<script>
-    function updateDistribution() {
-        const inputs = document.querySelectorAll('.distribution-input');
-        let total = 0;
-        let distributionFields = '';
-
-        inputs.forEach(input => {
-            const amount = parseFloat(input.value) || 0;
-            if (amount > 0) {
-                total += amount;
-                distributionFields +=
-                    `<input type="hidden" name="saveGoalIds" value="\${input.dataset.goalId}">` +
-                    `<input type="hidden" name="amounts" value="\${amount}">`;
-            }
-        });
-
-        document.getElementById('totalDistribution').textContent = total.toFixed(2);
-        document.getElementById('distributionFields').innerHTML = distributionFields;
-
-        const transactionSum = parseFloat(document.getElementById('transactionSum').value) || 0;
-        const messageElement = document.getElementById('distributionMessage');
-
-        if (total > transactionSum) {
-            messageElement.innerHTML = '<div class="distribution-warning">Сумма распределения превышает общий доход!</div>';
-        } else if (total > 0) {
-            messageElement.innerHTML = '<div class="distribution-success">Сумма распределения корректна</div>';
-        } else {
-            messageElement.innerHTML = '<div class="distribution-info">Введите суммы для распределения</div>';
-        }
-    }
-
-    document.getElementById('transactionSum').addEventListener('input', updateDistribution);
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('distributionMessage').innerHTML = '<div class="distribution-info">Введите суммы для распределения</div>';
-    });
-</script>
-
 <script src="${pageContext.request.contextPath}/static/js/transaction-common.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/income-transaction.js"></script>
 </body>
 </html>

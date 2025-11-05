@@ -17,6 +17,9 @@ public class RegexpSavingGoalValidationService implements SavingGoalDataValidati
             if (name.length() < 2) {
                 errors.add(new FieldErrorDto("name", "name is too short"));
             }
+            if (name.length() > 30) {
+                errors.add(new FieldErrorDto("name", "name is too long"));
+            }
         }
         return errors;
     }
@@ -28,6 +31,9 @@ public class RegexpSavingGoalValidationService implements SavingGoalDataValidati
             errors.add(new FieldErrorDto("title", "title is invalid"));
         } else {
             if (title.length() < 2) {
+                errors.add(new FieldErrorDto("title", "title is too short"));
+            }
+            if (title.length() > 50) {
                 errors.add(new FieldErrorDto("title", "title is too short"));
             }
         }

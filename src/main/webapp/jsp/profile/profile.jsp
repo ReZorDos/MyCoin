@@ -222,7 +222,6 @@
                 </c:choose>
             </section>
 
-            <!-- Saving Goals Section -->
             <section class="category-section">
                 <div class="section-header">
                     <h2 class="section-title">Saving Goals</h2>
@@ -299,27 +298,6 @@
 
 <script>
     const contextPath = '${pageContext.request.contextPath}';
-
-    function editSavingGoal(goalId) {
-        window.location.href = contextPath + '/saving-goal/update?uuid=' + goalId;
-    }
-
-    function deleteSavingGoal(goalId) {
-        if (confirm('Are you sure you want to delete this saving goal?')) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = contextPath + '/saving-goal/delete';
-
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'uuid';
-            input.value = goalId;
-
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
 </script>
 <script src="${pageContext.request.contextPath}/static/js/profile.js"></script>
 </body>
