@@ -1,6 +1,7 @@
 package ru.kpfu.itis.service.analyze.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.categories.IncomeDto;
@@ -72,8 +73,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     }
 
     @Override
-    public List<TransactionDto> getLastFiveExpenseTransactions(UUID userId) {
-        List<TransactionEntity> transactions = analyzeRepository.findLastExpenseTransactions(userId);
+    public List<TransactionDto> getMostFiveExpenseTransactionsByPeriod(UUID userId, LocalDate start, LocalDate end) {
+        List<TransactionEntity> transactions = analyzeRepository.findMostExpenseTransactionsByPeriod(userId, start, end);
         List<TransactionDto> result = new ArrayList<>();
         if (!transactions.isEmpty()) {
             for (TransactionEntity transaction : transactions) {
@@ -89,8 +90,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
     }
 
     @Override
-    public List<TransactionDto> getLastFiveIncomeTransactions(UUID userId) {
-        List<TransactionEntity> transactions = analyzeRepository.findLastIncomeTransactions(userId);
+    public List<TransactionDto> getMostFiveIncomeTransactionsByPeriod(UUID userId, LocalDate start, LocalDate end) {
+        List<TransactionEntity> transactions = analyzeRepository.findMostIncomeTransactionsByPeriod(userId, start, end);
         List<TransactionDto> result = new ArrayList<>();
         if (!transactions.isEmpty()) {
             for (TransactionEntity transaction : transactions) {

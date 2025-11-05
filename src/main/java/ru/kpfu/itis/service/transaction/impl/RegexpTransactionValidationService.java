@@ -19,6 +19,9 @@ public class RegexpTransactionValidationService implements TransactionDataValida
             if (title.length() < 2) {
                 errors.add(new FieldErrorDto("name", "name is too short"));
             }
+            if (title.length() > 25) {
+                errors.add(new FieldErrorDto("name", "name is too long"));
+            }
         }
         return errors;
     }

@@ -1,5 +1,6 @@
 package ru.kpfu.itis.service.transaction;
 
+import jakarta.servlet.http.HttpServletRequest;
 import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
 import ru.kpfu.itis.model.TransactionEntity;
@@ -13,6 +14,12 @@ public interface TransactionService {
 
     TransactionResponse createIncomeTransaction(TransactionDto transaction);
 
-    List<TransactionEntity> getAllTransactionsOfUser(UUID userId);
+    List<TransactionEntity> getAllTransactionsOfUserWithCategoryNames(UUID userId);
+
+    List<TransactionEntity> getTransactionsWithPagination(UUID userId, int page, int size);
+
+    int getTotalTransactionsCount(UUID userId);
+
+    int getIntParameter(String paramValue, String paramName, int defaultValue);
 
 }

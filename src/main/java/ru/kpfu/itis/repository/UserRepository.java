@@ -16,5 +16,4 @@ public interface UserRepository {
     Optional<UserEntity> findByEmail(String email);
     void updateUserBalance(UUID userId, String type, double sum);
     double getUserBalance(UUID userId);
-
 }

@@ -54,9 +54,6 @@ public class CreateExpenseTransactionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        UUID saveGoalId = (req.getParameter("saveGoalId") != null && !req.getParameter("saveGoalId").trim().isEmpty())
-                ? UUID.fromString(req.getParameter("saveGoalId")) : null;
-
         TransactionDto request = TransactionDto.builder()
                 .title(req.getParameter("title"))
                 .sum(Double.parseDouble(req.getParameter("sum")))
@@ -68,7 +65,8 @@ public class CreateExpenseTransactionServlet extends HttpServlet {
 
         if (!transactionResponse.isSuccess()) {
             req.getSession(false).setAttribute("errors", transactionResponse.getErrors());
-            resp.sendRedirect("/create-transaction/expense");
+            String categoryId = req.getParameter("expenseId");
+            resp.sendRedirect("/create-transaction/expense?categoryId=" + categoryId);
         } else {
             userService.changeUserBalance((UUID) req.getSession(false).getAttribute("userId"),
                     "EXPENSE",

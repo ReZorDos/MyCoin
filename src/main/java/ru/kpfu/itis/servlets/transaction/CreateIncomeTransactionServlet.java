@@ -79,7 +79,8 @@ public class CreateIncomeTransactionServlet extends HttpServlet {
 
         if (!transactionResponse.isSuccess()) {
             req.getSession(false).setAttribute("errors", transactionResponse.getErrors());
-            resp.sendRedirect("/create-transaction/income");
+            String categoryId = req.getParameter("incomeId");
+            resp.sendRedirect("/create-transaction/income?categoryId=" + categoryId);
         } else {
             userService.changeUserBalance(
                     (UUID) req.getSession(false).getAttribute("userId"),

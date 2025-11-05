@@ -82,11 +82,34 @@ public class TransactionServiceImpl implements TransactionService {
         return ok();
     }
 
+
     @Override
-    public List<TransactionEntity> getAllTransactionsOfUser(UUID userId) {
-        return transactionRepository.getAllTransactionsOfUser(userId);
+    public List<TransactionEntity> getAllTransactionsOfUserWithCategoryNames(UUID userId) {
+        return transactionRepository.findAllTransactionsOfUserWithCategoryNames(userId);
     }
 
+    @Override
+    public List<TransactionEntity> getTransactionsWithPagination(UUID userId, int page, int size) {
+        int offset = (page - 1) * size;
+        return transactionRepository.findTransactionsWithPagination(userId, offset, size);
+    }
+
+    @Override
+    public int getTotalTransactionsCount(UUID userId) {
+        return transactionRepository.countAllTransactionsOfUser(userId);
+    }
+
+    @Override
+    public int getIntParameter(String paramValue, String paramName, int defaultValue) {
+        if (paramValue == null || paramValue.trim().isEmpty()) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(paramValue);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 
     private TransactionResponse fail(List<FieldErrorDto> errors) {
         return TransactionResponse.builder()

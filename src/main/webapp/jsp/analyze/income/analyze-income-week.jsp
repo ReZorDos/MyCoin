@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Анализ доходов за день</title>
+    <title>Анализ доходов за неделю</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/head.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/analyze-income.css">
 </head>
@@ -45,37 +45,38 @@
             <h1>Анализ доходов</h1>
 
             <div class="period-navigation">
-                <a href="${pageContext.request.contextPath}/analyze-income/day" class="period-btn active">За день</a>
-                <a href="${pageContext.request.contextPath}/analyze-income/week" class="period-btn">За неделю</a>
+                <a href="${pageContext.request.contextPath}/analyze-income/day" class="period-btn">За день</a>
+                <a href="${pageContext.request.contextPath}/analyze-income/week" class="period-btn active">За неделю</a>
                 <a href="${pageContext.request.contextPath}/analyze-income/month" class="period-btn">За месяц</a>
                 <a href="${pageContext.request.contextPath}/analyze-income/year" class="period-btn">За год</a>
             </div>
         </div>
 
         <div class="period-info">
-            Дата: <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/>
+            Период: с <fmt:formatDate value="${startDate}" pattern="dd.MM.yyyy"/>
+            по <fmt:formatDate value="${endDate}" pattern="dd.MM.yyyy"/>
         </div>
 
         <div class="chart-stats-container">
             <div class="chart-section">
-                <div class="chart-title">Распределение доходов за день</div>
+                <div class="chart-title">Распределение доходов за неделю</div>
                 <div class="chart-container">
-                    <img src="${pageContext.request.contextPath}/chart/income?period=day"
-                         alt="График доходов по категориям за день"
-                         style="max-width: 100%; height: auto;" />
+                    <img src="${pageContext.request.contextPath}/chart/income?period=week"
+                    alt="График доходов по категориям за неделю"
+                    style="max-width: 100%; height: auto;" />
                 </div>
             </div>
 
             <div class="stats-cards-vertical">
                 <div class="stat-card income">
-                    <div class="stat-label">Доходы за день</div>
+                    <div class="stat-label">Доходы за неделю</div>
                     <div class="stat-value">
                         <fmt:formatNumber value="${currentTotal}" pattern="#,##0.00"/> ₽
                     </div>
                 </div>
 
                 <div class="stat-card change">
-                    <div class="stat-label">Изменение за вчера</div>
+                    <div class="stat-label">Изменение за прошлую неделю</div>
                     <div class="stat-value ${percentageChange >= 0 ? 'positive' : 'negative'}">
                         <c:choose>
                             <c:when test="${percentageChange > 0}">
@@ -90,7 +91,7 @@
                         </c:choose>
                     </div>
                     <div class="stat-label yesterday">
-                        Вчера: <fmt:formatNumber value="${previousTotal}" pattern="#,##0.00"/> ₽
+                        Прошлая неделя: <fmt:formatNumber value="${previousTotal}" pattern="#,##0.00"/> ₽
                     </div>
                 </div>
             </div>
@@ -98,7 +99,7 @@
 
         <div class="data-section">
             <div class="section-card">
-                <div class="section-title">Топ категорий доходов за день</div>
+                <div class="section-title">Топ категорий доходов за неделю</div>
                 <c:choose>
                     <c:when test="${not empty incomeCategories}">
                         <c:forEach var="category" items="${incomeCategories}">
@@ -111,13 +112,13 @@
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        <div class="no-data">Нет доходов за сегодня</div>
+                        <div class="no-data">Нет доходов за эту неделю</div>
                     </c:otherwise>
                 </c:choose>
             </div>
 
             <div class="section-card">
-                <div class="section-title">Топ транзакций за день</div>
+                <div class="section-title">Топ транзакций за неделю</div>
                 <c:choose>
                     <c:when test="${not empty lastTransactions}">
                         <c:forEach var="transaction" items="${lastTransactions}">
@@ -138,15 +139,15 @@
                                     </span>
                                 </div>
                                 <div class="transaction-footer">
-                  <span class="transaction-date">
-                      <fmt:formatDate value="${transaction.date}" pattern="dd.MM.yyyy HH:mm"/>
-                  </span>
+                                    <span class="transaction-date">
+                                        <fmt:formatDate value="${transaction.date}" pattern="dd.MM.yyyy HH:mm"/>
+                                    </span>
                                 </div>
                             </div>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        <div class="no-data">Нет транзакций за сегодня</div>
+                        <div class="no-data">Нет транзакций за эту неделю</div>
                     </c:otherwise>
                 </c:choose>
             </div>

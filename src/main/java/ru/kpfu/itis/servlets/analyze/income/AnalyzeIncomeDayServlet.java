@@ -35,7 +35,7 @@ public class AnalyzeIncomeDayServlet extends HttpServlet {
         LocalDate yesterday = today.minusDays(1);
 
         List<IncomeDto> incomeCategories = analyzeService.getMostIncomeCategoryByPeriod(userId, today, tomorrow);
-        List<TransactionDto> lastTransactions = analyzeService.getLastFiveIncomeTransactions(userId);
+        List<TransactionDto> lastTransactions = analyzeService.getMostFiveIncomeTransactionsByPeriod(userId, today, tomorrow);
         Double currentTotal = analyzeService.getTotalIncomesByPeriod(userId, today, tomorrow);
         Double previousTotal = analyzeService.getTotalIncomesByPeriod(userId, yesterday, today);
         Double percentageChange = analyzeService.getPercentageChange(currentTotal, previousTotal);

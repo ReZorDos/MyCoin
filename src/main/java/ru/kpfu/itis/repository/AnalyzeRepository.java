@@ -15,8 +15,8 @@ public interface AnalyzeRepository {
     List<IncomeCategoryEntity> findMostIncomeCategory(UUID userId, LocalDate start, LocalDate end);
 
     List<TransactionEntity> findLastTransactions(UUID userId);
-    List<TransactionEntity> findLastExpenseTransactions(UUID userId);
-    List<TransactionEntity> findLastIncomeTransactions(UUID userId);
+    List<TransactionEntity> findMostExpenseTransactionsByPeriod(UUID userId, LocalDate start, LocalDate end);
+    List<TransactionEntity> findMostIncomeTransactionsByPeriod(UUID userId, LocalDate start, LocalDate end);
 
     Double findTotalExpensesByPeriod(UUID userId, LocalDate start, LocalDate end);
     Double findTotalIncomesByPeriod(UUID userId, LocalDate start, LocalDate end);
