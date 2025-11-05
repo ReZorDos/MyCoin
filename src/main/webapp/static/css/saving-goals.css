@@ -19,6 +19,21 @@
     border: 1px solid #dee2e6;
     position: sticky;
     top: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.saving-goals-sidebar {
+    max-height: 80vh;
+}
+
+.saving-goals-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+    padding-right: 5px;
+    margin-top: 10px;
 }
 
 .saving-goal-item {
@@ -125,4 +140,22 @@
 
 .saving-goals-empty .create-btn {
     margin-top: 1rem;
+}
+
+.saving-goals-scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.saving-goals-scrollable::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.saving-goals-scrollable::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.saving-goals-scrollable::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }

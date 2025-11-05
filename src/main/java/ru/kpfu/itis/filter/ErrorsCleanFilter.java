@@ -18,7 +18,9 @@ public class ErrorsCleanFilter implements Filter {
             "/expense-category/update",
             "/income-category/update",
             "/create-transaction/expense",
-            "/create-transaction/income"
+            "/create-transaction/income",
+            "/create-saving-goal",
+            "/saving-goal/update"
     );
 
     @Override

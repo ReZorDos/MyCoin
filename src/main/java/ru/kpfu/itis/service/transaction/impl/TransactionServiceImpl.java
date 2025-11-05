@@ -11,6 +11,7 @@ import ru.kpfu.itis.model.TransactionEntity;
 import ru.kpfu.itis.repository.SavingGoalRepository;
 import ru.kpfu.itis.repository.TransactionRepository;
 import ru.kpfu.itis.service.expense.ExpenseService;
+import ru.kpfu.itis.service.goals.SavingGoalService;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
 import ru.kpfu.itis.service.transaction.TransactionService;
 
@@ -23,7 +24,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final TransactionDataValidation validationService;
-    private final SavingGoalRepository savingGoalRepository;
+    private final SavingGoalService savingGoalService;
 
     @Override
     public TransactionResponse createExpenseTransaction(TransactionDto transaction) {
@@ -73,15 +74,15 @@ public class TransactionServiceImpl implements TransactionService {
                         distribution.getAmount()
                 );
 
-                savingGoalRepository.updateCurrentAmount(
+                savingGoalService.addToCurrentAmount(
                         distribution.getSaveGoalId(),
-                        distribution.getAmount());
+                        distribution.getAmount(),
+                        transaction.getUserId());
             }
         }
 
         return ok();
     }
-
 
     @Override
     public List<TransactionEntity> getAllTransactionsOfUserWithCategoryNames(UUID userId) {

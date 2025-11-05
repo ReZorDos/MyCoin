@@ -69,7 +69,14 @@ public class SavingGoalServiceImpl implements SavingGoalService {
             return fail(errors);
         }
 
-        savingGoalRepository.updateById(saveGoalId, request);
+        SavingGoalEntity goalToUpdate = SavingGoalEntity.builder()
+                .name(request.getName())
+                .title(request.getTitle())
+                .total_amount(request.getTotal_amount())
+                .current_amount(savingGoal.get().getCurrent_amount())
+                .build();
+
+        savingGoalRepository.updateById(saveGoalId, goalToUpdate);
         return ok();
     }
 
@@ -78,11 +85,7 @@ public class SavingGoalServiceImpl implements SavingGoalService {
         return savingGoalRepository.findAllSavingGoalsByIdUser(userId);
     }
 
-    public SavingGoalResponse updateCurrentAmount(UUID goalId, Double amount, UUID userId) {
-        savingGoalRepository.updateCurrentAmount(goalId, amount);
-        return ok();
-    }
-
+    @Override
     public SavingGoalResponse addToCurrentAmount(UUID goalId, Double amountToAdd, UUID userId) {
         List<FieldErrorDto> errors = new ArrayList<>();
         errors.addAll(validationService.validateAmount(amountToAdd));
@@ -115,14 +118,17 @@ public class SavingGoalServiceImpl implements SavingGoalService {
     }
 
     @Override
-    public List<SavingGoalDistribution> makeDistributionByGoals(String[] saveGoalsIds, String[] amounts) {
+    public List<SavingGoalDistribution> makeDistributionByGoals(String[] saveGoalIds, String[] amounts) {
         List<SavingGoalDistribution> distributions = new ArrayList<>();
-        if (saveGoalsIds != null && amounts != null) {
-            for (int i = 0; i < saveGoalsIds.length; i++) {
-                distributions.add(SavingGoalDistribution.builder()
-                                .saveGoalId(UUID.fromString(saveGoalsIds[i]))
-                                .amount(Double.parseDouble(amounts[i]))
-                                .build());
+        if (saveGoalIds != null && amounts != null && saveGoalIds.length == amounts.length) {
+            for (int i = 0; i < saveGoalIds.length; i++) {
+                double amount = Double.parseDouble(amounts[i]);
+                if (amount > 0) {
+                    distributions.add(SavingGoalDistribution.builder()
+                            .saveGoalId(UUID.fromString(saveGoalIds[i]))
+                            .amount(amount)
+                            .build());
+                }
             }
         }
         return distributions;

@@ -24,4 +24,6 @@ public interface SavingGoalService {
 
     List<SavingGoalDistribution> makeDistributionByGoals(String[] saveGoalsIds, String[] amounts);
 
+    SavingGoalResponse addToCurrentAmount(UUID goalId, Double amountToAdd, UUID userId);
+
 }
