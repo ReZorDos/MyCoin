@@ -35,7 +35,7 @@ public class AnalyzeExpenseMonthServlet extends HttpServlet {
         LocalDate previousEnd = previousStart.plusMonths(1);
 
         List<ExpenseDto> expenseCategories = analyzeService.getMostExpenseCategoryByPeriod(userId, start, end);
-        List<TransactionDto> lastTransactions = analyzeService.getLastFiveExpenseTransactions(userId);
+        List<TransactionDto> lastTransactions = analyzeService.getMostFiveExpenseTransactionsByPeriod(userId, start, end);
         Double currentTotal = analyzeService.getTotalExpensesByPeriod(userId, start, end);
         Double previousTotal = analyzeService.getTotalExpensesByPeriod(userId, previousStart, previousEnd);
         Double percentageChange = analyzeService.getPercentageChange(currentTotal, previousTotal);

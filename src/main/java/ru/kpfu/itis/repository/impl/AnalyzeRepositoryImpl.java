@@ -30,18 +30,22 @@ public class AnalyzeRepositoryImpl implements AnalyzeRepository {
             order by date DESC
             limit 5
             """;
-    private final static String SQL_FIND_LAST_EXPENSE_TRANSACTIONS = """
+    private final static String SQL_FIND_MOST_EXPENSE_TRANSACTIONS_BY_PERIOD = """
             select *
             from transaction
             where user_id = ?
+                and date >= ?
+                and date < ?
                 and type = 'EXPENSE'
-            order by date DESC
+            order by sum DESC
             limit 5
             """;
-    private final static String SQL_FIND_LAST_INCOME_TRANSACTIONS = """
+    private final static String SQL_FIND_MOST_INCOME_TRANSACTIONS_BY_PERIOD = """
             select *
             from transaction
             where user_id = ?
+                and date >= ?
+                and date < ?
                 and type = 'INCOME'
             order by date DESC
             limit 5
@@ -124,24 +128,24 @@ public class AnalyzeRepositoryImpl implements AnalyzeRepository {
     }
 
     @Override
-    public List<TransactionEntity> findLastExpenseTransactions(UUID userId) {
+    public List<TransactionEntity> findMostExpenseTransactionsByPeriod(UUID userId, LocalDate start, LocalDate end) {
         Optional<UserEntity> user = userRepository.findById(userId);
         if (user.isPresent()) {
-            return jdbcTemplate.query(SQL_FIND_LAST_EXPENSE_TRANSACTIONS,
+            return jdbcTemplate.query(SQL_FIND_MOST_EXPENSE_TRANSACTIONS_BY_PERIOD,
                     transactionRowMapper,
-                    userId);
+                    userId, start, end);
         } else {
             return List.of();
         }
     }
 
     @Override
-    public List<TransactionEntity> findLastIncomeTransactions(UUID userId) {
+    public List<TransactionEntity> findMostIncomeTransactionsByPeriod(UUID userId, LocalDate start, LocalDate end) {
         Optional<UserEntity> user = userRepository.findById(userId);
         if (user.isPresent()) {
-            return jdbcTemplate.query(SQL_FIND_LAST_INCOME_TRANSACTIONS,
+            return jdbcTemplate.query(SQL_FIND_MOST_INCOME_TRANSACTIONS_BY_PERIOD,
                     transactionRowMapper,
-                    userId);
+                    userId, start, end);
         } else {
             return List.of();
         }

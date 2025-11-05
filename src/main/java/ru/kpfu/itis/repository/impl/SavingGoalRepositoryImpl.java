@@ -22,7 +22,7 @@ public class SavingGoalRepositoryImpl implements SavingGoalRepository {
     private final SaveGoalRowMapper rowMapper = new SaveGoalRowMapper();
 
     private static final String SQL_FIND_BY_ID = "select * from save_goal where id = ?";
-    private static final String SQL_FIND_ALL_GOALS_BY_USER_ID = "select * from save_goal where user_id = ?";
+    private static final String SQL_FIND_ALL_GOALS_BY_USER_ID = "select * from save_goal where user_id = ? order by created_at asc";
     private static final String SQL_DELETE_BY_ID = "delete from save_goal where id = ?";
     private static final String SQL_UPDATE_CURRENT_AMOUNT = "update save_goal set current_amount = current_amount + ? where id = ?";
     private static final String SQL_FIND_BY_USER_ID_AND_GOAL_ID = """

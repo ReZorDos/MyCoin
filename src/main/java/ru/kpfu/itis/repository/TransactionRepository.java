@@ -14,12 +14,16 @@ public interface TransactionRepository {
 
     TransactionEntity saveIncomeTransaction(TransactionDto incomeTransaction);
 
-    List<TransactionEntity> getAllTransactionsOfUser(UUID userId);
-
     void saveSavingGoalDistribution(UUID transactionId, UUID saveGoalId, Double amount);
 
     List<SavingGoalDistribution> findAllDistributionsByTransactionId(UUID transactionId);
 
     Optional<TransactionEntity> findTransactionById(UUID transactionId);
+
+    List<TransactionEntity> findAllTransactionsOfUserWithCategoryNames(UUID userId);
+
+    List<TransactionEntity> findTransactionsWithPagination(UUID userId, int offset, int limit);
+
+    int countAllTransactionsOfUser(UUID userId);
 
 }

@@ -116,6 +116,47 @@
                 </div>
             </c:otherwise>
         </c:choose>
+
+        <c:if test="${not empty transactionList}">
+            <div class="pagination-info">
+                Показано ${(currentPage - 1) * pageSize + 1}-${(currentPage - 1) * pageSize + transactionList.size()} из ${totalTransactions} транзакций
+            </div>
+
+            <div class="pagination">
+                <c:if test="${currentPage > 1}">
+                    <a href="${pageContext.request.contextPath}/all-transactions?page=${currentPage - 1}" class="page-link">← Назад</a>
+                </c:if>
+
+                <c:if test="${startPage > 1}">
+                    <a href="${pageContext.request.contextPath}/all-transactions?page=1" class="page-link">1</a>
+                    <c:if test="${startPage > 2}">
+                        <span class="page-dots">...</span>
+                    </c:if>
+                </c:if>
+
+                <c:forEach begin="${startPage}" end="${endPage}" var="page">
+                    <c:choose>
+                        <c:when test="${page == currentPage}">
+                            <span class="page-link current">${page}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/all-transactions?page=${page}" class="page-link">${page}</a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+
+                <c:if test="${endPage < totalPages}">
+                    <c:if test="${endPage < totalPages - 1}">
+                        <span class="page-dots">...</span>
+                    </c:if>
+                    <a href="${pageContext.request.contextPath}/all-transactions?page=${totalPages}" class="page-link">${totalPages}</a>
+                </c:if>
+
+                <c:if test="${currentPage < totalPages}">
+                    <a href="${pageContext.request.contextPath}/all-transactions?page=${currentPage + 1}" class="page-link">Вперед →</a>
+                </c:if>
+            </div>
+        </c:if>
     </div>
 </div>
 </body>

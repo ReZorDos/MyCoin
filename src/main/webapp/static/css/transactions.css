@@ -168,3 +168,61 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
 }
+
+.pagination-info {
+    text-align: center;
+    margin: 20px 0 10px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding: 10px 0;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 20px 0;
+    flex-wrap: wrap;
+}
+
+.page-link {
+    padding: 10px 16px;
+    border: 2px solid #dcfce7;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #166534;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: white;
+    transition: none;
+    min-width: 44px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.page-link:hover {
+    background-color: white;
+    border-color: #dcfce7;
+    color: #166534;
+    transform: none;
+    box-shadow: none;
+}
+
+.page-link.current {
+    background-color: #16a34a;
+    color: white;
+    border-color: #16a34a;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    cursor: default;
+}
+
+.page-dots {
+    padding: 10px 8px;
+    color: #65a30d;
+    font-weight: 600;
+}
