@@ -11,10 +11,15 @@ import java.util.UUID;
 public interface IncomeCategoryRepository {
 
     Optional<IncomeCategoryEntity> findByUserIdAndIncomeId(UUID userUUID, UUID incomeUUID);
+
     List<IncomeCategoryEntity> findAllIncomeCategoriesByIdUser(UUID uuid);
+
     boolean deleteById(UUID uuid);
+
     IncomeCategoryEntity updateById(UUID uuid, IncomeCategoryEntity incomeCategory);
+
     void save(IncomeDto incomeCategory);
+
     Optional<IncomeCategoryEntity> findById(UUID uuid);
 
     IncomeCategoryEntity updateTotalSum(UUID incomeId, Double transactionSum);

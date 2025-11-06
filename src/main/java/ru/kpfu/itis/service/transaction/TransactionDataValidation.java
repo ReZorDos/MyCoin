@@ -2,7 +2,6 @@ package ru.kpfu.itis.service.transaction;
 
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
-import ru.kpfu.itis.model.SavingGoalDistribution;
 
 import java.util.List;
 

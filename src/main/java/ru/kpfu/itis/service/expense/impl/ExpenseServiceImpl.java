@@ -1,7 +1,6 @@
 package ru.kpfu.itis.service.expense.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
@@ -51,7 +50,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         errors.addAll(validationService.validateName(request.getName()));
         Optional<ExpenseCategoryEntity> existingCategory = expenseRepository.findByUserIdAndExpenseId(userId, uuid);
         if (existingCategory.isEmpty()) {
-            errors.add(new FieldErrorDto("category", "Category not found or access denied"));
+            errors.add(new FieldErrorDto("Категория", "не найдена или у вас нет доступа к ней"));
         }
 
         if (!errors.isEmpty()) {

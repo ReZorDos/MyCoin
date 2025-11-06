@@ -3,14 +3,10 @@ package ru.kpfu.itis.service.transaction.impl;
 import lombok.RequiredArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
-import ru.kpfu.itis.dto.categories.ExpenseDto;
-import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.dto.response.TransactionResponse;
-import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.dto.SavingGoalDistribution;
 import ru.kpfu.itis.model.TransactionEntity;
-import ru.kpfu.itis.repository.SavingGoalRepository;
 import ru.kpfu.itis.repository.TransactionRepository;
-import ru.kpfu.itis.service.expense.ExpenseService;
 import ru.kpfu.itis.service.goals.SavingGoalService;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
 import ru.kpfu.itis.service.transaction.TransactionService;
@@ -18,6 +14,7 @@ import ru.kpfu.itis.service.transaction.TransactionService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
@@ -85,14 +82,18 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionEntity> getAllTransactionsOfUserWithCategoryNames(UUID userId) {
-        return transactionRepository.findAllTransactionsOfUserWithCategoryNames(userId);
-    }
-
-    @Override
-    public List<TransactionEntity> getTransactionsWithPagination(UUID userId, int page, int size) {
+    public List<TransactionDto> getTransactionsWithPagination(UUID userId, int page, int size) {
         int offset = (page - 1) * size;
-        return transactionRepository.findTransactionsWithPagination(userId, offset, size);
+        return transactionRepository.findTransactionsWithPagination(userId, offset, size).stream()
+                .map((transaction) -> TransactionDto.builder()
+                        .title(transaction.getTitle())
+                        .type(transaction.getType())
+                        .sum(transaction.getSum())
+                        .date(transaction.getDate())
+                        .expenseCategoryName(transaction.getExpenseCategoryName())
+                        .incomeCategoryName(transaction.getIncomeCategoryName())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override

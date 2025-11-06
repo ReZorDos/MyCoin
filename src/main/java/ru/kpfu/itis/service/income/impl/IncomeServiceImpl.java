@@ -56,7 +56,7 @@ public class IncomeServiceImpl implements IncomeService {
         errors.addAll(validationService.validateName(request.getName()));
         Optional<IncomeCategoryEntity> existingCategory = incomeRepository.findByUserIdAndIncomeId(uuid, userId);
         if (existingCategory.isEmpty()) {
-            errors.add(new FieldErrorDto("category", "Category not found or access denied"));
+            errors.add(new FieldErrorDto("Категория", "не найдена или у вас нет доступа к ней"));
         }
 
         if (!errors.isEmpty()) {

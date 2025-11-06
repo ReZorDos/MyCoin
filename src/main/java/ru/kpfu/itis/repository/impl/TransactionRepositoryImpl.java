@@ -7,15 +7,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import ru.kpfu.itis.dto.TransactionDto;
-import ru.kpfu.itis.model.SavingGoalDistribution;
 import ru.kpfu.itis.model.TransactionEntity;
-import ru.kpfu.itis.model.UserEntity;
 import ru.kpfu.itis.repository.TransactionRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,25 +37,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         limit ?
         offset ?
             """;
-    private static final String SQL_GET_ALL_TRANSACTIONS_OF_USER_WITH_CATEGORIES = """
-        select t.*,
-                ec.name as expense_category_name,
-                ic.name as income_category_name
-        from transaction t
-        left join expense_category ec ON t.expense_category_id = ec.id
-        left join income_category ic ON t.income_category_id = ic.id
-        where t.user_id = ?
-        order by t.date desc
-        """;
     private static final String SQL_SAVE_SAVING_GOAL_DISTRIBUTION = """
             insert into transaction_saving_distribution (transaction_id, save_goal_id, amount)
             values (?, ?, ?)
-            """;
-    private static final String SQL_FIND_DISTRIBUTIONS_BY_TRANSACTION_ID = """
-            select tsd.save_goal_id, sg.name, tsd.amount
-            from transaction_saving_distribution tsd
-            join save_goal sg on sg.id = tsd.save_goal_id
-            where tsd.transaction_id = ?
             """;
     private static final String SQL_SAVE_EXPENSE_TRANSACTION = """
             insert  into transaction (title, expense_category_id, user_id, sum, type)
@@ -105,38 +86,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public List<SavingGoalDistribution> findAllDistributionsByTransactionId(UUID transactionId) {
-        try {
-            return jdbcTemplate.query(
-                    SQL_FIND_DISTRIBUTIONS_BY_TRANSACTION_ID,
-                    (rs, rowNum) -> SavingGoalDistribution.builder()
-                            .saveGoalId(UUID.fromString(rs.getString("save_goal_id")))
-                            .amount(rs.getDouble("amount"))
-                            .goalName(rs.getString("name"))
-                            .build(),
-                    transactionId
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     public Optional<TransactionEntity> findTransactionById(UUID transactionId) {
         try {
             return Optional.of(jdbcTemplate.queryForObject(SQL_FIND_BY_ID, rowMapper, transactionId));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
-        }
-    }
-
-    @Override
-    public List<TransactionEntity> findAllTransactionsOfUserWithCategoryNames(UUID userId) {
-        try {
-            return jdbcTemplate.query(SQL_GET_ALL_TRANSACTIONS_OF_USER_WITH_CATEGORIES,
-                    transactionWithCategoryRowMapper, userId);
-        } catch (EmptyResultDataAccessException e) {
-            return Collections.emptyList();
         }
     }
 

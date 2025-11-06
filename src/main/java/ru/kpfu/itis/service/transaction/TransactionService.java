@@ -14,9 +14,7 @@ public interface TransactionService {
 
     TransactionResponse createIncomeTransaction(TransactionDto transaction);
 
-    List<TransactionEntity> getAllTransactionsOfUserWithCategoryNames(UUID userId);
-
-    List<TransactionEntity> getTransactionsWithPagination(UUID userId, int page, int size);
+    List<TransactionDto> getTransactionsWithPagination(UUID userId, int page, int size);
 
     int getTotalTransactionsCount(UUID userId);
 

@@ -41,7 +41,7 @@ public class SavingGoalRepositoryImpl implements SavingGoalRepository {
             """;
 
     @Override
-    public Optional<SavingGoalEntity> findByUserIdAndExpenseId(UUID userUUID, UUID goalUUID) {
+    public Optional<SavingGoalEntity> findByUserIdAndSavingGoalId(UUID userUUID, UUID goalUUID) {
         try {
             return Optional.of(jdbcTemplate.queryForObject(SQL_FIND_BY_USER_ID_AND_GOAL_ID, rowMapper, goalUUID, userUUID));
         } catch (EmptyResultDataAccessException e) {
@@ -54,7 +54,7 @@ public class SavingGoalRepositoryImpl implements SavingGoalRepository {
         try {
             return jdbcTemplate.query(SQL_FIND_ALL_GOALS_BY_USER_ID, rowMapper, userId);
         } catch (EmptyResultDataAccessException e) {
-            return Collections.emptyList();
+            return List.of();
         }
     }
 

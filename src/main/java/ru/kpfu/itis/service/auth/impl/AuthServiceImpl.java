@@ -34,12 +34,12 @@ public class AuthServiceImpl implements AuthService {
         Optional<UserEntity> user = userRepository.findByEmail(request.getEmail());
 
         if (user.isEmpty()) {
-            errors.add(new FieldErrorDto("email", "email not found"));
+            errors.add(new FieldErrorDto("Почта:", "не найдена"));
             return fail(errors);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.get().getPassword())) {
-            errors.add(new FieldErrorDto("password", "password incorrect"));
+            errors.add(new FieldErrorDto("Пароль:", "неверный"));
             return fail(errors);
         }
 
@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            errors.add(new FieldErrorDto("email", "email already use"));
+            errors.add(new FieldErrorDto("Почта", "уже используется"));
             return fail(errors);
         }
 

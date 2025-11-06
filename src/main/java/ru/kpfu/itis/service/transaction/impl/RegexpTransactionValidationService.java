@@ -2,7 +2,7 @@ package ru.kpfu.itis.service.transaction.impl;
 
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
-import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.dto.SavingGoalDistribution;
 import ru.kpfu.itis.service.transaction.TransactionDataValidation;
 
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ public class RegexpTransactionValidationService implements TransactionDataValida
     public List<FieldErrorDto> validateTitle(String title) {
         List<FieldErrorDto> errors = new ArrayList<>();
         if (Objects.isNull(title)) {
-            errors.add(new FieldErrorDto("name", "name is invalid"));
+            errors.add(new FieldErrorDto("Название:", "Тербуется название"));
         } else {
             if (title.length() < 2) {
-                errors.add(new FieldErrorDto("name", "name is too short"));
+                errors.add(new FieldErrorDto("Название:", "слишком короткое"));
             }
             if (title.length() > 25) {
-                errors.add(new FieldErrorDto("name", "name is too long"));
+                errors.add(new FieldErrorDto("Название:", "не должно превышать 25 символов"));
             }
         }
         return errors;
@@ -30,10 +30,10 @@ public class RegexpTransactionValidationService implements TransactionDataValida
     public List<FieldErrorDto> validateSum(Double sum) {
         List<FieldErrorDto> errors = new ArrayList<>();
         if (Objects.isNull(sum)) {
-            errors.add(new FieldErrorDto("sum", "sum is invalid"));
+            errors.add(new FieldErrorDto("Сумма", "Требуется сумма"));
         } else {
             if (sum < 0) {
-                errors.add(new FieldErrorDto("sum", "sum is less than null"));
+                errors.add(new FieldErrorDto("Сумма", "меньше нуля"));
             }
         }
         return errors;
@@ -47,7 +47,7 @@ public class RegexpTransactionValidationService implements TransactionDataValida
                 .sum();
 
         if (totalDistributed > transaction.getSum()) {
-            errors.add(new FieldErrorDto("distributions", "Сумма распределения не может превышать сумму транзакции"));
+            errors.add(new FieldErrorDto("Распределения", "сумма  не может превышать сумму транзакции"));
         }
         return errors;
     }

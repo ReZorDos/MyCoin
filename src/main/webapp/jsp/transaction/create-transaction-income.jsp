@@ -66,7 +66,6 @@
 
     <div class="saving-goals-sidebar">
         <h3>Распределение по целям</h3>
-        <p class="distribution-info">Укажите суммы для распределения части дохода по целям накопления</p>
 
         <c:if test="${not empty savingGoals}">
             <div class="saving-goals-scrollable">
@@ -97,9 +96,6 @@
         <c:if test="${empty savingGoals}">
             <div class="saving-goals-empty">
                 <p>У вас пока нет целей накопления.</p>
-                <a href="${pageContext.request.contextPath}/saving-goals" class="create-btn">
-                    Создать цель
-                </a>
             </div>
         </c:if>
     </div>

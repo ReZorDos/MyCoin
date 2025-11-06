@@ -40,7 +40,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
             """;
 
     @Override
-    public Optional<ExpenseCategoryEntity> findByUserIdAndExpenseId(UUID userUUID, UUID expenseUUID) {
+    public Optional<ExpenseCategoryEntity>  findByUserIdAndExpenseId(UUID userUUID, UUID expenseUUID) {
         try {
             return Optional.of(jdbcTemplate.queryForObject(SQL_FIND_BY_USER_ID_AND_EXPENSE_ID, rowMapper, expenseUUID, userUUID));
         } catch (EmptyResultDataAccessException e) {
@@ -53,7 +53,7 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
         try {
             return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
         } catch (EmptyResultDataAccessException e) {
-            return Collections.emptyList();
+            return List.of();
         }
     }
 

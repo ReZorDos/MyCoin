@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.kpfu.itis.dto.FieldErrorDto;
+import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.service.expense.ExpenseService;

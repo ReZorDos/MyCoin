@@ -1,7 +1,7 @@
 package ru.kpfu.itis.repository;
 
 import ru.kpfu.itis.dto.TransactionDto;
-import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.dto.SavingGoalDistribution;
 import ru.kpfu.itis.model.TransactionEntity;
 
 import java.util.List;
@@ -16,11 +16,7 @@ public interface TransactionRepository {
 
     void saveSavingGoalDistribution(UUID transactionId, UUID saveGoalId, Double amount);
 
-    List<SavingGoalDistribution> findAllDistributionsByTransactionId(UUID transactionId);
-
     Optional<TransactionEntity> findTransactionById(UUID transactionId);
-
-    List<TransactionEntity> findAllTransactionsOfUserWithCategoryNames(UUID userId);
 
     List<TransactionEntity> findTransactionsWithPagination(UUID userId, int offset, int limit);
 

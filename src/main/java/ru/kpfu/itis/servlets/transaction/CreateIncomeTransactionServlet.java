@@ -10,7 +10,7 @@ import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.dto.response.TransactionResponse;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
-import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.dto.SavingGoalDistribution;
 import ru.kpfu.itis.model.SavingGoalEntity;
 import ru.kpfu.itis.service.goals.SavingGoalService;
 import ru.kpfu.itis.service.income.IncomeService;
