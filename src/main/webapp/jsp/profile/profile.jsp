@@ -40,7 +40,7 @@
     <div class="main-content">
         <div class="top-info-row">
             <section class="user-info-section">
-                <p class="user-email">Name: ${email}</p>
+                <p class="user-email">Name: ${nickname}</p>
             </section>
 
             <section class="balance-section">

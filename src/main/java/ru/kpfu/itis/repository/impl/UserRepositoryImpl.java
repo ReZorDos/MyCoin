@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper rowMapper = new UserRowMapper();
     private static final String SQL_FIND_BY_ID = "select * from user_entity where id = ?";
-    private static final String SQL_FIND_ALL_USERS = "select * from user_entity";
+    private static final String SQL_NICKNAME_OF_USER = "select nickname from user_entity where id = ?";
     private static final String SQL_DELETE_BY_ID = "delete from user_entity where id = ?";
     private static final String SQL_FIND_BY_EMAIL = "select * from user_entity where email = ?";
     private static final String SQL_UPDATE_USER_BALANCE = "update user_entity set balance = balance + ? where id = ?";
@@ -45,11 +45,6 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
-    }
-
-    @Override
-    public List<UserEntity> findAllUsers() {
-        return jdbcTemplate.query(SQL_FIND_ALL_USERS, rowMapper);
     }
 
     @Override
@@ -107,6 +102,15 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (EmptyResultDataAccessException e) {
             return 0.0;
         }
+    }
+
+    @Override
+    public String findNickNameOfUser(UUID userId) {
+        Optional<UserEntity> user = findById(userId);
+        if (user.isPresent()) {
+            return jdbcTemplate.queryForObject(SQL_NICKNAME_OF_USER, String.class, userId);
+        }
+        throw new IllegalArgumentException();
     }
 
     private static final class UserRowMapper implements RowMapper<UserEntity> {

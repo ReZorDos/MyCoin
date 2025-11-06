@@ -13,10 +13,10 @@ public class RegexpExpenseValidationService implements ExpenseDataValidationServ
     public List<FieldErrorDto> validateName(String name) {
         List<FieldErrorDto> listOfErrors = new ArrayList<>();
         if (Objects.isNull(name)) {
-            listOfErrors.add(new FieldErrorDto("name", "name is invalid"));
+            listOfErrors.add(new FieldErrorDto("Название:", "Требуется название"));
         } else {
             if (name.length() < 2) {
-                listOfErrors.add(new FieldErrorDto("name", "name is too short"));
+                listOfErrors.add(new FieldErrorDto("Название:", "должно содержать минимум 2 знака"));
             }
         }
         return listOfErrors;

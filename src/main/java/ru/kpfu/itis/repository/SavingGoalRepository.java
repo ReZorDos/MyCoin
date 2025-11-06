@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface SavingGoalRepository {
 
-    Optional<SavingGoalEntity> findByUserIdAndExpenseId(UUID userid, UUID saveGoalId);
+    Optional<SavingGoalEntity> findByUserIdAndSavingGoalId(UUID userid, UUID saveGoalId);
 
     List<SavingGoalEntity> findAllSavingGoalsByIdUser(UUID userId);
 

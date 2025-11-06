@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
 import ru.kpfu.itis.model.SavingGoalEntity;
@@ -45,7 +46,9 @@ public class ProfileServlet extends HttpServlet {
         List<SavingGoalEntity> savingGoals = savingGoalService.getAllSavingGoalsByIdUser(userId);
 
         double balance = userService.getUserBalance(userId);
+        String nickName = userService.getNicknameOfUser(userId);
 
+        req.setAttribute("nickname", nickName);
         req.setAttribute("expenseCategories", expenseCategories);
         req.setAttribute("incomeCategories", incomeCategories);
         req.setAttribute("savingGoals", savingGoals);

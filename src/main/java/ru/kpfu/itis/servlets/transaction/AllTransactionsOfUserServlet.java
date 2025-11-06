@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.kpfu.itis.dto.TransactionDto;
 import ru.kpfu.itis.model.TransactionEntity;
 import ru.kpfu.itis.service.transaction.TransactionService;
 
@@ -33,7 +34,7 @@ public class AllTransactionsOfUserServlet extends HttpServlet {
         int page = transactionService.getIntParameter(paramValue, "page", DEFAULT_PAGE);
         int size = PAGE_SIZE;
 
-        List<TransactionEntity> transactionList = transactionService.getTransactionsWithPagination(userId, page, size);
+        List<TransactionDto> transactionList = transactionService.getTransactionsWithPagination(userId, page, size);
         int totalTransactions = transactionService.getTotalTransactionsCount(userId);
         int totalPages = (int) Math.ceil((double) totalTransactions / size);
 

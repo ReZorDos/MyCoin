@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.categories.SavingGoalDto;
 import ru.kpfu.itis.dto.response.SavingGoalResponse;
-import ru.kpfu.itis.model.SavingGoalDistribution;
+import ru.kpfu.itis.dto.SavingGoalDistribution;
 import ru.kpfu.itis.model.SavingGoalEntity;
 import ru.kpfu.itis.repository.SavingGoalRepository;
 import ru.kpfu.itis.service.goals.SavingGoalDataValidation;
@@ -49,8 +49,12 @@ public class SavingGoalServiceImpl implements SavingGoalService {
     }
 
     @Override
-    public SavingGoalEntity getSavingGoalById(UUID savingGoalId) {
-        return savingGoalRepository.findById(savingGoalId).get();
+    public SavingGoalEntity getSavingGoalById(UUID userId, UUID savingGoalId) {
+        Optional<SavingGoalEntity> goal = savingGoalRepository.findByUserIdAndSavingGoalId(userId, savingGoalId);
+        if (goal.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return goal.get();
     }
 
     @Override
@@ -60,7 +64,7 @@ public class SavingGoalServiceImpl implements SavingGoalService {
         errors.addAll(validationService.validateTitle(request.getTitle()));
         errors.addAll(validationService.validateAmount(request.getTotal_amount()));
 
-        Optional<SavingGoalEntity> savingGoal = savingGoalRepository.findByUserIdAndExpenseId(userId, saveGoalId);
+        Optional<SavingGoalEntity> savingGoal = savingGoalRepository.findByUserIdAndSavingGoalId(userId, saveGoalId);
         if (savingGoal.isEmpty()) {
             errors.add(new FieldErrorDto("goal", "Saving goal not found or access denied"));
         }
@@ -90,7 +94,7 @@ public class SavingGoalServiceImpl implements SavingGoalService {
         List<FieldErrorDto> errors = new ArrayList<>();
         errors.addAll(validationService.validateAmount(amountToAdd));
 
-        Optional<SavingGoalEntity> existingGoal = savingGoalRepository.findByUserIdAndExpenseId(userId, goalId);
+        Optional<SavingGoalEntity> existingGoal = savingGoalRepository.findByUserIdAndSavingGoalId(userId, goalId);
 
         SavingGoalEntity goal = existingGoal.get();
         double newAmount = goal.getCurrent_amount() + amountToAdd;
@@ -102,19 +106,6 @@ public class SavingGoalServiceImpl implements SavingGoalService {
 
         savingGoalRepository.updateCurrentAmount(goalId, amountToAdd);
         return ok();
-    }
-
-    @Override
-    public List<SavingGoalEntity> getCompletedGoals(UUID userId) {
-        List<SavingGoalEntity> allGoals = getAllSavingGoalsByIdUser(userId);
-        List<SavingGoalEntity> completedGoals = new ArrayList<>();
-
-        for (SavingGoalEntity goal : allGoals) {
-            if (goal.getCurrent_amount() >= goal.getTotal_amount()) {
-                completedGoals.add(goal);
-            }
-        }
-        return completedGoals;
     }
 
     @Override

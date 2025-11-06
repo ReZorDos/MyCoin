@@ -35,7 +35,10 @@ public class UpdateSavingGoalServlet extends HttpServlet {
 
         String uuid = req.getParameter("uuid");
 
-        SavingGoalEntity category = savingGoalService.getSavingGoalById(UUID.fromString(uuid));
+        SavingGoalEntity category = savingGoalService.getSavingGoalById(
+                (UUID) req.getSession(false).getAttribute("userId"),
+                UUID.fromString(uuid)
+        );
         req.setAttribute("savingGoal", category);
 
         req.getRequestDispatcher("/jsp/saving-goal/edit-saving-goal.jsp").forward(req, resp);

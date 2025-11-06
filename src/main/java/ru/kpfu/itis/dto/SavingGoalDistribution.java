@@ -1,4 +1,4 @@
-package ru.kpfu.itis.model;
+package ru.kpfu.itis.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

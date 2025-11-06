@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserBalance(userId);
     }
 
+    @Override
+    public String getNicknameOfUser(UUID userId) {
+        return userRepository.findNickNameOfUser(userId);
+    }
+
 }

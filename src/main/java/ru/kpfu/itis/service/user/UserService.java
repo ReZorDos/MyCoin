@@ -8,4 +8,6 @@ public interface UserService {
 
     double getUserBalance(UUID userId);
 
+    String getNicknameOfUser(UUID userId);
+
 }
