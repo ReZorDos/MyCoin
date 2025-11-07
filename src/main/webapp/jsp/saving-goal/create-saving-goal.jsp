@@ -2,12 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Create Saving Goal</title>
+    <title>Создать цель</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/forms.css">
 </head>
 <body>
 <div class="container">
-    <h2>Create New Saving Goal</h2>
+    <h2>Создать новую цель</h2>
 
     <c:if test="${not empty errors}">
         <div class="error-container">
@@ -18,29 +18,29 @@
     </c:if>
 
     <div class="form-container">
-        <form action="${pageContext.request.contextPath}/create-saving-goal" method="post">
+        <form action="${pageContext.request.contextPath}/saving-goal/create" method="post">
             <div class="form-group">
-                <label for="name">Goal Name:</label>
+                <label for="name">Название цели:</label>
                 <input class="form-input" type="text" id="name" name="name" required
-                       placeholder="Enter goal name">
+                       placeholder="Введите название цели">
             </div>
 
             <div class="form-group">
-                <label for="title">Description:</label>
-                <input class="form-input" type="text" id="title" name="title" required
-                       placeholder="Enter goal description">
+                <label for="title">Описание:</label>
+                <input class="form-input" type="text" id="title" name="title"
+                       placeholder="Введите описание цели (необязательно)">
             </div>
 
             <div class="form-group">
-                <label for="total_amount">Target Amount:</label>
+                <label for="total_amount">Сумма накопления:</label>
                 <input class="form-input" type="number" id="total_amount" name="total_amount"
                        step="0.01" min="0.01" required
-                       placeholder="Enter target amount">
+                       placeholder="Введите сумму накопления">
             </div>
 
             <div>
-                <button type="submit" class="create-btn">Create Goal</button>
-                <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
+                <button type="submit" class="create-btn">Создать цель</button>
+                <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Отмена</a>
             </div>
         </form>
     </div>

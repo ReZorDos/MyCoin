@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@WebServlet("/create-saving-goal")
+@WebServlet("/saving-goal/create")
 public class CreateSavingGoalServlet extends HttpServlet {
 
     private SavingGoalService savingGoalService;

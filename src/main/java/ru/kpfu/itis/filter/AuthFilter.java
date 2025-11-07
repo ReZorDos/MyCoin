@@ -33,7 +33,7 @@ public class AuthFilter implements Filter {
             "/analyze-income/week",
             "/analyze-income/year",
             "/analyze/overview",
-            "/create-saving-goal",
+            "/saving-goal/create",
             "/saving-goal/delete",
             "/saving-goal/update"
     );

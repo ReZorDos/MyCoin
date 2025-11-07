@@ -30,11 +30,9 @@ public class RegexpSavingGoalValidationService implements SavingGoalDataValidati
         if (Objects.isNull(title)) {
             errors.add(new FieldErrorDto("title", "title is invalid"));
         } else {
-            if (title.length() < 2) {
-                errors.add(new FieldErrorDto("title", "title is too short"));
-            }
+
             if (title.length() > 50) {
-                errors.add(new FieldErrorDto("title", "title is too short"));
+                errors.add(new FieldErrorDto("title", "title is too long"));
             }
         }
         return errors;

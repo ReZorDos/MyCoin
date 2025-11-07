@@ -40,7 +40,7 @@
     <div class="main-content">
         <div class="top-info-row">
             <section class="user-info-section">
-                <p class="user-email">Name: ${nickname}</p>
+                <p class="user-email">Никнейм: ${nickname}</p>
             </section>
 
             <section class="balance-section">
@@ -63,19 +63,19 @@
                     <div class="action-icon expense">
                         +
                     </div>
-                    <span>Add Expense Category</span>
+                    <span>Добавить категорию расхода</span>
                 </a>
                 <a href="${pageContext.request.contextPath}/create-income" class="action-card">
                     <div class="action-icon income">
                         +
                     </div>
-                    <span>Add Income Category</span>
+                    <span>Добавить категорию дохода </span>
                 </a>
-                <a href="${pageContext.request.contextPath}/create-saving-goal" class="action-card">
+                <a href="${pageContext.request.contextPath}/saving-goal/create" class="action-card">
                     <div class="action-icon saving">
                         +
                     </div>
-                    <span>Add Saving Goal</span>
+                    <span>Добавить цель</span>
                 </a>
             </div>
         </section>
@@ -83,7 +83,7 @@
         <div class="categories-sections">
             <section class="category-section">
                 <div class="section-header">
-                    <h2 class="section-title">Expense Categories</h2>
+                    <h2 class="section-title">Категории Расходов</h2>
                     <span class="category-count">${not empty expenseCategories ? expenseCategories.size() : 0}</span>
                 </div>
 
@@ -132,7 +132,7 @@
                                         </div>
                                     </div>
                                     <button class="transaction-btn" onclick="createTransaction('${category.id}', 'expense')">
-                                        + Add Transaction
+                                        + Добавить
                                     </button>
                                 </div>
                             </c:forEach>
@@ -140,10 +140,9 @@
                     </c:when>
                     <c:otherwise>
                         <div class="empty-state">
-                            <h3>No expense categories yet</h3>
-                            <p>Start by creating your first expense category</p>
+                            <h3>Еще нет категорий расходов</h3>
                             <a href="${pageContext.request.contextPath}/create-expense" class="btn-primary">
-                                Create Expense Category
+                                Создать категорию расходов
                             </a>
                         </div>
                     </c:otherwise>
@@ -152,7 +151,7 @@
 
             <section class="category-section">
                 <div class="section-header">
-                    <h2 class="section-title">Income Categories</h2>
+                    <h2 class="section-title">Категории Доходов</h2>
                     <span class="category-count">${not empty incomeCategories ? incomeCategories.size() : 0}</span>
                 </div>
 
@@ -201,10 +200,7 @@
                                         </div>
                                     </div>
                                     <button class="transaction-btn" onclick="createTransaction('${category.id}', 'income')">
-                                        Add Transaction
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
+                                        + Добавить
                                     </button>
                                 </div>
                             </c:forEach>
@@ -212,10 +208,9 @@
                     </c:when>
                     <c:otherwise>
                         <div class="empty-state">
-                            <h3>No income categories yet</h3>
-                            <p>Start by creating your first income category</p>
+                            <h3>Еще нет категорий доходов</h3>
                             <a href="${pageContext.request.contextPath}/create-income" class="btn-primary">
-                                Create Income Category
+                                Создать категорию доходов
                             </a>
                         </div>
                     </c:otherwise>
@@ -224,7 +219,7 @@
 
             <section class="category-section">
                 <div class="section-header">
-                    <h2 class="section-title">Saving Goals</h2>
+                    <h2 class="section-title">Цели</h2>
                     <span class="category-count">${not empty savingGoals ? savingGoals.size() : 0}</span>
                 </div>
 
@@ -279,10 +274,9 @@
                     </c:when>
                     <c:otherwise>
                         <div class="empty-state">
-                            <h3>No saving goals yet</h3>
-                            <p>Start by creating your first saving goal</p>
+                            <h3>Еще нет целей</h3>
                             <a href="${pageContext.request.contextPath}/create-saving-goal" class="btn-primary">
-                                Create Saving Goal
+                                Создать цель
                             </a>
                         </div>
                     </c:otherwise>
