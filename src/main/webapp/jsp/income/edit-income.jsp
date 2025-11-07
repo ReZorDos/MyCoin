@@ -2,13 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Edit Income Category</title>
+    <title>Изменить категорию дохода</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/forms.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/icons.css">
 </head>
 <body>
 <div class="container">
-    <h2>Edit Income Category</h2>
+    <h2>Изменить категорию дохода</h2>
 
     <c:if test="${not empty errors}">
         <div class="error-container">
@@ -22,13 +22,13 @@
             <input type="hidden" name="uuid" value="${category.id}">
 
             <div class="form-group">
-                <label for="name">Category Name:</label>
+                <label for="name">Название категории:</label>
                 <input class="form-input" type="text" id="name" name="name" value="${category.name}" required
-                       placeholder="Enter category name">
+                       placeholder="Введите название категории">
             </div>
 
             <div class="form-group">
-                <label>Icon:</label>
+                <label>Иконка:</label>
                 <div class="icons-container">
                     <c:choose>
                         <c:when test="${not empty availableIcons}">
@@ -53,8 +53,8 @@
             </div>
 
             <div>
-                <button type="submit" class="create-btn">Update Category</button>
-                <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Cancel</a>
+                <button type="submit" class="create-btn">Обновить категорию</button>
+                <a href="${pageContext.request.contextPath}/profile" class="cancel-btn">Отмена</a>
             </div>
         </form>
     </div>

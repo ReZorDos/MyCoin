@@ -56,7 +56,7 @@ function editSavingGoal(goalId) {
 }
 
 function deleteSavingGoal(goalId) {
-    if (confirm('Are you sure you want to delete this saving goal?')) {
+    if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = contextPath + '/saving-goal/delete';

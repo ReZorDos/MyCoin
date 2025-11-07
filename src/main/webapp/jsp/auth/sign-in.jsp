@@ -8,19 +8,21 @@
 </head>
 <body>
 <div class="auth-page">
-    <h1>Sign in</h1>
+    <h1>Войти</h1>
 
     <form class="auth-form" action="${pageContext.request.contextPath}/sign-in" method="post">
         <label>Email:
             <input class="auth-input" type="text" name="email" value="${param.email}"
-                   placeholder="Enter your email">
+                   placeholder="Введите вашу почту">
         </label>
         <label>Password:
             <input class="auth-input" type="password" name="password"
-                   placeholder="Enter your password">
+                   placeholder="Введите ваш пароль">
         </label>
-        <input class="auth-submit" type="submit" value="Sign in">
+        <input class="auth-submit" type="submit" value="Войти">
     </form>
+
+    <a href="${pageContext.request.contextPath}/" class="home-btn">Вернуться на главную</a>
 
     <c:if test="${not empty errors}">
         <div class="error-container">

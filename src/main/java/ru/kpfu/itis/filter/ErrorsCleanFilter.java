@@ -19,7 +19,7 @@ public class ErrorsCleanFilter implements Filter {
             "/income-category/update",
             "/create-transaction/expense",
             "/create-transaction/income",
-            "/create-saving-goal",
+            "/saving-goal/create",
             "/saving-goal/update"
     );
 

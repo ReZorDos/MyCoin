@@ -82,18 +82,24 @@ body {
     transform: translateY(-1px);
 }
 
-
-.auth-submit[value="Sign up"]:hover {
-    background: #007B9A;
-    transform: translateY(-1px);
+.home-btn {
+    display: inline-block;
+    background: #6b7280;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
 }
 
-.auth-submit[value="Sign in"] {
-    background: #16a34a;
-}
-
-.auth-submit[value="Sign in"]:hover {
-    background: #15803d;
+.home-btn:hover {
+    background: #4b5563;
     transform: translateY(-1px);
 }
 

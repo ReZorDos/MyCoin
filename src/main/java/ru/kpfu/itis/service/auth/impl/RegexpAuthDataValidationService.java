@@ -9,6 +9,8 @@ import java.util.Objects;
 
 public class RegexpAuthDataValidationService implements AuthDataValidationService {
 
+    //TODO: сделать тримы
+
     @Override
     public List<FieldErrorDto> validateEmail(String email) {
         List<FieldErrorDto> listOfErrors = new ArrayList<>();
@@ -34,6 +36,9 @@ public class RegexpAuthDataValidationService implements AuthDataValidationServic
             if (nickname.length() < 4) {
                 listOfErrors.add(new FieldErrorDto("Никнейм:", "слишком короткий"));
             }
+            if (nickname.contains(" ")) {
+                listOfErrors.add(new FieldErrorDto("Никнейм", "не должен содержать пробелы"));
+            }
         }
         return listOfErrors;
     }
@@ -46,6 +51,9 @@ public class RegexpAuthDataValidationService implements AuthDataValidationServic
         } else {
             if (password.length() < 8) {
                 listOfErrors.add(new FieldErrorDto("Пароль:", "длина должна быть больше 8 символов"));
+            }
+            if (password.contains(" ")) {
+                listOfErrors.add(new FieldErrorDto("Пароль", "не должен содержать пробелы"));
             }
             if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$")) {
                 listOfErrors.add(new FieldErrorDto(
