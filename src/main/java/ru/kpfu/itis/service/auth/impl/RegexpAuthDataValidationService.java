@@ -9,8 +9,6 @@ import java.util.Objects;
 
 public class RegexpAuthDataValidationService implements AuthDataValidationService {
 
-    //TODO: сделать тримы
-
     @Override
     public List<FieldErrorDto> validateEmail(String email) {
         List<FieldErrorDto> listOfErrors = new ArrayList<>();

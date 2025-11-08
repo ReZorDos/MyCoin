@@ -222,8 +222,8 @@ public class ChartServiceImpl implements ChartService {
             int year = Integer.parseInt(parts[0]);
             int monthNum = Integer.parseInt(parts[1]);
 
-            String[] monthNames = {"Янв", "Фев", "Мар", "Апр", "Май", "Июн",
-                    "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"};
+            String[] monthNames = {"01", "02", "03", "04", "05", "06",
+                    "07", "08", "09", "10", "11", "12"};
 
             return monthNames[monthNum - 1] + " " + year;
         } catch (Exception e) {
@@ -327,7 +327,7 @@ public class ChartServiceImpl implements ChartService {
             byte[] imageBytes = outputStream.toByteArray();
             return Base64.getEncoder().encodeToString(imageBytes);
         } catch (Exception e) {
-            throw new RuntimeException("Error converting chart to base64", e);
+            throw new RuntimeException("Ошибка конвертирования в base64", e);
         }
     }
 

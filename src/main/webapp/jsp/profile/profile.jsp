@@ -275,7 +275,7 @@
                     <c:otherwise>
                         <div class="empty-state">
                             <h3>Еще нет целей</h3>
-                            <a href="${pageContext.request.contextPath}/create-saving-goal" class="btn-primary">
+                            <a href="${pageContext.request.contextPath}/saving-goal/create" class="btn-primary">
                                 Создать цель
                             </a>
                         </div>

@@ -99,11 +99,6 @@ public class SavingGoalServiceImpl implements SavingGoalService {
         SavingGoalEntity goal = existingGoal.get();
         double newAmount = goal.getCurrent_amount() + amountToAdd;
 
-        if (newAmount > goal.getTotal_amount()) {
-            errors.add(new FieldErrorDto("amount", "Amount exceeds goal total amount"));
-            return fail(errors);
-        }
-
         savingGoalRepository.updateCurrentAmount(goalId, amountToAdd);
         return ok();
     }
