@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import ru.kpfu.itis.dto.FieldErrorDto;
 import ru.kpfu.itis.dto.categories.IncomeDto;
 import ru.kpfu.itis.dto.response.IncomeResponse;
-import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
 import ru.kpfu.itis.repository.IncomeCategoryRepository;
 import ru.kpfu.itis.service.income.IncomeDataValidation;
 import ru.kpfu.itis.service.income.IncomeService;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,8 +89,8 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
-    public List<IncomeCategoryEntity> getAllIncomeCategoriesByIdUser(UUID uuid) {
-        return incomeRepository.findAllIncomeCategoriesByIdUser(uuid);
+    public List<IncomeCategoryEntity> getAllIncomeCategoriesByIdUser(UUID uuid, LocalDate start, LocalDate end) {
+        return incomeRepository.findAllIncomeCategoriesByIdUser(uuid, start, end);
     }
 
     private IncomeResponse fail(List<FieldErrorDto> errors) {

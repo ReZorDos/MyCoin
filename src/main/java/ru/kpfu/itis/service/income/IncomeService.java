@@ -5,6 +5,7 @@ import ru.kpfu.itis.dto.response.IncomeResponse;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 import ru.kpfu.itis.model.IncomeCategoryEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,5 +23,5 @@ public interface IncomeService {
 
     void updateIncomeCategoryTotal(UUID incomeId, Double transactionSum);
 
-    List<IncomeCategoryEntity> getAllIncomeCategoriesByIdUser(UUID uuid);
+    List<IncomeCategoryEntity> getAllIncomeCategoriesByIdUser(UUID uuid, LocalDate start, LocalDate end);
 }

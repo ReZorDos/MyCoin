@@ -4,6 +4,7 @@ import ru.kpfu.itis.dto.categories.ExpenseDto;
 import ru.kpfu.itis.dto.response.ExpenseResponse;
 import ru.kpfu.itis.model.ExpenseCategoryEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +23,6 @@ public interface ExpenseService {
 
     void updateExpenseCategoryTotal(UUID expenseId, Double transactionSum);
 
-    List<ExpenseCategoryEntity> getAllExpenseCategoriesByIdUser(UUID uuid);
+    List<ExpenseCategoryEntity> getAllExpenseCategoriesByIdUser(UUID uuid, LocalDate start, LocalDate end);
 
 }

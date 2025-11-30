@@ -13,6 +13,7 @@ import ru.kpfu.itis.repository.ExpenseCategoryRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -21,7 +22,22 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
     private final JdbcTemplate jdbcTemplate;
     private final ExpenseCategoryRowMapper rowMapper = new ExpenseCategoryRowMapper();
     private static final String SQL_FIND_BY_ID = "select * from expense_category where id = ?";
-    private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from expense_category where user_id = ? order by created_at asc";
+    private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = """
+        select 
+            ec.id,
+            ec.name,
+            ec.user_id,
+            ec.icon,
+            ec.created_at,
+            coalesce(sum(t.sum), 0) as total_amount
+        from expense_category ec
+        left join transaction t on ec.id = t.expense_category_id
+                        and t.type = 'EXPENSE'
+                        and t.date between ? and ?
+        where ec.user_id = ?
+        group by ec.id, ec.name, ec.user_id, ec.icon, ec.created_at
+        order by ec.created_at asc
+        """;
     private static final String SQL_DELETE_BY_ID = "delete from expense_category where id = ?";
     private static final String SQL_UPDATE_TOTAL_AMOUNT = "update expense_category set total_amount = total_amount + ? where id = ?";
     private static final String SQL_FIND_BY_USER_ID_AND_EXPENSE_ID = """
@@ -49,9 +65,9 @@ public class ExpenseCategoryRepositoryImpl implements ExpenseCategoryRepository 
     }
 
     @Override
-    public List<ExpenseCategoryEntity> findAllExpenseCategoriesByIdUser(UUID uuid) {
+    public List<ExpenseCategoryEntity> findAllExpenseCategoriesByIdUser(UUID uuid, LocalDate start, LocalDate end) {
         try {
-            return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
+            return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, start, end, uuid);
         } catch (EmptyResultDataAccessException e) {
             return List.of();
         }

@@ -18,6 +18,7 @@ import ru.kpfu.itis.service.income.IncomeService;
 import ru.kpfu.itis.service.user.UserService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,9 +41,12 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        LocalDate start = LocalDate.now().withDayOfMonth(1);
+        LocalDate end = start.plusMonths(1);
+
         UUID userId = (UUID) req.getSession(false).getAttribute("userId");
-        List<ExpenseCategoryEntity> expenseCategories = expenseService.getAllExpenseCategoriesByIdUser(userId);
-        List<IncomeCategoryEntity> incomeCategories = incomeService.getAllIncomeCategoriesByIdUser(userId);
+        List<ExpenseCategoryEntity> expenseCategories = expenseService.getAllExpenseCategoriesByIdUser(userId, start, end);
+        List<IncomeCategoryEntity> incomeCategories = incomeService.getAllIncomeCategoriesByIdUser(userId, start, end);
         List<SavingGoalEntity> savingGoals = savingGoalService.getAllSavingGoalsByIdUser(userId);
 
         double balance = userService.getUserBalance(userId);

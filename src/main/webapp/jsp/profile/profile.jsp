@@ -91,7 +91,7 @@
                     <c:when test="${not empty expenseCategories}">
                         <div class="categories-grid">
                             <c:forEach var="category" items="${expenseCategories}" varStatus="status">
-                                <div class="category-card" data-uuid="${category.id}" data-type="expense" style="grid-column: ${status.index + 1};">
+                                <div class="category-card" data-uuid="${category.id}" data-type="expense">
                                     <div class="category-header">
                                         <div class="category-icon-wrapper">
                                             <c:choose>
@@ -159,7 +159,7 @@
                     <c:when test="${not empty incomeCategories}">
                         <div class="categories-grid">
                             <c:forEach var="category" items="${incomeCategories}" varStatus="status">
-                                <div class="category-card" data-uuid="${category.id}" data-type="income" style="grid-column: ${status.index + 1};">
+                                <div class="category-card" data-uuid="${category.id}" data-type="income">
                                     <div class="category-header">
                                         <div class="category-icon-wrapper">
                                             <c:choose>

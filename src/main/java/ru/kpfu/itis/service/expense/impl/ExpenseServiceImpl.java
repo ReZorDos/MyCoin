@@ -10,6 +10,7 @@ import ru.kpfu.itis.service.expense.ExpenseDataValidationService;
 import ru.kpfu.itis.service.expense.ExpenseService;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -87,8 +88,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public List<ExpenseCategoryEntity> getAllExpenseCategoriesByIdUser(UUID uuid) {
-        return expenseRepository.findAllExpenseCategoriesByIdUser(uuid);
+    public List<ExpenseCategoryEntity> getAllExpenseCategoriesByIdUser(UUID uuid, LocalDate start, LocalDate end) {
+        return expenseRepository.findAllExpenseCategoriesByIdUser(uuid, start, end);
     }
 
     private ExpenseResponse fail(List<FieldErrorDto> errors) {

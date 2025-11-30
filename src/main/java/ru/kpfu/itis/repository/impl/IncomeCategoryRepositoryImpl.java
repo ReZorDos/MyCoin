@@ -14,6 +14,7 @@ import ru.kpfu.itis.repository.IncomeCategoryRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,22 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
     private final IncomeRowMapper rowMapper = new IncomeRowMapper();
     private static final String SQL_DELETE_BY_ID = "delete from income_category where id = ?";
     private static final String SQL_FIND_BY_ID = "select * from income_category where id = ?";
-    private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = "select * from income_category where user_id = ? order by created_at asc";
+    private static final String SQL_FIND_ALL_CATEGORIES_BY_USER_ID = """
+            select 
+                ic.id,
+                ic.name,
+                ic.user_id,
+                ic.icon,
+                ic.created_at,
+                coalesce(sum(t.sum), 0) as total_amount
+            from income_category ic
+            left join transaction t on ic.id = t.income_category_id
+                                    and t.type = 'INCOME'
+                                    and t.date between ? and ?
+            where ic.user_id = ?
+            group by ic.id, ic.name, ic.user_id, ic.icon
+            order by ic.created_at asc
+            """;
     private static final String SQL_UPDATE_TOTAL_AMOUNT = "update income_category set total_amount = total_amount + ? where id = ?";
     private static final String SQL_UPDATE_BY_ID = """
             update income_category
@@ -52,9 +68,9 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
     }
 
     @Override
-    public List<IncomeCategoryEntity> findAllIncomeCategoriesByIdUser(UUID uuid) {
+    public List<IncomeCategoryEntity> findAllIncomeCategoriesByIdUser(UUID uuid, LocalDate start, LocalDate end) {
         try {
-            return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, uuid);
+            return jdbcTemplate.query(SQL_FIND_ALL_CATEGORIES_BY_USER_ID, rowMapper, start, end, uuid);
         } catch (EmptyResultDataAccessException e) {
             return Collections.emptyList();
         }
@@ -120,6 +136,7 @@ public class IncomeCategoryRepositoryImpl implements IncomeCategoryRepository {
                     .id(UUID.fromString(rs.getString("id")))
                     .name(rs.getString("name"))
                     .totalAmount(rs.getDouble("total_amount"))
+                    .userId(UUID.fromString(rs.getString("user_id")))
                     .icon(rs.getString("icon"))
                     .createdAt(rs.getTimestamp("created_at"))
                     .build();
